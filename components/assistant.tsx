@@ -5,7 +5,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useAcademy } from "@/lib/store";
-import { getApiKey, loadChat, saveChat, streamChat, ChatMessage, AI_MODELS } from "@/lib/ai";
+import { getApiKey, loadChat, saveChat, runAssistant, ChatMessage, AI_MODELS } from "@/lib/ai";
 import { Icon, Button } from "./ui";
 
 const PAGE_LABELS: { test: RegExp; label: string }[] = [
@@ -30,9 +30,9 @@ const PAGE_LABELS: { test: RegExp; label: string }[] = [
 
 const SUGGESTIONS = [
   "Explain this page simply, like I'm a beginner.",
+  "Log a trade: long XAU at 3710, stop 3704, target 3730, London, sweep-reclaim. Outcome win +2R.",
+  "Review my recent journal trades and my process.",
   "Quiz me on this topic with 3 questions.",
-  "What's a liquidity sweep, with a gold example?",
-  "How do I size a trade risking 1% of $5,000?",
 ];
 
 export function Assistant() {
@@ -77,19 +77,48 @@ export function Assistant() {
     setMessages(next);
     setBusy(true);
     abortRef.current = new AbortController();
+    const appendToAssistant = (chunk: string) =>
+      setMessages((prev) => {
+        const copy = prev.slice();
+        copy[copy.length - 1] = { role: "assistant", content: copy[copy.length - 1].content + chunk };
+        return copy;
+      });
     try {
-      await streamChat({
+      await runAssistant({
         apiKey: key,
         model: settings.aiModel,
         context: buildContext(),
-        messages: next.slice(0, -1), // exclude the empty assistant placeholder
+        history: messages, // prior visible turns (excludes this user msg + placeholder)
+        userText: content,
         signal: abortRef.current.signal,
-        onDelta: (chunk) => {
-          setMessages((prev) => {
-            const copy = prev.slice();
-            copy[copy.length - 1] = { role: "assistant", content: copy[copy.length - 1].content + chunk };
-            return copy;
-          });
+        onText: appendToAssistant,
+        onToolResult: (_tool, summary) => appendToAssistant(`\n\n> 🛠️ ${summary}\n\n`),
+        executeTool: async (name, input) => {
+          const store = useAcademy.getState();
+          if (name === "log_journal_trade") {
+            const id = store.addTrade({
+              date: input.date, direction: input.direction ?? "long", session: input.session ?? "London",
+              context: input.context ?? "", location: input.location ?? "", scenario: input.scenario ?? "",
+              trigger: input.trigger ?? "", invalidation: input.invalidation ?? "",
+              entry: input.entry ?? null, stop: input.stop ?? null, target: input.target ?? null,
+              size: input.size ?? null, outcome: input.outcome ?? "open", rMultiple: input.rMultiple ?? null,
+              pnl: input.pnl ?? null, followedPlan: input.followedPlan ?? true,
+              emotions: input.emotions ?? "", lessons: input.lessons ?? "",
+              tags: Array.isArray(input.tags) ? input.tags : [],
+            });
+            const dir = (input.direction ?? "long").toUpperCase();
+            return `Logged a ${dir} trade to the Journal (id ${id.slice(0, 12)}). The learner can open the Journal page to review or edit it.`;
+          }
+          if (name === "get_recent_trades") {
+            const n = Math.min(Math.max(1, input.limit ?? 5), 20);
+            const rows = store.trades.slice(0, n).map((t) => ({
+              date: t.date, direction: t.direction, session: t.session, outcome: t.outcome,
+              rMultiple: t.rMultiple, followedPlan: t.followedPlan, scenario: t.scenario,
+              ruleViolations: t.ruleViolations,
+            }));
+            return rows.length ? JSON.stringify(rows) : "The Journal is currently empty.";
+          }
+          return `Unknown tool: ${name}`;
         },
       });
     } catch (e: any) {
@@ -158,7 +187,7 @@ export function Assistant() {
               <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4">
                 {messages.length === 0 && (
                   <div className="space-y-3">
-                    <p className="text-sm text-muted">Hi! I'm your trading tutor. I can see the page you're on, so ask me anything — I'll explain from first principles and keep it honest (no signals, risk first).</p>
+                    <p className="text-sm text-muted">Hi! I'm your trading tutor. I can see the page you're on and I can <b className="text-fg">write trades straight into your Journal</b> and read them back to review your process. Ask me anything — I'll explain from first principles and keep it honest (no signals, risk first).</p>
                     <div className="space-y-1.5">
                       {SUGGESTIONS.map((s) => (
                         <button key={s} onClick={() => send(s)} className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm text-muted transition-colors hover:border-accent/40 hover:bg-elevated hover:text-fg">
