@@ -92,11 +92,12 @@ Lessons use a **query-param route** `/learn?m=<moduleId>&l=<lessonId>` (single s
 - **Streaming:** `streamChat()` (used by the Settings "Test" button) parses SSE `content_block_delta` text deltas.
 - **Agentic tool loop:** `runAssistant()` streams text AND handles tool use. It accumulates content blocks (text + `tool_use` with `input_json_delta`), and when `stop_reason === "tool_use"` it calls the caller-supplied `executeTool(name, input)`, feeds a `tool_result` back, and loops (max 6 iterations) so the model can respond after acting.
 - **Tools** are declared in `TUTOR_TOOLS` (`lib/ai.ts`) and **executed client-side** in `assistant.tsx` against `useAcademy.getState()` (use `getState()`, not a render-time snapshot, to avoid stale data). Current tools:
-  - `log_journal_trade` → `addTrade`
-  - `get_recent_trades` (read)
-  - `add_playbook_setup` → `addSetup` (maps `checklist: string[]` → `{id,text}[]`)
-  - `get_playbook_setups` (read)
-  - `log_top_down_read` → `addSnapshot` (validates trend/structure enums, fills all 5 timeframes with blanks)
+  - Journal: `log_journal_trade` → `addTrade`; `get_recent_trades` (read, returns ids); `update_journal_trade` → `updateTrade`
+  - Playbook: `add_playbook_setup` → `addSetup` (maps `checklist: string[]` → `{id,text}[]`); `get_playbook_setups` (read, returns ids); `update_playbook_setup` → `updateSetup`
+  - Top-Down: `log_top_down_read` → `addSnapshot` (validates trend/structure enums, fills all 5 timeframes with blanks)
+  - Curriculum (canvas editing): `get_curriculum` (modules+lessons index), `get_lesson` (full body), `update_lesson` → `updateLesson` (whole-field replace; omit lessonId ⇒ current lesson via `currentLessonId()` parsing `window.location`), `add_lesson`
+  - Glossary/Mistakes: `upsert_glossary_term` → `upsertTerm`; `add_mistake` → `addMistake`
+- **Canvas/live-edit behaviour:** editing a store entity re-renders its page live (Zustand subscription). Editing the *current* lesson updates the lesson viewer immediately because it renders `lesson.body` directly in non-edit mode. The persona explicitly forbids "I can't edit this / flag it to the app team" — the tutor must use these tools when asked to change page content.
 - Tool results are narrated inline in the chat (`> 🛠️ …`). Chat history persists to `localStorage` `academy-ai-chat` (text-only turns; tool internals are side-effects, not re-sent across turns).
 
 ### Adding a new tutor tool (pattern)

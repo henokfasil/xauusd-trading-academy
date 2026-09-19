@@ -29,8 +29,14 @@ const PAGE_LABELS: { test: RegExp; label: string }[] = [
   { test: /\/settings\/?$/, label: "Settings" },
 ];
 
+const currentLessonId = (): string | null => {
+  if (typeof window === "undefined") return null;
+  if (!/\/learn\/?$/.test(window.location.pathname)) return null;
+  return new URLSearchParams(window.location.search).get("l");
+};
+
 const SUGGESTIONS = [
-  "Explain this page simply, like I'm a beginner.",
+  "Simplify this lesson and add a concrete gold example.",
   "Log a trade: long XAU 3710, stop 3704, target 3730, London, sweep-reclaim, +2R.",
   "Draft a Playbook setup for break-and-retest continuation.",
   "Record a top-down read: Daily & 4H bullish, 15m pulling back into support.",
@@ -62,7 +68,7 @@ export function Assistant() {
     if (/\/learn\/?$/.test(path)) {
       const p = new URLSearchParams(window.location.search);
       const l = lessons.find((x) => x.id === p.get("l"));
-      if (l) return `Page: Lesson viewer.\nCurrent lesson: "${l.title}" (module: ${l.moduleId}).\nLesson summary: ${l.summary}\n\nLesson content (markdown):\n${l.body.slice(0, 3000)}${l.notes ? `\n\nLearner's own notes on this lesson:\n${l.notes.slice(0, 800)}` : ""}`;
+      if (l) return `Page: Lesson viewer (you can edit this lesson directly with update_lesson).\nCurrent lesson id: ${l.id}\nCurrent lesson: "${l.title}" (module: ${l.moduleId}).\nLesson summary: ${l.summary}\n\nLesson content (markdown, may be truncated — call get_lesson for the full body before editing):\n${l.body.slice(0, 3500)}${l.notes ? `\n\nLearner's own notes on this lesson:\n${l.notes.slice(0, 800)}` : ""}`;
     }
     return `Page: ${label}. The learner's default risk is ${settings.riskPercent}% of a ${settings.currency} ${settings.accountBalance} account.`;
   };
@@ -113,11 +119,76 @@ export function Assistant() {
           if (name === "get_recent_trades") {
             const n = Math.min(Math.max(1, input.limit ?? 5), 20);
             const rows = store.trades.slice(0, n).map((t) => ({
-              date: t.date, direction: t.direction, session: t.session, outcome: t.outcome,
+              id: t.id, date: t.date, direction: t.direction, session: t.session, outcome: t.outcome,
               rMultiple: t.rMultiple, followedPlan: t.followedPlan, scenario: t.scenario,
               ruleViolations: t.ruleViolations,
             }));
             return rows.length ? JSON.stringify(rows) : "The Journal is currently empty.";
+          }
+          if (name === "get_curriculum") {
+            const mods = store.modules.slice().sort((a, b) => a.order - b.order).map((m) => ({
+              moduleId: m.id, title: m.title,
+              lessons: store.lessons.filter((l) => l.moduleId === m.id).sort((a, b) => a.order - b.order).map((l) => ({ lessonId: l.id, title: l.title })),
+            }));
+            return JSON.stringify(mods);
+          }
+          if (name === "get_lesson") {
+            const id = input.lessonId || currentLessonId();
+            const l = store.lessons.find((x) => x.id === id);
+            if (!l) return "Lesson not found. Use get_curriculum to find a lesson id, or open a lesson page.";
+            return JSON.stringify({ id: l.id, moduleId: l.moduleId, title: l.title, summary: l.summary, estMinutes: l.estMinutes, status: l.status, completed: l.completed, notes: l.notes, body: l.body });
+          }
+          if (name === "update_lesson") {
+            const id = input.lessonId || currentLessonId();
+            const l = store.lessons.find((x) => x.id === id);
+            if (!l) return "No lesson to update — open a lesson page or pass a lessonId (see get_curriculum).";
+            const patch: any = {};
+            for (const k of ["title", "summary", "body", "notes", "estMinutes", "status", "completed"]) {
+              if (input[k] !== undefined) patch[k] = input[k];
+            }
+            if (Object.keys(patch).length === 0) return "No fields provided to update.";
+            store.updateLesson(l.id, patch);
+            return `Updated lesson "${patch.title ?? l.title}" (${Object.keys(patch).join(", ")}). The page now reflects the change.`;
+          }
+          if (name === "add_lesson") {
+            const mod = store.modules.find((m) => m.id === input.moduleId);
+            if (!mod) return "moduleId not found — call get_curriculum for valid module ids.";
+            const id = store.addLesson(input.moduleId, input.title ?? "New lesson");
+            store.updateLesson(id, {
+              ...(input.body !== undefined ? { body: input.body } : {}),
+              ...(input.summary !== undefined ? { summary: input.summary } : {}),
+              ...(input.estMinutes !== undefined ? { estMinutes: input.estMinutes } : {}),
+            });
+            return `Created lesson "${input.title}" in ${mod.title} (open it at /learn?m=${input.moduleId}&l=${id}).`;
+          }
+          if (name === "upsert_glossary_term") {
+            store.upsertTerm({ id: input.id, term: input.term, definition: input.definition, example: input.example, category: input.category });
+            return input.id ? `Updated glossary term "${input.term ?? input.id}".` : `Added glossary term "${input.term}".`;
+          }
+          if (name === "add_mistake") {
+            const id = store.addMistake({ title: input.title ?? "Mistake", description: input.description ?? "", cost: input.cost ?? "", correction: input.correction ?? "", tags: Array.isArray(input.tags) ? input.tags : [] });
+            return `Logged "${input.title}" to the Mistake Library (id ${id.slice(0, 12)}).`;
+          }
+          if (name === "update_journal_trade") {
+            const t = store.trades.find((x) => x.id === input.tradeId);
+            if (!t) return "tradeId not found — use get_recent_trades to get ids.";
+            const patch: any = {};
+            for (const k of ["context", "location", "scenario", "trigger", "invalidation", "entry", "stop", "target", "size", "outcome", "rMultiple", "pnl", "followedPlan", "emotions", "lessons"]) {
+              if (input[k] !== undefined) patch[k] = input[k];
+            }
+            store.updateTrade(t.id, patch);
+            return `Updated trade ${t.id.slice(0, 12)} (${Object.keys(patch).join(", ")}).`;
+          }
+          if (name === "update_playbook_setup") {
+            const s = store.setups.find((x) => x.id === input.setupId);
+            if (!s) return "setupId not found — use get_playbook_setups to get ids.";
+            const patch: any = {};
+            for (const k of ["name", "thesis", "context", "location", "trigger", "invalidation", "management", "targets"]) {
+              if (input[k] !== undefined) patch[k] = input[k];
+            }
+            if (Array.isArray(input.checklist)) patch.checklist = input.checklist.filter((x: any) => typeof x === "string" && x.trim()).map((text: string) => ({ id: nanoid(6), text }));
+            store.updateSetup(s.id, patch);
+            return `Updated setup "${patch.name ?? s.name}" (${Object.keys(patch).join(", ")}).`;
           }
           if (name === "add_playbook_setup") {
             const checklist = (Array.isArray(input.checklist) ? input.checklist : [])
@@ -132,7 +203,7 @@ export function Assistant() {
             return `Saved setup "${input.name ?? "New Setup"}" to the Playbook (${checklist.length} checklist items, id ${id.slice(0, 12)}). Editable on the Playbook page.`;
           }
           if (name === "get_playbook_setups") {
-            const rows = store.setups.map((s) => ({ name: s.name, thesis: s.thesis, checks: s.checklist.length }));
+            const rows = store.setups.map((s) => ({ id: s.id, name: s.name, thesis: s.thesis, checks: s.checklist.length }));
             return rows.length ? JSON.stringify(rows) : "The Playbook is currently empty.";
           }
           if (name === "log_top_down_read") {
@@ -223,7 +294,7 @@ export function Assistant() {
               <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4">
                 {messages.length === 0 && (
                   <div className="space-y-3">
-                    <p className="text-sm text-muted">Hi! I'm your trading tutor. I can see the page you're on and I can act in your workspace — <b className="text-fg">log trades to your Journal, draft setups in your Playbook, and record Top-Down reads</b> — then review them with you. Ask me anything; I'll explain from first principles and keep it honest (no signals, risk first).</p>
+                    <p className="text-sm text-muted">Hi! I'm your trading tutor, and I can <b className="text-fg">edit the page you're on</b> — rewrite or expand lessons, add examples — and act in your workspace: <b className="text-fg">log trades, draft Playbook setups, record Top-Down reads, edit the glossary, log mistakes</b>. Changes appear live on the page. Ask me anything; I keep it honest (no signals, risk first).</p>
                     <div className="space-y-1.5">
                       {SUGGESTIONS.map((s) => (
                         <button key={s} onClick={() => send(s)} className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm text-muted transition-colors hover:border-accent/40 hover:bg-elevated hover:text-fg">

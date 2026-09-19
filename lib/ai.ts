@@ -152,17 +152,131 @@ export const TUTOR_TOOLS: ClaudeTool[] = [
       },
     },
   },
+  {
+    name: "get_curriculum",
+    description: "List all modules and lessons (ids + titles) so you can find the id of a lesson to edit, or the module to add a lesson to.",
+    input_schema: { type: "object", properties: {}, required: [] },
+  },
+  {
+    name: "get_lesson",
+    description:
+      "Read the FULL content of a lesson (title, summary, body markdown, notes). Call this before editing a lesson so you have its complete current body. Omit lessonId to read the lesson the learner is currently viewing.",
+    input_schema: {
+      type: "object",
+      properties: { lessonId: { type: "string", description: "Lesson id; omit to use the current lesson" } },
+      required: [],
+    },
+  },
+  {
+    name: "update_lesson",
+    description:
+      "Edit an existing lesson's content directly — this changes what the learner sees on the page, live. Omit lessonId to edit the current lesson. IMPORTANT: each field you supply REPLACES that field entirely, so to change part of the body you must first get_lesson, then send the COMPLETE revised markdown in 'body'. Only include fields you want to change. Confirm exactly what you changed afterwards.",
+    input_schema: {
+      type: "object",
+      properties: {
+        lessonId: { type: "string", description: "Lesson id; omit to edit the current lesson" },
+        title: { type: "string" },
+        summary: { type: "string" },
+        body: { type: "string", description: "The COMPLETE new markdown body (replaces the old body)" },
+        notes: { type: "string", description: "The learner's personal notes for this lesson (replaces existing notes)" },
+        estMinutes: { type: "number" },
+        status: { type: "string", enum: ["unseen", "learning", "review", "mastered"] },
+        completed: { type: "boolean" },
+      },
+      required: [],
+    },
+  },
+  {
+    name: "add_lesson",
+    description: "Create a new lesson inside a module (use get_curriculum to find the moduleId). Provide a markdown body.",
+    input_schema: {
+      type: "object",
+      properties: {
+        moduleId: { type: "string" },
+        title: { type: "string" },
+        summary: { type: "string" },
+        body: { type: "string", description: "Markdown body for the new lesson" },
+        estMinutes: { type: "number" },
+      },
+      required: ["moduleId", "title"],
+    },
+  },
+  {
+    name: "upsert_glossary_term",
+    description: "Add a new glossary term, or edit an existing one (pass its id to edit). Keep definitions plain and beginner-friendly with a gold example where useful.",
+    input_schema: {
+      type: "object",
+      properties: {
+        id: { type: "string", description: "Term id to EDIT an existing term; omit to CREATE a new one" },
+        term: { type: "string" },
+        definition: { type: "string" },
+        example: { type: "string" },
+        category: { type: "string" },
+      },
+      required: [],
+    },
+  },
+  {
+    name: "add_mistake",
+    description: "Log an entry in the learner's Mistake Library: the error, its cost, and the professional correction.",
+    input_schema: {
+      type: "object",
+      properties: {
+        title: { type: "string" },
+        description: { type: "string" },
+        cost: { type: "string" },
+        correction: { type: "string", description: "The professional fix / what to do instead" },
+        tags: { type: "array", items: { type: "string" } },
+      },
+      required: ["title"],
+    },
+  },
+  {
+    name: "update_journal_trade",
+    description: "Edit an existing journal trade (get its id from get_recent_trades). Only include fields to change.",
+    input_schema: {
+      type: "object",
+      properties: {
+        tradeId: { type: "string" },
+        context: { type: "string" }, location: { type: "string" }, scenario: { type: "string" },
+        trigger: { type: "string" }, invalidation: { type: "string" },
+        entry: { type: "number" }, stop: { type: "number" }, target: { type: "number" }, size: { type: "number" },
+        outcome: { type: "string", enum: ["open", "win", "loss", "breakeven"] },
+        rMultiple: { type: "number" }, pnl: { type: "number" }, followedPlan: { type: "boolean" },
+        emotions: { type: "string" }, lessons: { type: "string" },
+      },
+      required: ["tradeId"],
+    },
+  },
+  {
+    name: "update_playbook_setup",
+    description: "Edit an existing playbook setup (get its id from get_playbook_setups). Only include fields to change.",
+    input_schema: {
+      type: "object",
+      properties: {
+        setupId: { type: "string" },
+        name: { type: "string" }, thesis: { type: "string" }, context: { type: "string" },
+        location: { type: "string" }, trigger: { type: "string" }, invalidation: { type: "string" },
+        management: { type: "string" }, targets: { type: "string" },
+        checklist: { type: "array", items: { type: "string" }, description: "Replaces the whole checklist" },
+      },
+      required: ["setupId"],
+    },
+  },
 ];
 
 // The tutor persona — kept static so it can be prompt-cached across turns.
 export const TUTOR_PERSONA = `You are the in-app tutor for the "XAU/USD Trading Academy", an educational app that teaches chart-based gold (XAU/USD) day trading from absolute zero.
 
-TOOLS / ACTING IN THE APP
-- You can act inside the learner's workspace via tools. Prefer acting when asked, rather than only describing.
-- JOURNAL: when the learner describes a trade and asks you to record it (or says "log this", "add to my journal"), call log_journal_trade, filling as many process fields as the conversation supports. Use get_recent_trades before commenting on "my trades"/"my journal".
-- PLAYBOOK: when asked to draft/save a setup, or to turn a lesson or idea into a repeatable setup, call add_playbook_setup with a full definition (thesis, context, location, trigger, invalidation, management, targets) and a concrete pre-trade checklist. Use get_playbook_setups to avoid duplicates.
-- TOP-DOWN: when the learner describes their multi-timeframe view or asks you to record a top-down read, call log_top_down_read with the timeframes you have information for. This is a reasoning record, NOT a signal — summarise the combined bias and the condition required before any entry.
-- Do not invent numbers or details you weren't given — leave unknown fields blank. If the learner is vague, either ask one quick clarifying question or save what you have and let them refine it. After any action, confirm exactly what you saved and that it's editable on the relevant page.
+TOOLS / ACTING IN THE APP — YOU ARE AN AGENT, NOT JUST A CHAT
+- You can directly READ and EDIT the learner's workspace via tools, and you should DO SO when asked instead of describing what you would do or telling them to edit it themselves. The learner wants the pages actually updated. Never say you "can't edit the page" or to "flag it to the app team" — you have edit tools; use them. Changes render live on the page.
+- EDIT LESSON CONTENT: when asked to change/improve/rewrite/expand a lesson (e.g. "update these two lines", "make this simpler", "add an example"), FIRST call get_lesson to load the full current body, then call update_lesson with the COMPLETE revised markdown body (update replaces the whole field, so never send a fragment). Omit lessonId to edit the lesson they're currently viewing. Preserve the rest of the lesson; change only what they asked.
+- CREATE LESSONS: use add_lesson (find moduleId via get_curriculum). Edit glossary via upsert_glossary_term. Log mistakes via add_mistake.
+- JOURNAL: log_journal_trade to record a described trade; get_recent_trades (returns ids) to review or find a trade; update_journal_trade to edit one.
+- PLAYBOOK: add_playbook_setup to draft a setup (full definition + checklist); get_playbook_setups (returns ids); update_playbook_setup to edit one.
+- TOP-DOWN: log_top_down_read to record a multi-timeframe read (a reasoning record, NOT a signal).
+- Do not invent numbers/details you weren't given — leave unknown fields blank. If genuinely ambiguous (e.g. which lesson, or which two lines), ask ONE quick clarifying question; otherwise act. After any action, confirm concisely exactly what you changed and where.
+- Not editable by tools: the Dashboard's intro heading and pure app chrome. Lesson bodies, glossary, journal, playbook, top-down, mistakes are all editable — that's where you act.
 
 YOUR ROLE
 - You are a patient, rigorous trading educator and quantitative-minded mentor. The learner may know nothing about discretionary/chart trading — never assume prior knowledge of candlesticks, pips, lots, structure, sessions, risk, or order types. Explain from first principles when needed.
