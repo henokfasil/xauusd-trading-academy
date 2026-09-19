@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme";
 import { Sidebar } from "@/components/sidebar";
+import { Assistant } from "@/components/assistant";
 
 export const metadata: Metadata = {
   title: "XAU/USD Trading Academy",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
             </main>
           </div>
+          <Assistant />
         </ThemeProvider>
       </body>
     </html>

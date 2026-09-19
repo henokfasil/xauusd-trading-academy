@@ -184,6 +184,8 @@ export interface Settings {
   currency: string;
   learnerName: string;
   timezone: string;
+  /** AI assistant model id (the API key is stored separately, never in exports) */
+  aiModel: string;
 }
 
 export interface Progress {

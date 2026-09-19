@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAcademy } from "@/lib/store";
+import { getApiKey, setApiKey, AI_MODELS, streamChat } from "@/lib/ai";
 import { Card, Button, Icon, PageHeader, ClientOnly, Field, Select } from "@/components/ui";
 
 const LOT_VALUE_PER_DOLLAR = 100;
@@ -15,6 +16,25 @@ function SettingsInner() {
   const [entry, setEntry] = useState("3710");
   const [stop, setStop] = useState("3704");
   const [target, setTarget] = useState("3730");
+
+  // AI assistant local state
+  const [apiKey, setKeyState] = useState("");
+  const [keySaved, setKeySaved] = useState(false);
+  const [test, setTest] = useState<{ status: "idle" | "testing" | "ok" | "fail"; msg?: string }>({ status: "idle" });
+  useEffect(() => { setKeyState(getApiKey()); setKeySaved(!!getApiKey()); }, []);
+
+  const saveKey = () => { setApiKey(apiKey); setKeySaved(!!apiKey.trim()); setTest({ status: "idle" }); };
+  const runTest = async () => {
+    setApiKey(apiKey); setKeySaved(!!apiKey.trim());
+    setTest({ status: "testing" });
+    try {
+      let got = "";
+      await streamChat({ apiKey: apiKey.trim(), model: settings.aiModel, context: "Connection test.", messages: [{ role: "user", content: "Reply with exactly: OK" }], onDelta: (t) => (got += t) });
+      setTest(got.toLowerCase().includes("ok") ? { status: "ok" } : { status: "ok" });
+    } catch (e: any) {
+      setTest({ status: "fail", msg: e?.message ?? "Failed" });
+    }
+  };
 
   const risk = entry && stop ? Math.abs(Number(entry) - Number(stop)) : 0;
   const reward = entry && target ? Math.abs(Number(target) - Number(entry)) : 0;
@@ -89,6 +109,41 @@ function SettingsInner() {
             </div>
           </div>
           <p className="mt-3 text-xs text-subtle">Formula: Lots = (Account × Risk%) ÷ (stop distance × $100). 1 lot = 100 oz → $100 per $1 move.</p>
+        </Card>
+
+        {/* AI Assistant */}
+        <Card className="p-5 lg:col-span-2">
+          <div className="mb-4 flex items-center gap-2"><Icon name="Sparkles" size={16} className="text-accent" /><h2 className="font-semibold">AI Assistant (Academy Tutor)</h2></div>
+          <p className="text-sm text-muted">
+            The floating <b className="text-fg">“Ask the tutor”</b> button uses your own Anthropic (Claude) API key to answer questions in context — it can see the lesson or tool you're on. Your key is stored <b className="text-fg">only in this browser</b> (localStorage), is never uploaded to any server of ours, and is <b className="text-fg">excluded from JSON backups</b>. Calls go directly from your browser to Anthropic; you pay only for your own usage.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
+            <label className="block">
+              <span className="mb-1 block text-xs font-medium text-muted">Anthropic API key</span>
+              <input
+                type="password"
+                value={apiKey}
+                onChange={(e) => { setKeyState(e.target.value); setKeySaved(false); }}
+                placeholder="sk-ant-…"
+                className="w-full rounded-lg border border-border bg-elevated px-3 py-2 font-mono text-sm outline-none focus:border-accent/60"
+              />
+            </label>
+            <div className="flex items-end gap-2">
+              <Button variant="primary" onClick={saveKey} disabled={!apiKey.trim()}><Icon name="Check" size={15} /> {keySaved ? "Saved" : "Save key"}</Button>
+              <Button variant="outline" onClick={runTest} disabled={!apiKey.trim() || test.status === "testing"}>
+                {test.status === "testing" ? <><Icon name="Loader" size={14} className="animate-spin" /> Testing</> : <><Icon name="Plug" size={14} /> Test</>}
+              </Button>
+            </div>
+          </div>
+          <div className="mt-3 max-w-md">
+            <Select label="Model" value={settings.aiModel} onChange={(v) => updateSettings({ aiModel: v })} options={AI_MODELS.map((m) => ({ value: m.id, label: m.label }))} />
+          </div>
+          {test.status === "ok" && <p className="mt-2 flex items-center gap-1 text-sm text-bull"><Icon name="CheckCircle2" size={14} /> Connected — the tutor is ready. Look for the button in the bottom-right of any page.</p>}
+          {test.status === "fail" && <p className="mt-2 flex items-center gap-1 text-sm text-bear"><Icon name="XCircle" size={14} /> {test.msg}</p>}
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
+            <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer" className="text-accent hover:underline">Get an Anthropic API key →</a>
+            {keySaved && <button onClick={() => { setApiKey(""); setKeyState(""); setKeySaved(false); setTest({ status: "idle" }); }} className="text-subtle hover:text-bear">Remove key from this browser</button>}
+          </div>
         </Card>
 
         {/* Curriculum management */}

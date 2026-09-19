@@ -132,6 +132,7 @@ const defaultSettings: Settings = {
   currency: "USD",
   learnerName: "",
   timezone: "Europe/London",
+  aiModel: "claude-haiku-4-5-20251001",
 };
 
 const defaultProgress: Progress = { lastLessonRoute: null, quizScores: {} };
@@ -367,7 +368,7 @@ export const useAcademy = create<AcademyState>()(
             backtests: d.backtests ?? [],
             calendar: d.calendar ?? [],
             resources: d.resources ?? defaultResources,
-            settings: d.settings ?? defaultSettings,
+            settings: { ...defaultSettings, ...(d.settings ?? {}) },
             progress: d.progress ?? defaultProgress,
           });
           return true;
@@ -378,7 +379,14 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
+      version: 2,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persisted: any, version) => {
+        if (persisted?.settings && persisted.settings.aiModel === undefined) {
+          persisted.settings = { ...defaultSettings, ...persisted.settings };
+        }
+        return persisted;
+      },
       onRehydrateStorage: () => (state) => state?.setHydrated(),
       partialize: (s) => {
         const { hydrated, setHydrated, ...rest } = s as any;
