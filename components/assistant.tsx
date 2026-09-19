@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { nanoid } from "nanoid";
 import { useAcademy } from "@/lib/store";
 import { getApiKey, loadChat, saveChat, runAssistant, ChatMessage, AI_MODELS } from "@/lib/ai";
 import { Icon, Button } from "./ui";
@@ -30,9 +31,9 @@ const PAGE_LABELS: { test: RegExp; label: string }[] = [
 
 const SUGGESTIONS = [
   "Explain this page simply, like I'm a beginner.",
-  "Log a trade: long XAU at 3710, stop 3704, target 3730, London, sweep-reclaim. Outcome win +2R.",
-  "Review my recent journal trades and my process.",
-  "Quiz me on this topic with 3 questions.",
+  "Log a trade: long XAU 3710, stop 3704, target 3730, London, sweep-reclaim, +2R.",
+  "Draft a Playbook setup for break-and-retest continuation.",
+  "Record a top-down read: Daily & 4H bullish, 15m pulling back into support.",
 ];
 
 export function Assistant() {
@@ -118,6 +119,41 @@ export function Assistant() {
             }));
             return rows.length ? JSON.stringify(rows) : "The Journal is currently empty.";
           }
+          if (name === "add_playbook_setup") {
+            const checklist = (Array.isArray(input.checklist) ? input.checklist : [])
+              .filter((x: any) => typeof x === "string" && x.trim())
+              .map((text: string) => ({ id: nanoid(6), text }));
+            const id = store.addSetup({
+              name: input.name ?? "New Setup", thesis: input.thesis ?? "", context: input.context ?? "",
+              location: input.location ?? "", trigger: input.trigger ?? "", invalidation: input.invalidation ?? "",
+              management: input.management ?? "", targets: input.targets ?? "", checklist,
+              tags: Array.isArray(input.tags) ? input.tags : [],
+            });
+            return `Saved setup "${input.name ?? "New Setup"}" to the Playbook (${checklist.length} checklist items, id ${id.slice(0, 12)}). Editable on the Playbook page.`;
+          }
+          if (name === "get_playbook_setups") {
+            const rows = store.setups.map((s) => ({ name: s.name, thesis: s.thesis, checks: s.checklist.length }));
+            return rows.length ? JSON.stringify(rows) : "The Playbook is currently empty.";
+          }
+          if (name === "log_top_down_read") {
+            const TFS = ["Daily", "4H", "1H", "15m", "5m"] as const;
+            const blank = { trend: "unclear" as const, structure: "mixed" as const, levels: "", observations: "", bias: "" };
+            const src = input.reads ?? {};
+            const reads: Record<string, typeof blank> = {} as any;
+            for (const tf of TFS) {
+              const r = src[tf] ?? {};
+              reads[tf] = {
+                trend: ["bullish", "bearish", "range", "unclear"].includes(r.trend) ? r.trend : "unclear",
+                structure: ["hh_hl", "lh_ll", "mixed"].includes(r.structure) ? r.structure : "mixed",
+                levels: r.levels ?? "", observations: r.observations ?? "", bias: r.bias ?? "",
+              };
+            }
+            const id = store.addSnapshot({
+              title: input.title ?? `Read ${new Date().toISOString().slice(0, 10)}`,
+              date: input.date, reads: reads as any, interpretation: input.interpretation ?? "",
+            });
+            return `Created a Top-Down read "${input.title ?? "Read"}" (id ${id.slice(0, 12)}). Open Top-Down Analysis to review or refine it.`;
+          }
           return `Unknown tool: ${name}`;
         },
       });
@@ -187,7 +223,7 @@ export function Assistant() {
               <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4">
                 {messages.length === 0 && (
                   <div className="space-y-3">
-                    <p className="text-sm text-muted">Hi! I'm your trading tutor. I can see the page you're on and I can <b className="text-fg">write trades straight into your Journal</b> and read them back to review your process. Ask me anything — I'll explain from first principles and keep it honest (no signals, risk first).</p>
+                    <p className="text-sm text-muted">Hi! I'm your trading tutor. I can see the page you're on and I can act in your workspace — <b className="text-fg">log trades to your Journal, draft setups in your Playbook, and record Top-Down reads</b> — then review them with you. Ask me anything; I'll explain from first principles and keep it honest (no signals, risk first).</p>
                     <div className="space-y-1.5">
                       {SUGGESTIONS.map((s) => (
                         <button key={s} onClick={() => send(s)} className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm text-muted transition-colors hover:border-accent/40 hover:bg-elevated hover:text-fg">

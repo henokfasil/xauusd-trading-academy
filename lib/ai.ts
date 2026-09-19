@@ -89,15 +89,80 @@ export const TUTOR_TOOLS: ClaudeTool[] = [
       required: [],
     },
   },
+  {
+    name: "add_playbook_setup",
+    description:
+      "Create a new setup in the learner's Playbook. Call this when the learner asks you to draft/save a setup, or turn a lesson or idea into a repeatable, checkable setup definition. Fill every field you can and include a concrete pre-trade checklist. Confirm what you saved and that it's editable on the Playbook page.",
+    input_schema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "Short setup name, e.g. 'Sweep & Reclaim (London open)'" },
+        thesis: { type: "string", description: "The edge in one line" },
+        context: { type: "string", description: "When it applies (market context)" },
+        location: { type: "string", description: "Where it applies (levels/zones)" },
+        trigger: { type: "string", description: "The precise entry condition" },
+        invalidation: { type: "string", description: "Stop logic / where the idea is wrong" },
+        management: { type: "string", description: "Post-entry management rules" },
+        targets: { type: "string", description: "Exit logic / targets (aim >= 2R)" },
+        checklist: { type: "array", items: { type: "string" }, description: "Conditions that MUST be true before taking the trade" },
+        tags: { type: "array", items: { type: "string" } },
+      },
+      required: ["name"],
+    },
+  },
+  {
+    name: "get_playbook_setups",
+    description: "Read the learner's existing playbook setups (names + thesis) to reference them or avoid creating duplicates.",
+    input_schema: { type: "object", properties: {}, required: [] },
+  },
+  {
+    name: "log_top_down_read",
+    description:
+      "Create a Top-Down Analysis read for the learner. Call this when they describe their multi-timeframe view or ask you to record a top-down read. Provide the 'reads' object with any of the timeframes Daily, 4H, 1H, 15m, 5m; omit timeframes you have no information for. This is an educational reasoning record — never a buy/sell signal. Summarise the combined bias in 'interpretation' (e.g. 'HTF bullish, LTF pulling back, no entry until confirmation').",
+    input_schema: {
+      type: "object",
+      properties: {
+        title: { type: "string", description: "Title for the read, e.g. 'London prep 2026-09-19'" },
+        date: { type: "string", description: "YYYY-MM-DD, defaults to today" },
+        reads: {
+          type: "object",
+          description: "Per-timeframe reads keyed by timeframe.",
+          properties: {
+            Daily: { $ref: "#/definitions/tfRead" },
+            "4H": { $ref: "#/definitions/tfRead" },
+            "1H": { $ref: "#/definitions/tfRead" },
+            "15m": { $ref: "#/definitions/tfRead" },
+            "5m": { $ref: "#/definitions/tfRead" },
+          },
+        },
+        interpretation: { type: "string", description: "Plain-English combined bias and plan-conditions" },
+      },
+      required: [],
+      definitions: {
+        tfRead: {
+          type: "object",
+          properties: {
+            trend: { type: "string", enum: ["bullish", "bearish", "range", "unclear"] },
+            structure: { type: "string", enum: ["hh_hl", "lh_ll", "mixed"] },
+            levels: { type: "string" },
+            observations: { type: "string" },
+            bias: { type: "string" },
+          },
+        },
+      },
+    },
+  },
 ];
 
 // The tutor persona — kept static so it can be prompt-cached across turns.
 export const TUTOR_PERSONA = `You are the in-app tutor for the "XAU/USD Trading Academy", an educational app that teaches chart-based gold (XAU/USD) day trading from absolute zero.
 
 TOOLS / ACTING IN THE APP
-- You can act inside the learner's workspace. When the learner describes a trade and asks you to record it (or says "log this", "add to my journal", etc.), call the log_journal_trade tool, filling as many process fields as the conversation supports. Do not invent numbers you weren't given — leave unknown fields blank. After logging, confirm exactly what you saved and note they can edit it on the Journal page.
-- If the learner is vague, it's fine to ask one quick clarifying question first, but prefer to log what you have and let them refine it.
-- Use get_recent_trades before commenting on "my trades"/"my journal" so your feedback is grounded in real data. When reviewing, focus on process and risk (adherence, reward-to-risk, sizing, rule violations), not on predicting outcomes.
+- You can act inside the learner's workspace via tools. Prefer acting when asked, rather than only describing.
+- JOURNAL: when the learner describes a trade and asks you to record it (or says "log this", "add to my journal"), call log_journal_trade, filling as many process fields as the conversation supports. Use get_recent_trades before commenting on "my trades"/"my journal".
+- PLAYBOOK: when asked to draft/save a setup, or to turn a lesson or idea into a repeatable setup, call add_playbook_setup with a full definition (thesis, context, location, trigger, invalidation, management, targets) and a concrete pre-trade checklist. Use get_playbook_setups to avoid duplicates.
+- TOP-DOWN: when the learner describes their multi-timeframe view or asks you to record a top-down read, call log_top_down_read with the timeframes you have information for. This is a reasoning record, NOT a signal — summarise the combined bias and the condition required before any entry.
+- Do not invent numbers or details you weren't given — leave unknown fields blank. If the learner is vague, either ask one quick clarifying question or save what you have and let them refine it. After any action, confirm exactly what you saved and that it's editable on the relevant page.
 
 YOUR ROLE
 - You are a patient, rigorous trading educator and quantitative-minded mentor. The learner may know nothing about discretionary/chart trading — never assume prior knowledge of candlesticks, pips, lots, structure, sessions, risk, or order types. Explain from first principles when needed.
