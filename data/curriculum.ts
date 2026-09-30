@@ -8,6 +8,7 @@ import { Module, Lesson } from "@/lib/types";
 // ---------------------------------------------------------------------------
 
 export const modules: Module[] = [
+  { id: "trading-day", title: "A Gold Trader's Day", blurb: "Follow a professional XAU/USD day trader from pre-market prep to entry, exit and the closing journal.", order: 0, icon: "Sunrise" },
   { id: "foundations", title: "Foundations", blurb: "The vocabulary and mechanics every trade rests on. Assume nothing.", order: 1, icon: "BookOpen" },
   { id: "chart-reading", title: "Chart Reading", blurb: "Turn a wall of candles into structure you can reason about.", order: 2, icon: "CandlestickChart" },
   { id: "key-levels", title: "Key Levels", blurb: "Where price is likely to react — and why zones beat exact lines.", order: 3, icon: "Ruler" },
@@ -1176,6 +1177,242 @@ Each event shows:
 
 > The **Economic Calendar** page in this app lets you record upcoming events, tag their impact, and note your pre-planned policy for each — turning the calendar from a source of ambushes into a source of *preparation.*
 `, "/calendar"),
+
+  // --------------------------------------------------------------- A GOLD TRADER'S DAY
+  L("trading-day", "day-overview", "A Day in the Life of a Gold Trader", "The shape of a professional's day — and why prep, not prediction, is the job.", 10, ["top-down", "session", "economic-calendar", "risk-per-trade", "scenario"], `
+# A Day in the Life of a Gold Trader
+
+Before any of the mechanics in the rest of this academy, it helps to see the **whole day** a serious XAU/USD day trader actually runs — because the surprising truth is that *most of the work happens before a single trade is placed, and most of the day is spent waiting.*
+
+> ⚠️ **Educational only.** This chapter describes *how* many gold day traders structure their work — it is **not** a recommendation to trade, a signal, or a promise that any of this makes money. Trading is risky and most retail traders lose. Read it to understand the process, not to copy a "system".
+
+## The one-sentence version of the whole day
+> **Prepare in the calm, so you can execute mechanically in the chaos.**
+
+A professional's day is not "stare at charts → feel a hunch → click." It is a repeatable **process**:
+
+**context → key levels → economic calendar → scenarios → wait → trigger → size → execute → manage → journal → review.**
+
+That process is the spine of this entire app, and this chapter walks through a real day along it.
+
+## The five acts of a trading day
+1. **Pre-market prep** — review overnight moves, mark the levels, check the news calendar, write the day's plan. (Next lesson.)
+2. **Reading the chart** — top-down analysis to set a bias and spot where a decision is likely. (Lesson 3.)
+3. **Deciding the entry** — waiting for a *specific* trigger at a *specific* level, in the *right* session. (Lesson 4.)
+4. **Managing the exit** — stop as invalidation, a defined target, and pre-planned management. (Lesson 5.)
+5. **Closing the day** — journal honestly, review the process, protect tomorrow. (Lesson 5.)
+
+## The realistic rhythm of the day (roughly, London time)
+Gold trades nearly 24 hours on weekdays (the underlying CME gold futures run Sun–Fri, ~23 hours a day), but it has a **daily personality**:
+
+- **Asian session** (~00:00–07:00) — quiet, low volume, often a tight range. Little trading; it *builds a reference range* for later.
+- **Pre-London prep** (~06:00–07:00) — the 30–60 minute routine: review the overnight range, mark levels, check the calendar, glance at the dollar and yields.
+- **London open** (~07:00–13:00) — volume and volatility ramp; the first real setups appear.
+- **London / New York overlap** (~13:00–17:00) — **prime time**: deepest liquidity, tightest spreads, biggest clean moves — and the riskiest news (US data drops here).
+- **New York afternoon** (~17:00–21:00) — activity fades; fewer clean setups.
+- **End of day** — journal and review.
+
+> These times **shift with daylight saving** and are approximate. Learn the *rhythm* (quiet Asia → London expansion → NY overlap → fade), then re-anchor to your platform clock. The interactive **"A Day Trading XAU/USD"** timeline breaks this into an expandable, hour-by-hour walkthrough.
+
+## The mindset that separates professionals
+- They treat **"no trade" as a valid, professional outcome.** Most of the day is waiting.
+- They decide **what they'll do before it happens**, so live decisions are mechanical.
+- They judge themselves on **process, not the result of one trade.**
+
+## Sources
+- CME Group — *Gold Futures* (near-23-hour trading, gold's sensitivity to economic events): https://www.cmegroup.com/markets/metals/precious/gold-futures.html
+- BabyPips — *Forex Trading Sessions* (session structure, London/NY overlap as the busiest window): https://www.babypips.com/learn/forex/forex-trading-sessions
+- OANDA — *When is the best time for forex trading?* (overlap = highest liquidity/volatility): https://www.oanda.com/us-en/skills-and-insights/education/trading-asset-classes/forex/when-is-the-best-time-for-forex-trading/
+- RoboForex — *Gold Trading Explained (XAUUSD)* (gold's peak hours ~13:00–17:00 GMT, session behaviour): https://roboforex.com/blog/education/gold-trading-xauusd/
+`, "/day-in-the-life"),
+
+  L("trading-day", "premarket-prep", "Pre-Market Prep: How the Day Starts", "The 30–60 minute routine a trader runs before touching the buy button.", 11, ["top-down", "economic-calendar", "usd", "real-yield", "pdh", "pdl", "session-high"], `
+# Pre-Market Prep: How the Day Starts
+
+Ask a professional gold trader how their day starts and you'll rarely hear "I look for a trade." You'll hear a **checklist** run in the calm *before* the session — typically 30–60 minutes of preparation so that when volatility arrives, every decision is already half-made.
+
+## Step 1 — Review the overnight action
+Open the chart and see what happened while you slept: did Asia drift in a tight range, or did something (news, a geopolitical headline) move gold? Note yesterday's close and the **Asian range** (its high and low), because those become reference points for the London session.
+
+## Step 2 — Check the economic calendar *first*
+Before marking a single level, professionals screen the day's **scheduled news**, so they know *when* volatility is coming. A calendar (e.g. [FXStreet's](https://www.fxstreet.com/economic-calendar)) flags each release's expected impact (high-impact "red-folder" events are the ones that move gold). The ones that matter most for gold:
+
+- **FOMC** rate decisions (8×/year), **CPI** (inflation), and **NFP** (jobs, first Friday).
+
+You note the **exact time** of each in your platform's timezone and decide your **policy in advance** — most commonly, *be flat into the release and trade the cleaner move afterwards* (more in Lesson 5).
+
+## Step 3 — Glance at gold's macro dashboard: the dollar & yields
+Gold is priced in dollars and pays no interest, so two screens sit next to the XAU/USD chart:
+
+- **US Dollar Index (DXY)** — gold usually moves **inversely** to the dollar.
+- **US Treasury yields (e.g. 10-year / real yields)** — when yields rise, holding zero-yield gold costs more, which tends to pressure gold; when they fall, gold tends to be supported.
+
+You're not forecasting these — you're noting which way the *macro wind* is blowing today.
+
+## Step 4 — Mark the key levels (the battlegrounds)
+Now draw the small number of places where a decision is likely today:
+
+- **Previous Day High / Low (PDH / PDL).**
+- **The Asian / overnight range** high and low.
+- **Major support/resistance zones** and big **round numbers** (3700, 3750…).
+
+Draw **zones, not pixel lines**, and keep it to a handful — if everything is "near a level", nothing is.
+
+## Step 5 — Write the day's plan (scenarios + risk)
+Finally, turn analysis into a plan you can execute mechanically:
+
+- **2–3 if-then scenarios** at your key levels, *both directions* (Lesson 3 & 4).
+- Your **risk settings**: risk per trade (commonly 0.5–1%) and a **max daily loss** limit that ends your day if hit.
+
+> The output of prep is a one-page plan: *"Bias is X. I'm watching levels A and B. Here's exactly what I'll do at each, and here's the news that could override it."* Record your reads in the **Top-Down Analysis** workspace and your rules in the **Playbook**.
+
+## Sources
+- Pro Trader Dashboard — *Morning Trading Routine* (pre-market checklist, 30–60 min before session): https://protraderdashboard.com/blog/morning-trading-routine/
+- United Daytraders — *Building a Trading Routine* (mark PDH/PDL & overnight range pre-session): https://united-daytraders.com/blog/building-trading-routine/
+- FXStreet — *Economic Calendar* (impact ratings; check high-impact events pre-market): https://www.fxstreet.com/economic-calendar
+- RoboForex — *Gold Trading Explained* (USD & interest-rate inverse relationship with gold): https://roboforex.com/blog/education/gold-trading-xauusd/
+- CME Group — *Gold Futures* (CPI and the 8×/year FOMC as key gold drivers): https://www.cmegroup.com/markets/metals/precious/gold-futures.html
+`, "/top-down"),
+
+  L("trading-day", "reading-the-setup", "Reading the Chart & Spotting the Setup", "Top-down analysis, market structure, and the patterns gold traders watch.", 12, ["top-down", "market-structure", "support", "resistance", "liquidity-sweep", "breakout", "retest"], `
+# Reading the Chart & Spotting the Setup
+
+With prep done, the trader reads the chart to answer two questions: **which way is the wind blowing (bias)?** and **where is a decision likely (the setup)?** The professional method is **top-down**.
+
+## Top-down (multi-timeframe) analysis
+Read from high timeframe to low, each with a different job:
+
+1. **Daily / 4H — the narrative.** What's the dominant trend and structure? This sets your **bias**.
+2. **1H — the structure & levels.** Where are the key zones price is respecting right now?
+3. **15m / 5m — the timing.** Where, precisely, will you enter *once price arrives*?
+
+The rule: **trade with the higher-timeframe bias, and use the lower timeframe only to time entries.** Fighting the higher timeframe with a 5-minute signal is how traders get repeatedly stopped out.
+
+## Reading market structure
+Structure is the sequence of swing highs and lows:
+
+- **Uptrend** = higher highs + higher lows → favour longs.
+- **Downtrend** = lower highs + lower lows → favour shorts.
+- A **break of structure** (price breaking the swing point that defined the prior trend) is the market's hint that control may be shifting.
+
+## The patterns gold traders specifically watch
+At the marked levels, a few recurring behaviours come up again and again on gold:
+
+- **Break-and-retest** — price breaks a clean level, comes *back* to it, and it holds (old resistance becomes support). A mainstream, widely-accepted continuation pattern.
+- **Rejection at a level** — a long-wicked candle (pin bar / engulfing) showing one side defended the zone.
+- **Liquidity sweep / stop-hunt** — price spikes *through* an obvious level (a swing high/low, PDH/PDL, or the Asian range) to trigger the stops resting there, then reverses. The classic gold example is the **"London sweep"**: London takes out the Asian range high or low, then turns.
+
+> 🧭 **Methodology, not gospel.** Break-and-retest and multi-timeframe analysis are broadly accepted. "Liquidity sweeps", "order blocks" and the "London sweep of the Asian range" come from **Smart Money Concepts (SMC)** — a *very popular* framework in the retail gold community, but a teaching methodology, **not** an academically validated fact. Use it as one lens, and let your own journaled results (not a guru) tell you whether it has an edge *for you*.
+
+## Confluence — stacking reasons
+The setups worth waiting for have **several independent reasons** to be there at once:
+
+> higher-timeframe bias **+** a key level **+** a price-action trigger **+** the right session.
+
+One reason is a coin flip; three aligned reasons is an **A+ setup**. But don't wait for ten perfect stars — two or three solid, independent reasons is the sweet spot.
+
+> Record each read in the **Top-Down Analysis** workspace so your bias is written down and filters every trade for the day.
+
+## Sources
+- Investopedia — *Multiple Time Frames Can Multiply Returns* (top-down higher→lower timeframe method): https://www.investopedia.com/articles/trading/07/timeframes.asp
+- BabyPips — *Multiple Time Frame Analysis* (define trend on higher TF, time entries on lower): https://www.babypips.com/forexpedia/multiple-time-frame-analysis
+- FXOpen — *Break and Retest Strategy* (break → return → hold pattern): https://fxopen.com/blog/en/how-can-you-use-a-break-and-retest-strategy-in-trading/
+- ACY — *How to Trade Metals with SMC and Fundamentals* (multi-timeframe gold stack, structure, liquidity — SMC methodology): https://acy.com/en/market-news/education/how-to-trade-metals-with-smc-and-fundamentals-j-o-20251024-094909/
+- LiquidityFinder — *Day Trading Gold (XAU/USD) with SMC* (liquidity sweeps, London sweep of the Asian range — popular methodology): https://liquidityfinder.com/news/complete-step-by-step-guide-to-day-trading-gold-xau-usd-with-smart-money-concepts-smc-2ccd7
+`, "/top-down"),
+
+  L("trading-day", "deciding-the-entry", "Deciding the Entry", "Turning a setup into a click: trigger, timing, and confirmation vs anticipation.", 10, ["session", "confirmation", "confluence", "trigger", "liquidity-sweep", "retest"], `
+# Deciding the Entry
+
+A level is *not* an entry. The professional waits for three things to line up: the **right place**, the **right trigger**, and the **right time**.
+
+## Timing: the session is part of the setup
+The single most-cited entry window for gold is the **London / New York overlap** (~13:00–17:00 GMT / 8am–12pm ET) — the deepest liquidity, tightest spreads and cleanest moves of the day (roughly **70% of daily FX volume** happens in this overlap). The same setup that's high-quality during the overlap can be noise in thin, late-Asia liquidity.
+
+## The trigger: a written rule, not a feeling
+"It looked bullish" can't be journaled, tested, or improved. A **trigger** is a precise, pre-written event that gives you permission to click. The three core gold entry models:
+
+1. **Rejection at a level** — price reaches your zone and prints a rejection candle (long wick / engulfing). Enter on the confirming close.
+2. **Break-and-retest** — price breaks a level, returns, and the level *holds*. Enter on the retest confirmation, stop just beyond the retest.
+3. **Sweep-and-reclaim** — price sweeps beyond an obvious level (grabbing stops), then *closes back inside*. Enter on the reclaim, stop just beyond the sweep's extreme.
+
+## The real debate: confirmation vs anticipation
+There's a genuine split among professionals here — know both:
+
+- **Confirmation (wait for the reaction):** let price reach the level *and* print the trigger before entering.
+  - ✅ Higher win rate — the market has "shown its hand."
+  - ❌ Worse price, wider stop, and sometimes you miss the move. *(Break-and-retest teachers lean this way.)*
+- **Anticipation (act into the level):** place a limit at the level and let price come to you.
+  - ✅ Best price → tightest stop → highest reward-to-risk.
+  - ❌ No confirmation; you'll be filled on some losers that slice straight through. *(Many SMC/liquidity traders anticipate the reversal at the swept level.)*
+
+> Neither is "correct." Messy conditions, counter-trend ideas, and news risk argue for **confirmation**; a strong, clean higher-timeframe level argues for leaning toward **anticipation**. Pick one *per scenario*, write it down, and let your journal reveal which fits you.
+
+## Confluence gate before the click
+Right before entering, the professional silently checks: *"Do I have my level + my bias + my trigger + acceptable timing — and has my exact trigger actually happened, or am I forcing it?"* **No trigger = no trade.**
+
+> Build these entry models as reusable checklists in your **Playbook**, so live entries are a matter of ticking boxes, not summoning courage.
+
+## Sources
+- OANDA — *When is the best time for forex trading?* (London/NY overlap = peak liquidity/volatility): https://www.oanda.com/us-en/skills-and-insights/education/trading-asset-classes/forex/when-is-the-best-time-for-forex-trading/
+- BabyPips — *Forex Trading Sessions* (the overlap is the busiest window): https://www.babypips.com/learn/forex/forex-trading-sessions
+- FXOpen — *Break and Retest Strategy* (retest as confirmation entry): https://fxopen.com/blog/en/how-can-you-use-a-break-and-retest-strategy-in-trading/
+- ACY — *Price Action: Retest vs Pullback Confirmation Guide* (rejection candles as triggers): https://acy.com/en/market-news/education/market-education-price-action-retest-vs-pullback-confirmation-guide-j-o-20250715-main-110718/
+- RoboForex — *Gold Trading Explained* (gold's peak window ~13:00–17:00 GMT): https://roboforex.com/blog/education/gold-trading-xauusd/
+`, "/playbook"),
+
+  L("trading-day", "managing-the-exit", "Managing the Exit & Closing the Day", "Stops, targets, trade management, daily risk rules, and the journal that compounds skill.", 11, ["invalidation", "stop-loss", "risk-reward", "risk-per-trade", "position-size", "breakeven", "trailing-stop"], `
+# Managing the Exit & Closing the Day
+
+Amateurs obsess over entries. Professionals know the **exit and the risk framework** are where accounts are actually made or lost. Every part of this is decided *before* the trade, so the live decisions are mechanical.
+
+## The stop is your invalidation, not a dollar figure
+Your stop-loss goes at the price where **your trade idea is simply wrong** — below the structure you bought from, above the level you sold from — *not* at an arbitrary dollar amount. Because gold is volatile (it routinely travels 1–2% in a session), stops are placed **wider** and positions sized **smaller** than in FX majors, so normal noise doesn't stop you out. Many traders size the stop to current volatility (e.g. using ATR).
+
+## Position size is derived from the stop — never guessed
+The professional order of operations:
+
+> **Risk% → risk dollars → stop distance → position size.**
+>
+> \`Position size = (Account × Risk%) ÷ (Stop distance × $ per point)\`
+
+Risk a **small, fixed fraction** per trade — the widely-taught **1% rule** (many day traders use 0.5–1%). The stop *distance* decides the size; a wider stop simply means fewer lots for the same fixed dollar risk.
+
+## The target: think in reward-to-risk
+Set a defined target and compare it to the stop *before* entering. The common standard is a **minimum 1:2** reward-to-risk, with **1:3** considered ideal — a 1:2 setup only needs roughly a **33% win rate** to break even before costs. This is why *reward-to-risk*, not win rate, is what pays you.
+
+## Trade management — the professional sequence
+Once in, you execute the *pre-written* plan, not your emotions. A common sequence:
+
+1. **Partial + breakeven:** at ~1R take part of the position off and move the remaining stop to **breakeven**, so the trade can no longer lose.
+2. **Trail the runner:** trail the stop beneath each new higher-low (in a long) to ride an extended move.
+
+> ⚠️ The most common management mistake is moving to breakeven **too early** — you get stopped out on a normal retracement for zero gain. And the deadliest mistake of all: **moving your stop *further away*** as price approaches it. Never do it.
+
+## The daily risk guardrails
+Your process is only as good as the rules that stop *you* on a bad day:
+
+- **Max daily loss** — stop trading for the day after e.g. −2R/−3R. This single rule kills the revenge-trading spiral.
+- **Stand aside around major news.** A common approach is *no new entries in a window around CPI/NFP/FOMC* (e.g. the "15-minute rule" — nothing in the first 15 minutes after a red-folder release), letting the spread-widening and whipsaw pass, then trading the cleaner structured move. Some traders *do* trade the news — for a developing trader, **stand aside / reduce size** is the more defensible default.
+
+## Closing the day: the journal
+The trade is closed — for a professional the most valuable part begins:
+
+1. **Screenshot** the chart (entry, stop, target, exit).
+2. **Journal honestly** — the process, not just the result: was the context right, did I follow my trigger, did I move my stop, what did I feel?
+3. **Grade process over outcome.** A disciplined loss is a *good* trade; a lucky, rule-breaking win is a *warning*.
+
+> This close → capture → review loop is the engine of skill. Use the **Trading Journal** to log each trade, the **Mistake Library** for recurring errors, and **Statistics** to review your sample. That's where your edge is actually found.
+
+## Sources
+- Investopedia — *Stop-Loss Order* (stop as a pre-defined technical exit / invalidation): https://www.investopedia.com/terms/s/stop-lossorder.asp
+- Investopedia — *Risk/Reward Ratio* (RR definition and calculation): https://www.investopedia.com/terms/r/riskrewardratio.asp
+- RoboForex — *Gold Trading Explained* (wider stops / smaller size on gold; 1:2–1:3 RR; 0.5–2% risk): https://roboforex.com/blog/education/gold-trading-xauusd/
+- DayTrading.com — *The 1% Rule* (risk ≤1% of equity per trade; caps loss not capital): https://www.daytrading.com/one-percent-rule
+- The Trapped Trader — *Trade Management: Trailing Stops, Partials & Breakeven* (partial-at-1R → BE → trail): https://thetrappedtrader.com/learn/foundations/risk-management/9
+- Trading Heroes — *Move Your Stop Loss to Breakeven* (when to move to BE; the "too early" pitfall): https://www.tradingheroes.com/move-stoploss-breakeven/
+- FXNX — *Mastering NFP & CPI* (stand-aside / reduce-size / 15-minute approach to major news): https://fxnx.com/en/blog/mastering-nfp-cpi-anti-gambler-guide
+`, "/journal"),
 ];
 
 // A tiny quiz bank — extendable; keyed by lessonId.
@@ -1216,6 +1453,40 @@ export const seedQuizzes = [
     options: ["Negative — they lose too often", "About +0.6R per trade (profitable)", "Exactly breakeven", "Impossible to know"],
     correctIndex: 1,
     explanation: "(0.4 × 3) − (0.6 × 1) = 1.2 − 0.6 = +0.6R. Reward-to-risk beats win rate.",
+  },
+  {
+    id: "q-day-overview",
+    lessonId: "day-overview",
+    prompt: "For most of a professional gold trader's day, the correct action is usually to:",
+    options: [
+      "Be in a trade at all times to maximise opportunity",
+      "Wait — most of the day is preparation and patience, and 'no trade' is a valid outcome",
+      "Trade the quiet Asian session hardest",
+      "Predict the day's close and hold to it",
+    ],
+    correctIndex: 1,
+    explanation: "The job is prepare-then-wait. Most of the day is spent waiting for a planned scenario to trigger; no-trade is a professional outcome.",
+  },
+  {
+    id: "q-premarket",
+    lessonId: "premarket-prep",
+    prompt: "Which is the highest-liquidity window most gold day traders focus on?",
+    options: [
+      "The Asian session",
+      "The London / New York overlap (~13:00–17:00 GMT)",
+      "The New York afternoon after London closes",
+      "The Sunday futures open",
+    ],
+    correctIndex: 1,
+    explanation: "The London/NY overlap has the deepest liquidity, tightest spreads and cleanest moves — roughly 70% of daily FX volume.",
+  },
+  {
+    id: "q-exit-rr",
+    lessonId: "managing-the-exit",
+    prompt: "A widely-taught minimum reward-to-risk for a trade is:",
+    options: ["1:1", "1:2 (with 1:3 considered ideal)", "3:1 against you", "It doesn't matter if win rate is high"],
+    correctIndex: 1,
+    explanation: "A common standard is a minimum 1:2 RR (1:3 ideal). A 1:2 setup only needs ~33% win rate to break even before costs.",
   },
   {
     id: "q-sweep",

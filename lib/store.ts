@@ -143,6 +143,12 @@ const defaultResources: ResourceItem[] = [
   { id: "r-yields", title: "US 10Y Treasury yield", url: "https://www.tradingview.com/symbols/TVC-US10Y/", note: "Watch the direction of yields (and real yields) — gold tracks them inversely.", category: "Data & Calendars" },
   { id: "r-fed", title: "Federal Reserve (FOMC calendar)", url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", note: "Official meeting dates — gold's biggest scheduled driver.", category: "Fundamentals" },
   { id: "r-tv", title: "Charting platform (TradingView)", url: "https://www.tradingview.com/chart/?symbol=OANDA%3AXAUUSD", note: "Practise marking levels and structure on XAU/USD.", category: "Tools" },
+  // Sources cited in "A Gold Trader's Day" (Chapter 1)
+  { id: "r-babypips-sessions", title: "BabyPips — Forex Trading Sessions", url: "https://www.babypips.com/learn/forex/forex-trading-sessions", note: "Session structure and why the London/NY overlap is the busiest window. Cited in Chapter 1.", category: "Learning" },
+  { id: "r-oanda-time", title: "OANDA — Best time for forex trading", url: "https://www.oanda.com/us-en/skills-and-insights/education/trading-asset-classes/forex/when-is-the-best-time-for-forex-trading/", note: "London/NY overlap = peak liquidity and volatility. Cited in Chapter 1.", category: "Learning" },
+  { id: "r-inv002-tf", title: "Investopedia — Multiple Time Frames", url: "https://www.investopedia.com/articles/trading/07/timeframes.asp", note: "Top-down multi-timeframe analysis. Cited in Chapter 1.", category: "Learning" },
+  { id: "r-robo-gold", title: "RoboForex — Gold Trading Explained (XAUUSD)", url: "https://roboforex.com/blog/education/gold-trading-xauusd/", note: "Gold-specific: peak hours, USD/yield inverse, wider stops, 1:2–1:3 RR (broker education). Cited in Chapter 1.", category: "Learning" },
+  { id: "r-daytrading-1pct", title: "DayTrading.com — The 1% Rule", url: "https://www.daytrading.com/one-percent-rule", note: "Risk ≤1% of equity per trade; caps loss, not capital. Cited in Chapter 1.", category: "Learning" },
 ];
 
 export const useAcademy = create<AcademyState>()(
@@ -379,11 +385,38 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
-        if (persisted?.settings && persisted.settings.aiModel === undefined) {
+        if (!persisted) return persisted;
+        // v2: ensure new Settings fields exist on older data
+        if (persisted.settings && persisted.settings.aiModel === undefined) {
           persisted.settings = { ...defaultSettings, ...persisted.settings };
+        }
+        // v3: inject the "A Gold Trader's Day" chapter into existing installs
+        // WITHOUT touching the user's own edits, journal, trades or settings.
+        // Idempotent: only adds items whose id is not already present.
+        const NEW_MODULE_ID = "trading-day";
+        if (Array.isArray(persisted.modules) && !persisted.modules.some((m: Module) => m.id === NEW_MODULE_ID)) {
+          const mod = seedModules.find((m) => m.id === NEW_MODULE_ID);
+          if (mod) persisted.modules = [mod, ...persisted.modules];
+        }
+        const newLessonIds = new Set(seedLessons.filter((l) => l.moduleId === NEW_MODULE_ID).map((l) => l.id));
+        if (Array.isArray(persisted.lessons)) {
+          const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
+          const add = seedLessons.filter((l) => l.moduleId === NEW_MODULE_ID && !have.has(l.id));
+          if (add.length) persisted.lessons = [...persisted.lessons, ...add];
+        }
+        if (Array.isArray(persisted.quizzes)) {
+          const haveQ = new Set(persisted.quizzes.map((q: QuizQuestion) => q.id));
+          const addQ = (seedQuizzes as QuizQuestion[]).filter((q) => newLessonIds.has(q.lessonId) && !haveQ.has(q.id));
+          if (addQ.length) persisted.quizzes = [...persisted.quizzes, ...addQ];
+        }
+        if (Array.isArray(persisted.resources)) {
+          const haveR = new Set(persisted.resources.map((r: ResourceItem) => r.id));
+          const addR = defaultResources.filter((r) => r.id.startsWith("r-") && !haveR.has(r.id) &&
+            ["r-babypips-sessions", "r-oanda-time", "r-inv002-tf", "r-robo-gold", "r-daytrading-1pct"].includes(r.id));
+          if (addR.length) persisted.resources = [...persisted.resources, ...addR];
         }
         return persisted;
       },
