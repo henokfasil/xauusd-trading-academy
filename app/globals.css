@@ -52,6 +52,16 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: padding-right 0.2s ease;
+}
+
+/* When the tutor drawer is open, dock it: reserve its width so the page
+   content reflows beside the panel instead of hiding behind it. The drawer
+   is 420px wide (max-w-[420px]); on narrow screens it stays an overlay. */
+@media (min-width: 1024px) {
+  body.assistant-open {
+    padding-right: 420px;
+  }
 }
 
 ::-webkit-scrollbar {

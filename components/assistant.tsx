@@ -58,6 +58,13 @@ export function Assistant() {
     setHasKey(!!getApiKey());
   }, []);
   useEffect(() => { if (open) setHasKey(!!getApiKey()); }, [open]);
+  // When the drawer is open, dock it: reflow the page beside it (large screens)
+  // instead of letting the panel overlap the main content.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.classList.toggle("assistant-open", open);
+    return () => document.body.classList.remove("assistant-open");
+  }, [open]);
   useEffect(() => { saveChat(messages); }, [messages]);
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages, busy]);
 
