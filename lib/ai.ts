@@ -435,7 +435,11 @@ export async function runAssistant({ apiKey, model, context, history, userText, 
     const res = await callClaude(
       {
         model,
-        max_tokens: 1400,
+        // Headroom for tool calls that carry a full lesson body (add_lesson /
+        // update_lesson can be several KB of markdown). Too low and the tool_use
+        // JSON gets truncated mid-stream, then fails to parse and the action is
+        // silently dropped — which is why large lessons used to "fail".
+        max_tokens: 8192,
         stream: true,
         tools: TUTOR_TOOLS,
         system: [
@@ -498,24 +502,37 @@ export async function runAssistant({ apiKey, model, context, history, userText, 
     const assistantContent = ordered.map((b) => {
       if (b.type === "tool_use") {
         let input: any = {};
-        try { input = b._json ? JSON.parse(b._json) : {}; } catch { input = {}; }
-        return { type: "tool_use", id: b.id, name: b.name, input };
+        let parseFailed = false;
+        try { input = b._json ? JSON.parse(b._json) : {}; } catch { parseFailed = true; }
+        return { type: "tool_use", id: b.id, name: b.name, input, _parseFailed: parseFailed };
       }
       return { type: "text", text: b.text };
     });
 
     if (stopReason !== "tool_use") return; // plain answer, done.
 
-    // Execute each requested tool and feed results back.
-    messages.push({ role: "assistant", content: assistantContent });
+    // Execute each requested tool and feed results back. Strip our internal
+    // _parseFailed flag so the API only sees valid content blocks.
+    messages.push({
+      role: "assistant",
+      content: assistantContent.map((b: any) =>
+        b.type === "tool_use" ? { type: "tool_use", id: b.id, name: b.name, input: b.input } : b
+      ),
+    });
     const toolResults: any[] = [];
-    for (const b of assistantContent) {
+    for (const b of assistantContent as any[]) {
       if (b.type !== "tool_use") continue;
       let summary = "";
-      try {
-        summary = await executeTool(b.name, b.input);
-      } catch (e: any) {
-        summary = `Tool error: ${e?.message ?? "failed"}`;
+      if (b._parseFailed) {
+        // The tool arguments were cut off (usually a very large body hitting
+        // max_tokens). Tell the model so it can retry in smaller pieces.
+        summary = `Tool error: the arguments for ${b.name} were truncated and could not be read. If you were sending a long body, retry by creating it first with a short placeholder body, then use update_lesson to add the full content (you can do it in sections).`;
+      } else {
+        try {
+          summary = await executeTool(b.name, b.input);
+        } catch (e: any) {
+          summary = `Tool error: ${e?.message ?? "failed"}`;
+        }
       }
       onToolResult(b.name, summary);
       toolResults.push({ type: "tool_result", tool_use_id: b.id, content: summary });

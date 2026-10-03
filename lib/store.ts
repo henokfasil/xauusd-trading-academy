@@ -388,7 +388,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 3,
+      version: 4,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -420,6 +420,41 @@ export const useAcademy = create<AcademyState>()(
           const addR = defaultResources.filter((r) => r.id.startsWith("r-") && !haveR.has(r.id) &&
             ["r-babypips-sessions", "r-oanda-time", "r-inv002-tf", "r-robo-gold", "r-daytrading-1pct"].includes(r.id));
           if (addR.length) persisted.resources = [...persisted.resources, ...addR];
+        }
+        // v4: inject the "Trading Strategies" module + Fibonacci lesson into
+        // existing installs, and clean up any EMPTY "Trading Strategies" module
+        // the tutor created before the max_tokens fix (lesson add used to fail).
+        // Idempotent and non-destructive: never removes a module that has lessons,
+        // never overwrites the user's own edits.
+        const STRAT_ID = "strategies";
+        const FIB_ID = "fibonacci-retracement";
+        if (Array.isArray(persisted.modules) && Array.isArray(persisted.lessons)) {
+          // Drop empty tutor-made strategy modules (title match, no lessons, not the canonical id).
+          const junk = new Set(
+            persisted.modules
+              .filter((m: Module) =>
+                m.id !== STRAT_ID &&
+                /trading strategies/i.test(m.title || "") &&
+                !persisted.lessons.some((l: Lesson) => l.moduleId === m.id)
+              )
+              .map((m: Module) => m.id)
+          );
+          if (junk.size) persisted.modules = persisted.modules.filter((m: Module) => !junk.has(m.id));
+          // Ensure the canonical module exists.
+          if (!persisted.modules.some((m: Module) => m.id === STRAT_ID)) {
+            const mod = seedModules.find((m) => m.id === STRAT_ID);
+            if (mod) persisted.modules = [...persisted.modules, mod];
+          }
+          // Ensure the Fibonacci lesson exists (attach to the canonical module).
+          if (!persisted.lessons.some((l: Lesson) => l.id === FIB_ID)) {
+            const les = seedLessons.find((l) => l.id === FIB_ID);
+            if (les) persisted.lessons = [...persisted.lessons, les];
+          }
+        }
+        if (Array.isArray(persisted.glossary)) {
+          const haveG = new Set(persisted.glossary.map((g: GlossaryTerm) => g.id));
+          const addG = seedGlossary.filter((g) => [FIB_ID, "golden-zone"].includes(g.id) && !haveG.has(g.id));
+          if (addG.length) persisted.glossary = [...persisted.glossary, ...addG];
         }
         return persisted;
       },
