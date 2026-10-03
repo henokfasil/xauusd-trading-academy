@@ -187,8 +187,23 @@ export const TUTOR_TOOLS: ClaudeTool[] = [
     },
   },
   {
+    name: "add_module",
+    description:
+      "Create a NEW curriculum module (a section in the left nav that groups lessons), e.g. 'Trading Strategies'. Use this when the learner asks for a topic that has no suitable existing module. First call get_curriculum to check an appropriate module doesn't already exist. After creating the module, use add_lesson with the returned moduleId to add lessons into it. New modules appear at the end of the curriculum.",
+    input_schema: {
+      type: "object",
+      properties: {
+        title: { type: "string", description: "Module title shown in the nav, e.g. 'Trading Strategies'" },
+        id: { type: "string", description: "Optional stable slug id (lowercase, hyphenated, e.g. 'strategies'). Omit to auto-generate. Must be unique." },
+        blurb: { type: "string", description: "One-line description shown under the module heading." },
+        icon: { type: "string", description: "Optional lucide icon name (e.g. 'Target', 'Crosshair'). Defaults to Folder." },
+      },
+      required: ["title"],
+    },
+  },
+  {
     name: "add_lesson",
-    description: "Create a new lesson inside a module (use get_curriculum to find the moduleId). Provide a markdown body.",
+    description: "Create a new lesson inside a module (use get_curriculum to find the moduleId, or add_module first to create a new section). Provide a markdown body.",
     input_schema: {
       type: "object",
       properties: {
@@ -271,7 +286,7 @@ export const TUTOR_PERSONA = `You are the in-app tutor for the "XAU/USD Trading 
 TOOLS / ACTING IN THE APP — YOU ARE AN AGENT, NOT JUST A CHAT
 - You can directly READ and EDIT the learner's workspace via tools, and you should DO SO when asked instead of describing what you would do or telling them to edit it themselves. The learner wants the pages actually updated. Never say you "can't edit the page" or to "flag it to the app team" — you have edit tools; use them. Changes render live on the page.
 - EDIT LESSON CONTENT: when asked to change/improve/rewrite/expand a lesson (e.g. "update these two lines", "make this simpler", "add an example"), FIRST call get_lesson to load the full current body, then call update_lesson with the COMPLETE revised markdown body (update replaces the whole field, so never send a fragment). Omit lessonId to edit the lesson they're currently viewing. Preserve the rest of the lesson; change only what they asked.
-- CREATE LESSONS: use add_lesson (find moduleId via get_curriculum). Edit glossary via upsert_glossary_term. Log mistakes via add_mistake.
+- CREATE LESSONS & SECTIONS: use add_lesson (find moduleId via get_curriculum). If the topic needs a whole new section that doesn't exist yet (e.g. "Trading Strategies"), first call add_module to create it, then add_lesson into the returned moduleId. Edit glossary via upsert_glossary_term. Log mistakes via add_mistake. When you write a trading-strategy lesson, keep it educational: a repeatable process (context → location → scenario → trigger → invalidation → size), never a buy/sell signal or price prediction.
 - JOURNAL: log_journal_trade to record a described trade; get_recent_trades (returns ids) to review or find a trade; update_journal_trade to edit one.
 - PLAYBOOK: add_playbook_setup to draft a setup (full definition + checklist); get_playbook_setups (returns ids); update_playbook_setup to edit one.
 - TOP-DOWN: log_top_down_read to record a multi-timeframe read (a reasoning record, NOT a signal).

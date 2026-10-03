@@ -150,6 +150,15 @@ export function Assistant() {
             store.updateLesson(l.id, patch);
             return `Updated lesson "${patch.title ?? l.title}" (${Object.keys(patch).join(", ")}). The page now reflects the change.`;
           }
+          if (name === "add_module") {
+            const title = (input.title ?? "").trim() || "New module";
+            const wantId = (input.id ?? "").trim();
+            if (wantId && store.modules.some((m) => m.id === wantId)) {
+              return `A module with id "${wantId}" already exists ("${store.modules.find((m) => m.id === wantId)?.title}"). Add lessons to it with add_lesson using that moduleId, or choose a different id.`;
+            }
+            const id = store.addModule(title, { id: wantId || undefined, blurb: input.blurb, icon: input.icon });
+            return `Created module "${title}" (moduleId "${id}"), added to the end of the curriculum nav. Add lessons into it with add_lesson using moduleId "${id}".`;
+          }
           if (name === "add_lesson") {
             const mod = store.modules.find((m) => m.id === input.moduleId);
             if (!mod) return "moduleId not found — call get_curriculum for valid module ids.";

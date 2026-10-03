@@ -66,7 +66,7 @@ interface AcademyState {
   setLessonStatus: (id: string, status: Lesson["status"]) => void;
 
   // Modules
-  addModule: (title: string) => void;
+  addModule: (title: string, opts?: { id?: string; blurb?: string; icon?: string }) => string;
   updateModule: (id: string, patch: Partial<Module>) => void;
   deleteModule: (id: string) => void;
 
@@ -222,13 +222,16 @@ export const useAcademy = create<AcademyState>()(
       setLessonStatus: (id, status) =>
         set((s) => ({ lessons: s.lessons.map((l) => (l.id === id ? { ...l, status, updatedAt: now() } : l)) })),
 
-      addModule: (title) =>
+      addModule: (title, opts) => {
+        const id = opts?.id?.trim() || `mod-${nanoid(6)}`;
         set((s) => ({
           modules: [
             ...s.modules,
-            { id: `mod-${nanoid(6)}`, title: title || "New module", blurb: "", order: Math.max(0, ...s.modules.map((m) => m.order)) + 1, icon: "Folder" },
+            { id, title: title || "New module", blurb: opts?.blurb ?? "", order: Math.max(0, ...s.modules.map((m) => m.order)) + 1, icon: opts?.icon ?? "Folder" },
           ],
-        })),
+        }));
+        return id;
+      },
       updateModule: (id, patch) => set((s) => ({ modules: s.modules.map((m) => (m.id === id ? { ...m, ...patch } : m)) })),
       deleteModule: (id) => set((s) => ({ modules: s.modules.filter((m) => m.id !== id), lessons: s.lessons.filter((l) => l.moduleId !== id) })),
 

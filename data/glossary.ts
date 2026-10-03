@@ -135,4 +135,6 @@ export const glossary: GlossaryTerm[] = [
   G("rules", "Trading Rules", "Method", "Pre-committed guardrails set while calm and followed mechanically.", ""),
   G("economic-calendar", "Economic Calendar", "Fundamentals", "Schedule of data releases and their expected market impact.", ""),
   G("news", "News", "Fundamentals", "Scheduled or unscheduled events that move gold via macro forces.", ""),
+  G("fibonacci-retracement", "Fibonacci Retracement", "Charting", "A location tool drawn across an impulse leg that marks how deep a pullback is (0.382/0.5/0.618/0.705/0.786), used to plan trend-continuation entries. Not a predictor.", "Drop from 3,800→3,740; the 0.618 pullback sits near 3,777."),
+  G("golden-zone", "Golden Zone", "Charting", "The 0.5–0.705 pocket of a Fibonacci retracement (0.618/0.705 at its heart) — the higher-probability area to look for a trend-continuation trigger.", ""),
 ];

@@ -17,13 +17,14 @@ export const modules: Module[] = [
   { id: "price-action", title: "Price Action", blurb: "Read intent from price: rejection, breakout, retest, sweep.", order: 6, icon: "Activity" },
   { id: "scenarios", title: "Trade Scenarios", blurb: "Convert analysis into conditional 'if-then' hypotheses.", order: 7, icon: "GitBranch" },
   { id: "entries", title: "Entry Models", blurb: "Precise, repeatable triggers instead of gut clicks.", order: 8, icon: "Crosshair" },
-  { id: "stops", title: "Stops & Invalidation", blurb: "Define where you are wrong before you enter.", order: 9, icon: "ShieldAlert" },
-  { id: "sizing", title: "Position Sizing", blurb: "The single most important survival skill.", order: 10, icon: "Scale" },
-  { id: "rr", title: "Risk / Reward", blurb: "Why expectancy — not win rate — pays you.", order: 11, icon: "TrendingUp" },
-  { id: "management", title: "Trade Management", blurb: "What to do after you are in the trade.", order: 12, icon: "Settings2" },
-  { id: "routine", title: "Daily Routine", blurb: "The repeatable process professionals run every day.", order: 13, icon: "ListChecks" },
-  { id: "psychology", title: "Trading Psychology", blurb: "Manage the one variable you can't chart: you.", order: 14, icon: "Brain" },
-  { id: "calendar", title: "Economic Calendar", blurb: "Plan around CPI, FOMC and NFP instead of being ambushed.", order: 15, icon: "CalendarClock" },
+  { id: "strategies", title: "Trading Strategies", blurb: "Complete chart-based setups that combine context, location and trigger into one repeatable play.", order: 9, icon: "Target" },
+  { id: "stops", title: "Stops & Invalidation", blurb: "Define where you are wrong before you enter.", order: 10, icon: "ShieldAlert" },
+  { id: "sizing", title: "Position Sizing", blurb: "The single most important survival skill.", order: 11, icon: "Scale" },
+  { id: "rr", title: "Risk / Reward", blurb: "Why expectancy — not win rate — pays you.", order: 12, icon: "TrendingUp" },
+  { id: "management", title: "Trade Management", blurb: "What to do after you are in the trade.", order: 13, icon: "Settings2" },
+  { id: "routine", title: "Daily Routine", blurb: "The repeatable process professionals run every day.", order: 14, icon: "ListChecks" },
+  { id: "psychology", title: "Trading Psychology", blurb: "Manage the one variable you can't chart: you.", order: 15, icon: "Brain" },
+  { id: "calendar", title: "Economic Calendar", blurb: "Plan around CPI, FOMC and NFP instead of being ambushed.", order: 16, icon: "CalendarClock" },
 ];
 
 // Helper to keep the seed compact & consistent.
@@ -1413,6 +1414,97 @@ The trade is closed — for a professional the most valuable part begins:
 - Trading Heroes — *Move Your Stop Loss to Breakeven* (when to move to BE; the "too early" pitfall): https://www.tradingheroes.com/move-stoploss-breakeven/
 - FXNX — *Mastering NFP & CPI* (stand-aside / reduce-size / 15-minute approach to major news): https://fxnx.com/en/blog/mastering-nfp-cpi-anti-gambler-guide
 `, "/journal"),
+
+  // ----------------------------------------------------------- TRADING STRATEGIES
+  L("strategies", "fibonacci-retracement", "Fibonacci Retracement Strategy", "A top-down, trend-following setup: read bias on the higher timeframe, draw the Fib on the impulse, and wait for a trigger in the golden zone.", 14, ["fibonacci-retracement", "golden-zone", "impulse", "pullback", "market-structure", "trend", "rejection", "confirmation", "invalidation"], `
+# Fibonacci Retracement Strategy
+
+This is a **complete, repeatable chart setup**, not a signal. It bolts together everything you've learned so far — higher-timeframe context, a precise location, a scenario, a trigger, and a pre-defined invalidation — into one play you can run the same way every day.
+
+> **Reminder:** this lesson teaches you a *process*. It never tells you to buy or sell a specific price. The levels below are illustrative numbers to make the mechanics concrete.
+
+## The idea in one sentence
+> In a higher-timeframe **trend**, price moves in bursts (**impulses**) and then **pulls back** against the trend before continuing. Fibonacci retracement measures *how deep* a pullback is, so you can plan a **trend-following entry** at a sensible location — then wait for a trigger to confirm the trend is resuming.
+
+Fibonacci is a **location tool**, nothing more. It does not predict. It gives you a disciplined place to *look* for a setup — the rest is structure, a trigger, and risk.
+
+## Step 1 — Get your bias from the higher timeframe
+Start on the **4H** (or Daily) and read the **market structure**, exactly as in [Chart Reading](/learn?m=chart-reading&l=market-structure):
+
+- **Bearish** = a sequence of **Lower Highs and Lower Lows**. You will only look for **shorts**.
+- **Bullish** = **Higher Highs and Higher Lows**. You will only look for **longs**.
+- **Ranging / unclear** = no trade. Fibonacci retracement is a *trend-continuation* tool; it has no edge in a range.
+
+You trade **with** the higher-timeframe trend, never against it. This single filter removes most bad Fib trades.
+
+## Step 2 — Find the most recent impulse on the lower timeframe
+Drop to the **1H**. Identify the most recent clean **impulse** leg *in the direction of your 4H bias* — the sharp, decisive move, not the slow grind.
+
+- Bearish bias → find the most recent sharp **drop** (a strong down-leg).
+- Bullish bias → find the most recent sharp **rally** (a strong up-leg).
+
+## Step 3 — Draw the Fib on the impulse (not the pullback)
+This is the step beginners get backwards. **You draw the Fibonacci across the impulse leg itself**, from where it started to where it ended:
+
+- In a **bearish** setup: drag from the **swing high (start of the drop → level 0)** down to the **swing low (end of the drop → level 1)**.
+- In a **bullish** setup: drag from the **swing low (start of the rally → 0)** up to the **swing high (end of the rally → 1)**.
+
+Your tool then paints the retracement levels — **0.382, 0.5, 0.618, 0.705, 0.786** — in between. These mark *how far back* a pullback has travelled into the impulse.
+
+#### Worked bearish example (illustrative)
+> Price drops hard on 1H from **$3,800 → $3,740** — that's your impulse. You draw the Fib from **$3,800 (0)** down to **$3,740 (1)**. Price then retraces **up** into the zone around **$3,777 (≈0.618)**. That upward pullback is what you were waiting for — it is *not* a sign of more buying, it is the counter-trend bounce you plan to **sell into**, back in the direction of the 4H downtrend.
+
+## Step 4 — Wait for price to reach the "golden zone"
+The high-probability pocket is the **0.5 – 0.705** region, often called the **golden zone** (the 0.618 and 0.705 levels are the heart of it).
+
+- **Bearish:** price pulls **back up** into the zone.
+- **Bullish:** price pulls **back down** into the zone.
+
+A shallow pullback (price barely reaches 0.382 and keeps trending) often means the trend is too strong to wait for — that's fine, you simply don't get a trade. A pullback that blows past **0.786** is a warning the impulse may be failing.
+
+## Step 5 — Demand a trigger (the zone alone is not an entry)
+**Reaching the Fib level is not a reason to enter.** Price touches these levels and keeps going all the time. You wait for the trend to *show* it's resuming, with a confirmation at the zone — for example:
+
+- A **rejection** candle in your direction (e.g. a bearish engulfing or pin bar in a bearish setup).
+- A **liquidity sweep** of a nearby swing, then a snap back.
+- A **break of structure** on a lower timeframe (e.g. 5m) confirming the pullback is over.
+
+Confluence makes it stronger: a golden-zone level that lines up with a **support/resistance zone**, a round number, or a session level is a better location than the Fib alone.
+
+## Step 6 — Invalidation, stop and target (risk first)
+Define where you are **wrong** *before* you enter — see [Stops & Invalidation](/learn?m=stops&l=invalidation-first):
+
+- **Stop:** just **beyond the zone** — above the pullback high (bearish) or below the pullback low (bullish). If price trades there, your idea that the trend resumed from the zone is simply wrong. The **0.786** level and the impulse's origin (0) are common invalidation anchors.
+- **Target:** the next structural level — commonly a retest of the impulse's extreme (the swing low in a bearish setup) or the next higher-timeframe level.
+- **Reward-to-risk:** only take it if it clears your minimum (e.g. **≥ 1:2**). A beautiful Fib setup with a 1:1 RR is still a pass.
+- **Size:** from your stop distance, never the other way round — \`lots = (account × risk%) / (stop distance × $100)\`.
+
+## The corrected flow at a glance
+
+| Step | What you do |
+|---|---|
+| 1. 4H bias | Read structure. Bearish = Lower Highs & Lower Lows → look only for shorts |
+| 2. 1H impulse | Find the most recent sharp leg *in the trend's direction* |
+| 3. Draw Fib | Across the **impulse** (high→low for bearish; low→high for bullish) |
+| 4. Wait | Let price retrace **into the 0.5–0.705 golden zone** |
+| 5. Trigger | Demand confirmation at the zone (rejection / sweep / break of structure) |
+| 6. Execute & manage | Stop beyond the zone, target the next structure, RR ≥ your minimum, size from the stop |
+
+## Common mistakes
+- **Drawing the Fib on the pullback instead of the impulse.** Always measure the strong leg, not the correction.
+- **Entering the moment price "touches" a level.** The level is a *place to look*, not a trigger.
+- **Trading against the higher-timeframe trend** because "it reached 0.618." Fib is a continuation tool — respect the bias.
+- **Forcing a trade in a range.** No trend, no edge.
+- **Moving the stop to "give it room."** The stop *is* your invalidation. Move it and you've abandoned the plan.
+
+## Practice this, don't trust it
+Fibonacci is popular partly because many traders watch the same levels, which can make them mildly self-fulfilling — but it is **not magic and has no guaranteed edge**. Treat it as one disciplined way to find a *location*. Prove it on your own chart history in **Backtesting**, save the rules as a setup in your **Playbook**, and let **Statistics** tell you whether *your* version of it actually has positive expectancy over a real sample.
+
+## Sources
+- Investopedia — *Fibonacci Retracement Levels* (what the levels are and how they're used as support/resistance): https://www.investopedia.com/terms/f/fibonacciretracement.asp
+- Investopedia — *How to Use Fibonacci Retracements* (drawing across a trending leg; using levels with other signals): https://www.investopedia.com/articles/technical/04/033104.asp
+- BabyPips — *How to Use Fibonacci Retracement* (trend bias first; the 50–61.8% pocket; combine with confirmation): https://www.babypips.com/learn/forex/fibonacci-retracement
+`, "/top-down"),
 ];
 
 // A tiny quiz bank — extendable; keyed by lessonId.
