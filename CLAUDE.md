@@ -16,12 +16,13 @@ Core philosophy it teaches and must always reinforce:
 - **Live:** https://henokfasil.github.io/xauusd-trading-academy/
 - **Repo:** https://github.com/henokfasil/xauusd-trading-academy (branch `main`)
 - Every push to `main` auto-builds a **static export** and deploys to **GitHub Pages** via `.github/workflows/deploy.yml`.
+- ⚠️ **Auto-deploy is currently BROKEN (since ~2026-09-30):** the GitHub account is **locked due to a billing issue**, so the Actions `workflow` deploy fails in ~3s (*"the job was not started because your account is locked due to a billing issue"*). As a stopgap (2026-10-03) Pages was switched to **`build_type: legacy` serving the `gh-pages` branch**, which is NOT subject to the Actions lock. See **Deploy notes** for how to publish now and how to restore the normal flow.
 
 ## Stack
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS** (custom theme via CSS variables in `app/globals.css`; dark/light through a `.dark` class)
-- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 2`)
+- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 4`)
 - **Recharts** (stats), **lucide-react** (icons, resolved by name via `<Icon name=.../>`), **react-markdown** + **remark-gfm** (lessons render Markdown), **nanoid** (ids)
 - Node 18+ (developed on Node 26).
 
@@ -91,6 +92,7 @@ Lessons use a **query-param route** `/learn?m=<moduleId>&l=<lessonId>` (single s
 - **Persona:** `TUTOR_PERSONA` in `lib/ai.ts` — static so it can be **prompt-cached** (`cache_control: ephemeral`); dynamic per-turn page/lesson context is a second, uncached system block. Keep the educational/no-signals guardrails in the persona.
 - **Streaming:** `streamChat()` (used by the Settings "Test" button) parses SSE `content_block_delta` text deltas.
 - **Agentic tool loop:** `runAssistant()` streams text AND handles tool use. It accumulates content blocks (text + `tool_use` with `input_json_delta`), and when `stop_reason === "tool_use"` it calls the caller-supplied `executeTool(name, input)`, feeds a `tool_result` back, and loops (max 6 iterations) so the model can respond after acting.
+- ⚠️ **`max_tokens` must cover the biggest tool payload (currently `8192`).** Tools like `add_lesson`/`update_lesson` carry a full markdown body inline (several KB). If `max_tokens` is too low the streamed `tool_use` JSON is truncated mid-object, `JSON.parse` fails, and the input would be lost — so `runAssistant` now feeds a *"arguments were truncated, retry in sections"* `tool_result` back instead of silently running the tool with `{}`. This was the 2026-10-03 bug where the tutor "promised but failed" to add the Fibonacci lesson (then-cap was 1400). Keep headroom when adding any tool that passes large content.
 - **Tools** are declared in `TUTOR_TOOLS` (`lib/ai.ts`) and **executed client-side** in `assistant.tsx` against `useAcademy.getState()` (use `getState()`, not a render-time snapshot, to avoid stale data). Current tools:
   - Journal: `log_journal_trade` → `addTrade`; `get_recent_trades` (read, returns ids); `update_journal_trade` → `updateTrade`
   - Playbook: `add_playbook_setup` → `addSetup` (maps `checklist: string[]` → `{id,text}[]`); `get_playbook_setups` (read, returns ids); `update_playbook_setup` → `updateSetup`
@@ -121,12 +123,17 @@ Lessons use a **query-param route** `/learn?m=<moduleId>&l=<lessonId>` (single s
 - Add a module: `data/curriculum.ts` `modules[]` (id, title, blurb, order, `icon` = lucide name).
 - Add a lesson: use the `L(moduleId, id, title, summary, estMinutes, concepts[], body, toolRoute?)` helper. `body` is Markdown; `concepts` are glossary term ids; `toolRoute` links to an interactive lab. Users can also add/edit lessons in-app (persisted to localStorage; seed changes only affect fresh/reset state).
 - Quizzes: `seedQuizzes[]` keyed by `lessonId`.
+- ⚠️ **To ship new seed content to EXISTING users** (not just fresh/reset browsers), add an **idempotent block to the persist `migrate` fn in `lib/store.ts` and bump `version`** — inject seed items by id only if absent, never overwrite user edits. Precedents: `v3` injects the `trading-day` chapter; `v4` injects the `strategies` module + `fibonacci-retracement` lesson + its glossary terms *and* removes any empty "Trading Strategies" module the tutor left behind. Current seed modules include **`strategies` (Trading Strategies, order 9)**.
 
 ## Deploy notes
 
-- Pages source = GitHub Actions (already configured). `configure-pages` + `upload-pages-artifact` + `deploy-pages`.
-- To watch a deploy: `gh run watch <id> --repo henokfasil/xauusd-trading-academy --exit-status`.
-- Node-20 deprecation + ubuntu-migration lines in CI are warnings only.
+- **Intended** Pages source = GitHub Actions. `configure-pages` + `upload-pages-artifact` + `deploy-pages`. To watch: `gh run watch <id> --repo henokfasil/xauusd-trading-academy --exit-status`. Node-20 deprecation + ubuntu-migration lines in CI are warnings only.
+- ⚠️ **CURRENT reality (account billing-locked → Actions blocked):** Pages serves the **`gh-pages` branch** (`build_type: legacy`). **`git push` to `main` does NOT update the live site.** To publish a change now:
+  1. Build: `PAGES=true BASE_PATH=/xauusd-trading-academy npm run build` (→ `out/`).
+  2. Publish `out/` to `gh-pages`: copy `out/` to a temp dir, `touch .nojekyll`, `git init`, `git checkout -b gh-pages`, commit, then `git push -f https://github.com/henokfasil/xauusd-trading-academy.git gh-pages`.
+  3. Trigger + poll the build: `gh api -X POST repos/henokfasil/xauusd-trading-academy/pages/builds` then poll `gh api repos/henokfasil/xauusd-trading-academy/pages/builds/latest` until `"status":"built"`.
+  4. Verify the live bundle actually changed (don't trust status alone): `curl` a referenced `_next/static/chunks/*.js` and grep for a known new string.
+- **To RESTORE normal auto-deploy once billing is fixed:** `gh api -X PUT repos/henokfasil/xauusd-trading-academy/pages -f build_type=workflow -F 'source[branch]=main' -F 'source[path]=/'`, then push to `main` and watch the Actions run. (Still commit source to `main` either way so the repo stays the source of truth.)
 - Only commit/push when asked. Commit messages end with the required `Co-Authored-By` trailer.
 
 ## Guardrails to never break
