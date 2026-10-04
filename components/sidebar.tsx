@@ -43,6 +43,47 @@ export function Sidebar() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   const sortedModules = [...modules].sort((a, b) => a.order - b.order);
+  // "A Gold Trader's Day" is pulled out of the Curriculum list and shown as its
+  // own chapter just below Start Here (above the Curriculum heading).
+  const FEATURED_ID = "trading-day";
+  const featuredModule = sortedModules.find((m) => m.id === FEATURED_ID);
+  const curriculumModules = sortedModules.filter((m) => m.id !== FEATURED_ID);
+
+  const renderModule = (m: (typeof sortedModules)[number]) => {
+    const modLessons = lessons.filter((l) => l.moduleId === m.id).sort((a, b) => a.order - b.order);
+    const done = modLessons.filter((l) => l.completed).length;
+    const open = openModules[m.id] ?? false;
+    const anyActive = modLessons.some((l) => activeLessonId === l.id);
+    return (
+      <div key={m.id}>
+        <button
+          onClick={() => setOpenModules((o) => ({ ...o, [m.id]: !open }))}
+          className={clsx(
+            "group flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors",
+            anyActive ? "text-fg" : "text-muted hover:bg-elevated hover:text-fg"
+          )}
+        >
+          <Icon name={m.icon} size={16} className="shrink-0 text-subtle group-hover:text-fg" />
+          <span className="flex-1 truncate text-left">{m.title}</span>
+          <span className="text-[10px] tabular-nums text-subtle">{done}/{modLessons.length}</span>
+          <Icon name={open ? "ChevronDown" : "ChevronRight"} size={14} className="text-subtle" />
+        </button>
+        {open && (
+          <div className="mt-0.5 mb-1">
+            {modLessons.map((l) => (
+              <NavLink
+                key={l.id}
+                href={`/learn?m=${m.id}&l=${l.id}`}
+                label={l.title}
+                active={activeLessonId === l.id}
+                depth={1}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <aside
@@ -73,42 +114,10 @@ export function Sidebar() {
             <NavLink key={n.href} {...n} active={isActive(n.href)} />
           ))}
 
+          {featuredModule && <div className="mt-1">{renderModule(featuredModule)}</div>}
+
           <SectionLabel>Curriculum</SectionLabel>
-          {sortedModules.map((m) => {
-            const modLessons = lessons.filter((l) => l.moduleId === m.id).sort((a, b) => a.order - b.order);
-            const done = modLessons.filter((l) => l.completed).length;
-            const open = openModules[m.id] ?? false;
-            const anyActive = modLessons.some((l) => activeLessonId === l.id);
-            return (
-              <div key={m.id}>
-                <button
-                  onClick={() => setOpenModules((o) => ({ ...o, [m.id]: !open }))}
-                  className={clsx(
-                    "group flex w-full items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors",
-                    anyActive ? "text-fg" : "text-muted hover:bg-elevated hover:text-fg"
-                  )}
-                >
-                  <Icon name={m.icon} size={16} className="shrink-0 text-subtle group-hover:text-fg" />
-                  <span className="flex-1 truncate text-left">{m.title}</span>
-                  <span className="text-[10px] tabular-nums text-subtle">{done}/{modLessons.length}</span>
-                  <Icon name={open ? "ChevronDown" : "ChevronRight"} size={14} className="text-subtle" />
-                </button>
-                {open && (
-                  <div className="mt-0.5 mb-1">
-                    {modLessons.map((l) => (
-                      <NavLink
-                        key={l.id}
-                        href={`/learn?m=${m.id}&l=${l.id}`}
-                        label={l.title}
-                        active={activeLessonId === l.id}
-                        depth={1}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {curriculumModules.map(renderModule)}
 
           <SectionLabel>{toolNav.label}</SectionLabel>
           {toolNav.items.map((n) => (

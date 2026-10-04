@@ -388,7 +388,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 4,
+      version: 5,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -455,6 +455,20 @@ export const useAcademy = create<AcademyState>()(
           const haveG = new Set(persisted.glossary.map((g: GlossaryTerm) => g.id));
           const addG = seedGlossary.filter((g) => [FIB_ID, "golden-zone"].includes(g.id) && !haveG.has(g.id));
           if (addG.length) persisted.glossary = [...persisted.glossary, ...addG];
+        }
+        // v5: re-order modules — Trading Strategies first in the Curriculum.
+        // ("A Gold Trader's Day" is pulled out to its own slot by the sidebar;
+        // its order value stays 0 but is only used as a tiebreak now.)
+        const MODULE_ORDER: Record<string, number> = {
+          "trading-day": 0, strategies: 1, foundations: 2, "chart-reading": 3,
+          "key-levels": 4, sessions: 5, fundamentals: 6, "price-action": 7,
+          scenarios: 8, entries: 9, stops: 10, sizing: 11, rr: 12,
+          management: 13, routine: 14, psychology: 15, calendar: 16,
+        };
+        if (Array.isArray(persisted.modules)) {
+          persisted.modules = persisted.modules.map((m: Module) =>
+            MODULE_ORDER[m.id] !== undefined ? { ...m, order: MODULE_ORDER[m.id] } : m
+          );
         }
         return persisted;
       },

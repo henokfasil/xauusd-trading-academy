@@ -22,7 +22,7 @@ Core philosophy it teaches and must always reinforce:
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS** (custom theme via CSS variables in `app/globals.css`; dark/light through a `.dark` class)
-- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 4`)
+- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 5`)
 - **Recharts** (stats), **lucide-react** (icons, resolved by name via `<Icon name=.../>`), **react-markdown** + **remark-gfm** (lessons render Markdown), **nanoid** (ids)
 - Node 18+ (developed on Node 26).
 
@@ -59,7 +59,10 @@ app/
 components/
   ui.tsx                     Shared primitives: Icon, Card, Button, Badge, PageHeader,
                              EditableText, Field, Select, EmptyState, Stat, ClientOnly
-  sidebar.tsx                Left nav (curriculum from store + static tool/workspace/reference nav)
+  sidebar.tsx                Left nav (curriculum from store + static tool/workspace/reference nav).
+                             `renderModule()` draws each collapsible module block; the "trading-day"
+                             module is pulled OUT of the Curriculum list (FEATURED_ID) and shown on
+                             its own just below Start Here. Curriculum order: Trading Strategies first.
   theme.tsx                  Dark/light provider (localStorage 'academy-theme')
   price-widget.tsx           Live read-only XAU/USD spot (gold-api.com, client fetch, 30s)
   assistant.tsx              Floating AI tutor drawer + client-side tool executors
@@ -123,7 +126,7 @@ Lessons use a **query-param route** `/learn?m=<moduleId>&l=<lessonId>` (single s
 - Add a module: `data/curriculum.ts` `modules[]` (id, title, blurb, order, `icon` = lucide name).
 - Add a lesson: use the `L(moduleId, id, title, summary, estMinutes, concepts[], body, toolRoute?)` helper. `body` is Markdown; `concepts` are glossary term ids; `toolRoute` links to an interactive lab. Users can also add/edit lessons in-app (persisted to localStorage; seed changes only affect fresh/reset state).
 - Quizzes: `seedQuizzes[]` keyed by `lessonId`.
-- ⚠️ **To ship new seed content to EXISTING users** (not just fresh/reset browsers), add an **idempotent block to the persist `migrate` fn in `lib/store.ts` and bump `version`** — inject seed items by id only if absent, never overwrite user edits. Precedents: `v3` injects the `trading-day` chapter; `v4` injects the `strategies` module + `fibonacci-retracement` lesson + its glossary terms *and* removes any empty "Trading Strategies" module the tutor left behind. Current seed modules include **`strategies` (Trading Strategies, order 9)**.
+- ⚠️ **To ship new seed content to EXISTING users** (not just fresh/reset browsers), add an **idempotent block to the persist `migrate` fn in `lib/store.ts` and bump `version`** — inject seed items by id only if absent, never overwrite user edits. Precedents: `v3` injects the `trading-day` chapter; `v4` injects the `strategies` module + `fibonacci-retracement` lesson + its glossary terms *and* removes any empty "Trading Strategies" module the tutor left behind; `v5` re-orders modules (Trading Strategies first) via a `MODULE_ORDER` map. Current seed modules include **`strategies` (Trading Strategies, order 1 — first in the Curriculum)**.
 
 ## Deploy notes
 
