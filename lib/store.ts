@@ -388,7 +388,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 5,
+      version: 6,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -469,6 +469,24 @@ export const useAcademy = create<AcademyState>()(
           persisted.modules = persisted.modules.map((m: Module) =>
             MODULE_ORDER[m.id] !== undefined ? { ...m, order: MODULE_ORDER[m.id] } : m
           );
+        }
+        // v6: add the OC Zone (Institutional Anchor) strategy lesson, placed
+        // ABOVE Fibonacci in the Trading Strategies module. Non-destructive.
+        const OC_ID = "oc-zone-strategy";
+        if (Array.isArray(persisted.lessons) && !persisted.lessons.some((l: Lesson) => l.id === OC_ID)) {
+          const les = seedLessons.find((l) => l.id === OC_ID);
+          if (les) {
+            const fib = persisted.lessons.find((l: Lesson) => l.id === FIB_ID);
+            const order = fib ? fib.order - 1 : les.order; // ensure OC sorts before Fibonacci
+            persisted.lessons = [...persisted.lessons, { ...les, order }];
+          }
+        }
+        if (Array.isArray(persisted.glossary)) {
+          const haveG = new Set(persisted.glossary.map((g: GlossaryTerm) => g.id));
+          const addG = seedGlossary.filter(
+            (g) => ["oc-zone", "institutional-anchor", "equilibrium", "premium-discount"].includes(g.id) && !haveG.has(g.id)
+          );
+          if (addG.length) persisted.glossary = [...persisted.glossary, ...addG];
         }
         return persisted;
       },

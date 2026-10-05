@@ -1416,6 +1416,68 @@ The trade is closed — for a professional the most valuable part begins:
 `, "/journal"),
 
   // ----------------------------------------------------------- TRADING STRATEGIES
+  L("strategies", "oc-zone-strategy", "OC Zone Strategy (Institutional Anchor)", "Use the daily Open–Close zone of an anchor candle as a fixed daily reference: premium/discount, a 50% equilibrium, and zone edges you trade with a trigger.", 15, ["oc-zone", "institutional-anchor", "equilibrium", "premium-discount", "market-structure", "rejection", "liquidity-sweep", "confirmation", "invalidation"], `
+# OC Zone Strategy (Institutional Anchor)
+
+The **OC Zone** ("Open–Close Zone") is a daily reference box drawn from a single **anchor candle** — usually the candle at a key session open (Midnight open, London open, or your broker's daily open). Once that candle closes, the box is **locked for the rest of the day** and becomes a fixed map of *premium*, *discount* and *fair value* to trade around.
+
+> **Reminder:** this is a *reference framework*, not a signal. It tells you **where** to look and how to frame bias — it never tells you to buy or sell a specific price. Numbers below are illustrative.
+
+## What the zone is
+Pick an **anchor candle** at a chosen open hour (set the UTC offset so the hour matches *your broker's* clock — this matters a lot). From that one candle you draw a rectangle:
+
+- **Body mode (O→C):** top & bottom = the candle's **Open and Close**. This is the "real move" — where the session actually settled, ignoring wick noise.
+- **Range mode (H→L):** top & bottom = the candle's **High and Low**. This captures the full liquidity/volatility envelope.
+- **Equilibrium (50% midline):** the exact centre of the box — the **"fair value" / mean threshold**. This line is the heart of the whole method.
+
+The zone is **non-repainting**: after the anchor hour closes it never moves, so everyone referencing it sees the same box all day.
+
+## Why traders use it — premium / discount / fair value
+Think of the box as the day's **dealing range**:
+
+- Price **above equilibrium** = **premium** (relatively expensive) → in a bearish day you look to **sell**.
+- Price **below equilibrium** = **discount** (relatively cheap) → in a bullish day you look to **buy**.
+- Price **at equilibrium** = fair value — often a decision point where the day's move resumes or reverses.
+
+This is the same logic as the golden zone in the [Fibonacci lesson](/learn?m=strategies&l=fibonacci-retracement) — a disciplined *location* to look for a trade — just anchored to the day's open instead of an impulse leg.
+
+## The two interactions to watch
+1. **Equilibrium touch** — price trades back to the 50% midline. Either it **rejects** (bias continues) or it **reclaims/holds** (bias may flip). A clean rejection at equilibrium in the direction of your bias is a classic place to look.
+2. **Boundary breach** — price taps or pushes through a zone **edge**. Two readings, and you must decide which with *confirmation*, not hope:
+   - **Rejection** off the edge back into the zone → fade it (mean-revert toward equilibrium / opposite edge).
+   - **Accept/breakout** (closes and holds beyond the edge) → the day is expanding; the breached edge can become support/resistance on a retest.
+
+## The flow (same discipline as every setup here)
+
+| Step | What you do |
+|---|---|
+| 1. Anchor | Mark the OC zone from the chosen open candle; let it lock. Note equilibrium. |
+| 2. Bias | Which side of equilibrium is price on? Combine with higher-timeframe [structure](/learn?m=chart-reading&l=market-structure). Premium → hunt sells; discount → hunt buys. |
+| 3. Location | Wait for price to reach a *decision* spot: an edge, or the 50% equilibrium. |
+| 4. Trigger | Demand confirmation there — a rejection candle, a [liquidity sweep](/learn?m=price-action&l=false-breakout-sweep) of the edge, or a lower-timeframe break of structure. The level alone is **not** an entry. |
+| 5. Invalidation | Stop just beyond the zone edge / anchor-candle extreme you're trading from — if price trades there, your read is wrong. |
+| 6. Manage | Target the opposite boundary, equilibrium, or the next structural level. Only take it if reward-to-risk clears your minimum; size from the stop. |
+
+## Confluence & context
+- **Nested zones:** yesterday's (and the prior days') OC zones still matter. Where today's edge lines up with a previous day's zone or equilibrium, the level is stronger.
+- **Weekly cycle:** Monday's anchor often frames the week; note where the current day sits inside the larger weekly range.
+- **Sessions & news:** the zone is cleanest during liquid hours (London / NY overlap). Around high-impact news it can be swept violently — size down or stand aside (see [Economic Calendar](/learn?m=calendar&l=using-the-calendar)).
+
+## Common mistakes
+- **Wrong anchor hour.** If your UTC offset doesn't match your broker's daily open, the whole box is off. Verify it once.
+- **Trading the touch, not the trigger.** Reaching an edge or equilibrium is a *location*, never a reason to click.
+- **Ignoring bias.** Buying premium in a bearish day (or selling discount in a bullish day) is fighting the range.
+- **No invalidation.** If you can't say where the idea is wrong (beyond which edge), you don't have a trade.
+
+## Practice it, don't trust it
+The OC zone is popular partly because many traders watch the same session opens, which can make these levels mildly self-fulfilling — but it is **not magic and carries no guaranteed edge**. Treat it as one clean way to frame the day. Prove *your* version on chart history in **Backtesting**, save the rules as a **Playbook** setup, and let **Statistics** tell you whether it actually has positive expectancy over a real sample.
+
+## Sources
+- Credit — concept based on *The Institutional Anchor (Daily OC Zone)* indicator by its TradingView author: https://www.tradingview.com/script/rg8g9p3i-The-Institutional-Anchor-Daily-OC-Zone/
+- Investopedia — *Opening Range* (using the session open as an intraday reference): https://www.investopedia.com/terms/o/opening-range.asp
+- Investopedia — *Mean Reversion* (why price often returns toward a central/fair value): https://www.investopedia.com/terms/m/meanreversion.asp
+`, "/top-down"),
+
   L("strategies", "fibonacci-retracement", "Fibonacci Retracement Strategy", "A top-down, trend-following setup: read bias on the higher timeframe, draw the Fib on the impulse, and wait for a trigger in the golden zone.", 14, ["fibonacci-retracement", "golden-zone", "impulse", "pullback", "market-structure", "trend", "rejection", "confirmation", "invalidation"], `
 # Fibonacci Retracement Strategy
 

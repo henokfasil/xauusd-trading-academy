@@ -137,4 +137,8 @@ export const glossary: GlossaryTerm[] = [
   G("news", "News", "Fundamentals", "Scheduled or unscheduled events that move gold via macro forces.", ""),
   G("fibonacci-retracement", "Fibonacci Retracement", "Charting", "A location tool drawn across an impulse leg that marks how deep a pullback is (0.382/0.5/0.618/0.705/0.786), used to plan trend-continuation entries. Not a predictor.", "Drop from 3,800→3,740; the 0.618 pullback sits near 3,777."),
   G("golden-zone", "Golden Zone", "Charting", "The 0.5–0.705 pocket of a Fibonacci retracement (0.618/0.705 at its heart) — the higher-probability area to look for a trend-continuation trigger.", ""),
+  G("oc-zone", "OC Zone (Open–Close Zone)", "Charting", "A daily reference box drawn from one anchor candle's Open and Close (body mode) or High and Low (range mode), locked after that candle closes. Frames premium/discount and fair value for the day.", "Midnight-open candle O 3,740 / C 3,760 → zone 3,740–3,760, equilibrium 3,750."),
+  G("institutional-anchor", "Institutional Anchor", "Charting", "The anchor candle at a chosen session open (midnight/London/broker daily open) whose OC zone defines the day's directional bias; non-repainting once it closes.", ""),
+  G("equilibrium", "Equilibrium (Fair Value)", "Charting", "The 50% midline of a zone/range — the mean threshold price mean-reverts toward and often decides from. Above it = premium, below it = discount.", ""),
+  G("premium-discount", "Premium / Discount", "Charting", "Relative-value halves of a dealing range: above equilibrium is premium (expensive → favour sells), below is discount (cheap → favour buys), read with trend.", ""),
 ];
