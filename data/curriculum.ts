@@ -25,6 +25,7 @@ export const modules: Module[] = [
   { id: "routine", title: "Daily Routine", blurb: "The repeatable process professionals run every day.", order: 14, icon: "ListChecks" },
   { id: "psychology", title: "Trading Psychology", blurb: "Manage the one variable you can't chart: you.", order: 15, icon: "Brain" },
   { id: "calendar", title: "Economic Calendar", blurb: "Plan around CPI, FOMC and NFP instead of being ambushed.", order: 16, icon: "CalendarClock" },
+  { id: "gold-research", title: "Gold Research Lab", blurb: "What 23 years of data and the academic literature say about gold, key levels and testing honestly.", order: 17, icon: "FlaskConical" },
 ];
 
 // Helper to keep the seed compact & consistent.
@@ -1567,6 +1568,128 @@ Fibonacci is popular partly because many traders watch the same levels, which ca
 - Investopedia — *How to Use Fibonacci Retracements* (drawing across a trending leg; using levels with other signals): https://www.investopedia.com/articles/technical/04/033104.asp
 - BabyPips — *How to Use Fibonacci Retracement* (trend bias first; the 50–61.8% pocket; combine with confirmation): https://www.babypips.com/learn/forex/fibonacci-retracement
 `, "/top-down"),
+  // ----------------------------------------------------------- GOLD RESEARCH LAB
+  L("gold-research", "do-key-levels-hold", "Do Gold's Key Levels Actually Hold? A 23-Year Test", "A pre-registered study of 23 years of gold bid/ask data: do round numbers, previous-day/week/month extremes and swing points make price bounce more than ordinary prices do?", 14, ["support-resistance", "placebo-level", "key-level", "stop-cluster"], `
+# Do Gold's Key Levels Actually Hold? A 23-Year Test
+
+A successful gold trader once told a student: *"Don't predict the price. Learn the levels where gold **reacts**."* That is a sensible idea. This lesson asks the next question honestly: **does gold actually react at those levels, more than it does at any random price?**
+
+> This is a **history lesson, not a signal**. It describes what happened to prices in the past. It does not say what price will do next.
+
+## How the test was built (in plain English)
+1. **Data:** Dukascopy XAU/USD one-minute **bid and ask** prices, 2003 to September 2026. We use the **mid** price (halfway between bid and ask) and keep the real gaps (weekends, daily break) instead of filling them.
+2. **Levels tested:** round numbers ($100 steps such as 4,400; and halfway points such as 4,450), the **previous day / week / month high and low**, **daily swing highs and lows**, and the 200-day average.
+3. **A "touch":** price arrives at the level from at least a small distance away, and the level was *not* touched in the previous 24 hours (so we look at first visits, not noise).
+4. **Outcome within 24 hours:** a **bounce** means price moves away from the level (back the way it came) by 0.35 x the daily range before it moves the same distance *through* the level. A **break** is the opposite order.
+5. **The key trick, a placebo:** the same test run on **ordinary prices that are not levels** (for example $25 above a round number, or a fixed distance off a previous high). If real levels do not beat these, they are not special.
+6. **Rules written before running:** the settings, the three time periods (2003-2012, 2013-2019, and a **locked** 2020-2026 era run only once) and the pass/fail gates were saved in advance, so nothing could be tuned after seeing results.
+
+## What came out
+| Level type | Bounce rate at real levels | Bounce rate at placebo prices |
+|---|---|---|
+| Round $100 numbers | about 38-40% | about 52% |
+| Round $50 midpoints | about 40-45% | about 52% |
+| Previous day/week/month extremes | about 43% | about 49% |
+| Daily swing highs/lows | about 44% | about 47% |
+
+- In **every era and almost every family**, real levels were **bounced from less often** than ordinary prices. In plain words: gold tended to **run through** these levels more than it turned at them.
+- On the **locked** period (2020-2026) the numbers pointed the same way but were **not statistically convincing** once corrected for running many tests (smallest p-value 0.11; the corrected bar was about 0.005). Officially: **not confirmed.**
+- The 200-day average produced too few clean touches to test at all.
+
+## What this does and does not mean
+- It does **not** show levels are useless. They are still how humans organise a chart, and they tell you **where something is likely to happen** (a fast move either way).
+- A reasonable reading, consistent with the finance literature (see the reading list): many traders place **stop orders just beyond round numbers**, so once price pushes through, those stops add fuel. A level can be **a place where price accelerates**, not a wall.
+- The practical lesson for a learner: **never treat a level as a guarantee of a bounce.** Treat it as a *zone to watch*, wait for a reaction **you can see**, and always define where you are wrong (your stop) before entering.
+- One unconfirmed hint appeared (following a break of a round $100 level seemed slightly positive after costs in all three eras), but there were only about 8 such events per year. It is a **question for further research**, not a method.
+
+## Try it yourself (safely)
+- In the **Support/Resistance lab**, mark a round number and note whether price rejected it or ran through it.
+- Log each first touch of a level in your **Journal** for a month: bounce, break, or neither. After 30-50 touches, you have your own small version of this study. Compare it to the table above.
+
+## Honest limits of this study
+Small samples on the locked period (about 50 round-number events), one fixed set of settings, an imperfect placebo for previous-high/low and swing levels, and mid-price bars. Full detail, the exact rules and the code are in the research repository (file: gold_levels_study_results_2026-10-07.md).
+
+## Sources
+- Osler, C. (2000), *Support for Resistance: Technical Analysis and Intraday Exchange Rates*, Federal Reserve Bank of New York Economic Policy Review 6(2).
+- Osler, C. (2003), *Currency Orders and Exchange Rate Dynamics*, Journal of Finance 58(5): stop-loss orders cluster at round numbers.
+- Aronson, D. (2006), *Evidence-Based Technical Analysis*, Wiley.
+`, "/labs/support-resistance"),
+
+  L("gold-research", "gold-reading-list", "The Gold Research Reading List", "Highly cited academic papers and books on gold, technical analysis, and honest testing, with a one-line takeaway for each. Read these before any YouTube strategy.", 12, ["buy-and-hold-benchmark", "placebo-level", "stop-cluster"], `
+# The Gold Research Reading List
+
+Chasing YouTubers is how accounts get blown up. Peer-reviewed work is slower but it lets you ask the right question. Below is a starter set, grouped by what it helps you understand. Citations are given from memory of the standard references; **check each title and DOI on Google Scholar before relying on a detail.**
+
+## 1. What kind of asset is gold?
+- Baur, D. & Lucey, B. (2010), *Is Gold a Hedge or a Safe Haven?*, The Financial Review 45(2). Gold tends to hold value against stocks in extreme stress, for a short time.
+- Baur, D. & McDermott, T. (2010), *Is Gold a Safe Haven? International Evidence*, Journal of Banking & Finance 34(8).
+- Erb, C. & Harvey, C. (2013), *The Golden Dilemma*, Financial Analysts Journal 69(4). Why the "gold = inflation hedge" story is weaker over short horizons than people think.
+- O'Connor, Lucey, Batten & Baur (2015), *The Financial Economics of Gold: A Survey*, International Review of Financial Analysis 41. The best single overview.
+- Barsky, R. & Summers, L. (1988), *Gibson's Paradox and the Gold Standard*, Journal of Political Economy 96(3). Gold and **real interest rates**.
+
+## 2. Does technical analysis work? Where do levels come from?
+- Brock, Lakonishok & LeBaron (1992), *Simple Technical Trading Rules and the Stochastic Properties of Stock Returns*, Journal of Finance 47(5). A landmark pro-technical result, later debated.
+- Lo, Mamaysky & Wang (2000), *Foundations of Technical Analysis*, Journal of Finance 55(4). Some chart patterns carry small amounts of information.
+- Park, C.-H. & Irwin, S. (2007), *What Do We Know About the Profitability of Technical Analysis?*, Journal of Economic Surveys 21(4). Survey: profits were larger before the 1990s and shrink after costs.
+- Osler, C. (2000), *Support for Resistance*, FRBNY Economic Policy Review 6(2). Published support/resistance levels were followed by more trend interruptions than chance in intraday FX.
+- Osler, C. (2003), *Currency Orders and Exchange Rate Dynamics*, Journal of Finance 58(5). **Stop-loss orders cluster just beyond round numbers**, which helps explain why levels get run through.
+- Neely, Weller & Dittmar (1997), *Is Technical Analysis in the Foreign Exchange Market Profitable?*, JFQA 32(4).
+- Aronson, D. (2006), *Evidence-Based Technical Analysis*, Wiley. How to test a rule without fooling yourself.
+
+## 3. Trends and predictability
+- Moskowitz, Ooi & Pedersen (2012), *Time Series Momentum*, Journal of Financial Economics 104(2). Trend-following across many markets.
+- Lo, A. & MacKinlay, C. (1988), *Stock Market Prices Do Not Follow Random Walks*, Review of Financial Studies 1(1). The variance-ratio test.
+
+## 4. How not to fool yourself
+- Bailey, D. & Lopez de Prado, M. (2014), *The Deflated Sharpe Ratio*, Journal of Portfolio Management 40(5). The more variants you try, the higher the best one looks by luck alone.
+- Harvey, Liu & Zhu (2016), *...and the Cross-Section of Expected Returns*, Review of Financial Studies 29(1). Most "discoveries" in finance are probably false; use a higher bar.
+- Chan, E. (2009/2013), *Quantitative Trading* and *Algorithmic Trading*, Wiley. Practical backtesting, costs and risk for a small account.
+
+## How to read a paper in 15 minutes
+1. Read the abstract and conclusion first.
+2. Find the **sample period** and whether the result held **out of sample**.
+3. Ask: **after costs?** and **versus simply holding the asset?**
+4. Check how many things the authors tried before finding this.
+
+## Educational note
+None of these papers is a trading recommendation. Use them to build better questions and to judge claims.
+`),
+
+  L("gold-research", "what-we-tested-on-gold", "What We Tested on Gold (and What Died)", "A plain-English scoreboard of the pre-registered gold tests so far: what failed, the two benchmark facts that explain it, and why 'exposure, not alpha' is the working conclusion.", 10, ["buy-and-hold-benchmark", "placebo-level", "spread", "slippage"], `
+# What We Tested on Gold (and What Died)
+
+This chapter is the **research notebook** behind the Academy. Each test was **pre-registered** (rules written down before running), costs were charged, and failures are reported as clearly as successes.
+
+## Two facts to know before any gold idea
+1. **Gold buy-and-hold, 2022-2026, had a Sharpe ratio of about 1.02** (roughly +146%, worst drop about -27%). A strategy scoring 1.0 on that window has **no edge over just holding gold**. Gold went up; most "winning" backtests were riding that.
+2. **No linear structure at tradeable horizons.** Variance-ratio tests from 4 hours to 40 days, on both a 4.7-year window and 23 years of data, found nothing beyond what chance produces (largest z about 1.35).
+
+## Scoreboard
+| Idea | Result |
+|---|---|
+| 16 trend, breakout, mean-reversion, macro and cross-asset (silver, dollar index) hypotheses | None beat buy-and-hold after costs |
+| Dollar index as a predictor | No predictive information (lag-1 z at most 0.8) |
+| Zero-fee scalping on one-minute gold | About 0 basis points per trade, ~52% win rate |
+| **Key-level reaction (this chapter, lesson 1)** | **Not confirmed**; levels are broken more often than ordinary prices |
+| A popular community gold breakout strategy | Reproduced on our data, but still an unvalidated observation (tuned on the same period) |
+
+## Costs matter, but carefully
+- At today's price (about $4,400), a broker spread of $0.25 is only about **0.6 basis points round trip**, far smaller than older estimates calibrated on $1,800 gold.
+- **Swap (overnight financing) is the real hidden cost** on a CFD: a long held overnight cost roughly 1.8 basis points per night at one broker, about three times the whole spread round trip, while shorts earned a small credit.
+
+## What "exposure, not alpha" means for a learner
+Gold is useful for diversification and as a store of value, but a retail trader should not assume that a chart pattern gives an edge over holding it. If you trade it, the honest goals are **small risk per trade, journal everything, and let a real sample size (dozens of trades) tell you whether your own method has positive expectancy**.
+
+## Process lessons you can reuse
+- Write the rules and pass/fail bar **before** you look at results.
+- Always compare to **buy-and-hold**.
+- A strong backtest with a weak significance test is a **hypothesis**, not a result.
+- Beware of data that has been **forward-filled** (fake candles) and prices that are **bid-only**.
+- Paper-trade first; the account you protect is the one that lets you keep learning.
+
+> Educational only. Nothing here predicts gold or recommends a trade.
+`),
+
 ];
 
 // A tiny quiz bank — extendable; keyed by lessonId.

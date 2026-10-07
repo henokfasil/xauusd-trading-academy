@@ -141,4 +141,9 @@ export const glossary: GlossaryTerm[] = [
   G("institutional-anchor", "Institutional Anchor", "Charting", "The anchor candle at a chosen session open (midnight/London/broker daily open) whose OC zone defines the day's directional bias; non-repainting once it closes.", ""),
   G("equilibrium", "Equilibrium (Fair Value)", "Charting", "The 50% midline of a zone/range — the mean threshold price mean-reverts toward and often decides from. Above it = premium, below it = discount.", ""),
   G("premium-discount", "Premium / Discount", "Charting", "Relative-value halves of a dealing range: above equilibrium is premium (expensive → favour sells), below is discount (cheap → favour buys), read with trend.", ""),
+  G("placebo-level", "Placebo Level", "Research", "A made-up price that is NOT a real level (for example $25 off a round number), used as a control. A real level only matters if price behaves differently there than at placebo prices.", ""),
+  G("stop-cluster", "Stop Cluster", "Research", "Many traders' stop-loss orders sitting just beyond the same obvious price (round numbers, prior highs/lows). When price pushes through, the triggered stops add fuel, so a level can be run through rather than held.", ""),
+  G("buy-and-hold-benchmark", "Buy-and-Hold Benchmark", "Research", "What you would have earned by simply holding the asset over the same period. A strategy with no edge over it is just asset exposure, not skill.", "Gold 2022-2026 buy-and-hold had a Sharpe of about 1.0."),
+  G("key-level", "Key Level", "Charting", "A price many traders watch: round numbers, previous day/week/month highs and lows, swing points. Treat as a zone to observe, not a guarantee of a bounce.", ""),
+  G("support-resistance", "Support / Resistance", "Charting", "Areas where price has paused or reversed before. Support is below price, resistance above; both are zones, not exact lines.", ""),
 ];

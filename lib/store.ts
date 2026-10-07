@@ -149,6 +149,15 @@ const defaultResources: ResourceItem[] = [
   { id: "r-inv002-tf", title: "Investopedia — Multiple Time Frames", url: "https://www.investopedia.com/articles/trading/07/timeframes.asp", note: "Top-down multi-timeframe analysis. Cited in Chapter 1.", category: "Learning" },
   { id: "r-robo-gold", title: "RoboForex — Gold Trading Explained (XAUUSD)", url: "https://roboforex.com/blog/education/gold-trading-xauusd/", note: "Gold-specific: peak hours, USD/yield inverse, wider stops, 1:2–1:3 RR (broker education). Cited in Chapter 1.", category: "Learning" },
   { id: "r-daytrading-1pct", title: "DayTrading.com — The 1% Rule", url: "https://www.daytrading.com/one-percent-rule", note: "Risk ≤1% of equity per trade; caps loss, not capital. Cited in Chapter 1.", category: "Learning" },
+  // Gold Research Lab reading list
+  { id: "r-gr-osler2000", title: "Osler (2000) — Support for Resistance (FRBNY)", url: "https://scholar.google.com/scholar?q=Osler+Support+for+Resistance+Technical+Analysis+and+Intraday+Exchange+Rates", note: "Published support/resistance levels vs intraday trend interruptions. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-osler2003", title: "Osler (2003) — Currency Orders and Exchange Rate Dynamics", url: "https://scholar.google.com/scholar?q=Osler+Currency+Orders+and+Exchange+Rate+Dynamics", note: "Stop-loss orders cluster at round numbers. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-baur", title: "Baur & Lucey (2010) — Is Gold a Hedge or a Safe Haven?", url: "https://scholar.google.com/scholar?q=Baur+Lucey+Is+Gold+a+Hedge+or+a+Safe+Haven", note: "Gold as a short-lived safe haven. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-oconnor", title: "O'Connor et al. (2015) — The Financial Economics of Gold: A Survey", url: "https://scholar.google.com/scholar?q=O%27Connor+Lucey+Batten+Baur+Financial+Economics+of+Gold+Survey", note: "Best single overview of gold research. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-erbharvey", title: "Erb & Harvey (2013) — The Golden Dilemma", url: "https://scholar.google.com/scholar?q=Erb+Harvey+The+Golden+Dilemma", note: "Inflation-hedge story vs the data. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-parkirwin", title: "Park & Irwin (2007) — Profitability of Technical Analysis", url: "https://scholar.google.com/scholar?q=Park+Irwin+What+Do+We+Know+About+the+Profitability+of+Technical+Analysis", note: "Survey: profits shrink after costs and over time. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-deflated", title: "Bailey & Lopez de Prado (2014) — The Deflated Sharpe Ratio", url: "https://scholar.google.com/scholar?q=Bailey+Lopez+de+Prado+The+Deflated+Sharpe+Ratio", note: "Why the best of many tries looks good by luck. Gold Research Lab.", category: "Research" },
+  { id: "r-gr-harvey", title: "Harvey, Liu & Zhu (2016) — ...and the Cross-Section of Expected Returns", url: "https://scholar.google.com/scholar?q=Harvey+Liu+Zhu+and+the+Cross-Section+of+Expected+Returns", note: "Most published 'discoveries' are likely false. Gold Research Lab.", category: "Research" },
 ];
 
 export const useAcademy = create<AcademyState>()(
@@ -388,7 +397,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 6,
+      version: 7,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -487,6 +496,30 @@ export const useAcademy = create<AcademyState>()(
             (g) => ["oc-zone", "institutional-anchor", "equilibrium", "premium-discount"].includes(g.id) && !haveG.has(g.id)
           );
           if (addG.length) persisted.glossary = [...persisted.glossary, ...addG];
+        }
+        // v7: inject the "Gold Research Lab" chapter (3 lessons), its glossary
+        // terms and reading-list resources. Idempotent; never overwrites edits.
+        const GR_ID = "gold-research";
+        if (Array.isArray(persisted.modules) && !persisted.modules.some((m: Module) => m.id === GR_ID)) {
+          const mod = seedModules.find((m) => m.id === GR_ID);
+          if (mod) persisted.modules = [...persisted.modules, mod];
+        }
+        if (Array.isArray(persisted.lessons)) {
+          const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
+          const add = seedLessons.filter((l) => l.moduleId === GR_ID && !have.has(l.id));
+          if (add.length) persisted.lessons = [...persisted.lessons, ...add];
+        }
+        if (Array.isArray(persisted.glossary)) {
+          const haveG = new Set(persisted.glossary.map((g: GlossaryTerm) => g.id));
+          const addG = seedGlossary.filter(
+            (g) => ["placebo-level", "stop-cluster", "buy-and-hold-benchmark", "key-level", "support-resistance"].includes(g.id) && !haveG.has(g.id)
+          );
+          if (addG.length) persisted.glossary = [...persisted.glossary, ...addG];
+        }
+        if (Array.isArray(persisted.resources)) {
+          const haveR = new Set(persisted.resources.map((r: ResourceItem) => r.id));
+          const addR = defaultResources.filter((r) => r.id.startsWith("r-gr-") && !haveR.has(r.id));
+          if (addR.length) persisted.resources = [...persisted.resources, ...addR];
         }
         return persisted;
       },
