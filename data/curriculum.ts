@@ -1,4 +1,5 @@
 import { Module, Lesson } from "@/lib/types";
+import { extraStrategyLessons } from "@/data/extra-strategies";
 
 // ---------------------------------------------------------------------------
 // Seed curriculum. This is the DEFAULT content the app loads on first run.
@@ -1690,6 +1691,9 @@ Gold is useful for diversification and as a store of value, but a retail trader 
 > Educational only. Nothing here predicts gold or recommends a trade.
 `),
 
+  // The user's in-app "Top 20 Chart-Based Trading Strategies for Gold" set,
+  // baked into the seed so it ships to every device/visitor (see extra-strategies.ts).
+  ...extraStrategyLessons,
 ];
 
 // A tiny quiz bank — extendable; keyed by lessonId.

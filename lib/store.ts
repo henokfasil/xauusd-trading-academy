@@ -397,7 +397,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 7,
+      version: 8,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -520,6 +520,14 @@ export const useAcademy = create<AcademyState>()(
           const haveR = new Set(persisted.resources.map((r: ResourceItem) => r.id));
           const addR = defaultResources.filter((r) => r.id.startsWith("r-gr-") && !haveR.has(r.id));
           if (addR.length) persisted.resources = [...persisted.resources, ...addR];
+        }
+        // v8: inject the "Top 20 Chart-Based Trading Strategies for Gold" lessons
+        // (the user's in-app set, now baked into the seed) into existing users'
+        // Trading Strategies module. Idempotent — by id, never overwrites edits.
+        if (Array.isArray(persisted.lessons)) {
+          const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
+          const add = seedLessons.filter((l) => l.moduleId === "strategies" && !have.has(l.id));
+          if (add.length) persisted.lessons = [...persisted.lessons, ...add];
         }
         return persisted;
       },
