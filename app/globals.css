@@ -55,13 +55,20 @@ body {
   transition: padding-right 0.2s ease;
 }
 
-/* When the tutor drawer is open, dock it: reserve its width so the page
-   content reflows beside the panel instead of hiding behind it. The drawer
-   is 420px wide (max-w-[420px]); on narrow screens it stays an overlay. */
+/* When the tutor drawer is open, dock it: reserve its (user-resizable) width so
+   the page content reflows beside the panel instead of hiding behind it. The
+   width is published as --assistant-width by the Assistant component; on narrow
+   screens (<1024px) the drawer stays an overlay. */
 @media (min-width: 1024px) {
   body.assistant-open {
-    padding-right: 420px;
+    padding-right: var(--assistant-width, 420px);
   }
+}
+
+/* While the user is dragging the resize handle, kill the reflow transition so
+   the page tracks the drawer edge instantly instead of lagging behind. */
+body.assistant-resizing {
+  transition: none;
 }
 
 ::-webkit-scrollbar {

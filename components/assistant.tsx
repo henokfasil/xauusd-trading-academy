@@ -71,21 +71,51 @@ export function Assistant() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasKey, setHasKey] = useState(false);
+  const [width, setWidth] = useState(420); // drawer width in px (user-resizable)
   const abortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const clampWidth = (w: number) => {
+    const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
+    return Math.round(Math.min(Math.max(w, 320), Math.min(900, vw - 80)));
+  };
 
   useEffect(() => {
     setMessages(loadChat());
     setHasKey(!!getApiKey());
+    try {
+      const saved = parseInt(localStorage.getItem("academy-ai-width") || "", 10);
+      if (!Number.isNaN(saved)) setWidth(clampWidth(saved));
+    } catch {}
   }, []);
   useEffect(() => { if (open) setHasKey(!!getApiKey()); }, [open]);
+  useEffect(() => { try { localStorage.setItem("academy-ai-width", String(width)); } catch {} }, [width]);
   // When the drawer is open, dock it: reflow the page beside it (large screens)
-  // instead of letting the panel overlap the main content.
+  // instead of letting the panel overlap the main content. The reserved width
+  // tracks the user's chosen drawer width via a CSS variable.
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.body.classList.toggle("assistant-open", open);
+    document.body.style.setProperty("--assistant-width", `${width}px`);
     return () => document.body.classList.remove("assistant-open");
-  }, [open]);
+  }, [open, width]);
+
+  // Drag the left edge to resize. The drawer is anchored to the right, so the
+  // width is the distance from the pointer to the right edge of the viewport.
+  const startResize = (e: React.PointerEvent) => {
+    e.preventDefault();
+    document.body.style.userSelect = "none";
+    document.body.classList.add("assistant-resizing"); // disable reflow transition while dragging
+    const onMove = (ev: PointerEvent) => setWidth(clampWidth(window.innerWidth - ev.clientX));
+    const onUp = () => {
+      document.body.style.userSelect = "";
+      document.body.classList.remove("assistant-resizing");
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
   useEffect(() => { saveChat(messages); }, [messages]);
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages, busy]);
   // Jump straight to the latest message whenever the drawer is (re)opened,
@@ -309,7 +339,16 @@ export function Assistant() {
 
       {/* Drawer */}
       {open && (
-        <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[420px] flex-col border-l border-border bg-surface shadow-2xl animate-fade-in">
+        <div style={{ width: `${width}px`, maxWidth: "96vw" }} className="fixed inset-y-0 right-0 z-50 flex flex-col border-l border-border bg-surface shadow-2xl animate-fade-in">
+          {/* Resize handle — drag the left edge to widen/narrow */}
+          <div
+            onPointerDown={startResize}
+            onDoubleClick={() => setWidth(420)}
+            title="Drag to resize · double-click to reset"
+            className="absolute left-0 top-0 z-20 flex h-full w-2 -translate-x-1/2 cursor-ew-resize items-center justify-center group"
+          >
+            <div className="h-10 w-1 rounded-full bg-border transition-colors group-hover:bg-accent/70" />
+          </div>
           {/* header */}
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
