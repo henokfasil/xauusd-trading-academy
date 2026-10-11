@@ -42,6 +42,27 @@ const SUGGESTIONS = [
   "Record a top-down read: Daily & 4H bullish, 15m pulling back into support.",
 ];
 
+// Short, human-readable label for each tool so the chat shows a tidy activity
+// chip (e.g. "✎ Updated the lesson") instead of dumping the raw tool payload
+// (which, for read tools, is a wall of JSON). The model's own reply carries the
+// detailed "done — here's what changed and where to check it" confirmation.
+const TOOL_ACTIVITY: Record<string, string> = {
+  log_journal_trade: "Logged a trade to your Journal",
+  get_recent_trades: "Reviewed your recent trades",
+  get_curriculum: "Checked the curriculum",
+  get_lesson: "Read the lesson",
+  update_lesson: "Updated the lesson on the page",
+  add_module: "Created a new module",
+  add_lesson: "Added a new lesson",
+  upsert_glossary_term: "Updated the Glossary",
+  add_mistake: "Logged to the Mistake Library",
+  update_journal_trade: "Updated a journal trade",
+  update_playbook_setup: "Updated a Playbook setup",
+  add_playbook_setup: "Saved a Playbook setup",
+  get_playbook_setups: "Checked your Playbook",
+  log_top_down_read: "Recorded a Top-Down read",
+};
+
 export function Assistant() {
   const { lessons, settings } = useAcademy();
   const [open, setOpen] = useState(false);
@@ -67,6 +88,16 @@ export function Assistant() {
   }, [open]);
   useEffect(() => { saveChat(messages); }, [messages]);
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages, busy]);
+  // Jump straight to the latest message whenever the drawer is (re)opened,
+  // so you never have to scroll down through the whole history.
+  useEffect(() => {
+    if (!open) return;
+    const id = requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    });
+    return () => cancelAnimationFrame(id);
+  }, [open]);
 
   const buildContext = (): string => {
     if (typeof window === "undefined") return "Unknown page.";
@@ -106,7 +137,7 @@ export function Assistant() {
         userText: content,
         signal: abortRef.current.signal,
         onText: appendToAssistant,
-        onToolResult: (_tool, summary) => appendToAssistant(`\n\n> 🛠️ ${summary}\n\n`),
+        onToolResult: (tool) => appendToAssistant(`\n\n> 🛠️ ${TOOL_ACTIVITY[tool] ?? "Updated your workspace"}\n\n`),
         executeTool: async (name, input) => {
           const store = useAcademy.getState();
           if (name === "log_journal_trade") {
@@ -327,7 +358,13 @@ export function Assistant() {
                       : "max-w-[92%] rounded-2xl rounded-bl-sm bg-elevated px-3.5 py-2 text-sm"}>
                       {m.role === "assistant" ? (
                         m.content ? (
-                          <article className="prose-academy text-sm [&_h1]:text-base [&_h2]:text-base [&_h2]:mt-3 [&_h2]:border-0 [&_h2]:pb-0 [&>*+*]:mt-2"><ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown></article>
+                          <article className="prose-academy text-sm [&_h1]:text-base [&_h2]:text-base [&_h2]:mt-3 [&_h2]:border-0 [&_h2]:pb-0 [&>*+*]:mt-2"><ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                          // Render tool-activity notes (and any blockquote) as a
+                          // compact, muted "chip" rather than a heavy quote block.
+                          blockquote: ({ children }) => (
+                            <div className="my-1.5 flex items-center gap-1.5 rounded-md border border-border bg-bg/50 px-2.5 py-1 text-[12px] text-subtle [&_p]:my-0">{children}</div>
+                          ),
+                        }}>{m.content}</ReactMarkdown></article>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-muted"><Icon name="Loader" size={13} className="animate-spin" /> thinking…</span>
                         )
