@@ -96,6 +96,8 @@ Gold trends and reverses in both directions, so a complete trader must be comfor
 
 ## Common beginner mistake
 Treating gold like it "always goes up over time." That is true for a buy-and-hold *investor* over years. As a **day trader** you care about the next few hours, where gold whips in both directions. Long-term bullishness is not an intraday edge.
+
+> **Sources:** CME Group, *Gold Futures Contract Specifications* (centralized futures reference); O'Connor, Lucey, Batten & Baur (2015), *The Financial Economics of Gold: A Survey*, International Review of Financial Analysis 41 — the best single survey of gold as an asset class.
 `),
 
   L("foundations", "how-markets-work", "How markets work", "Price is an auction between buyers and sellers, not a fixed number.", 9, ["order-flow", "liquidity", "auction"], `
@@ -116,6 +118,8 @@ When aggressive buyers outnumber sellers, they lift the offer and price ticks **
 
 ## Why this matters to you
 Everything you'll learn — support, resistance, breakouts, sweeps — is a *story about the auction*. A "support level" is just a price where buyers previously showed up in size. It is not magic; it is memory of order flow. Keep asking: **who is likely trapped, and who is likely in control here?**
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — the definitive text on how auctions, bids, and asks produce price.
 `),
 
   L("foundations", "bid-ask-spread", "Bid, Ask & Spread", "The two prices you actually trade at, and the hidden cost between them.", 7, ["bid", "ask", "spread", "slippage"], `
@@ -142,6 +146,8 @@ When you press buy/sell "at market", you take whatever price is available *now*.
 
 ## Professional habit
 Never plan a trade whose entire profit target is smaller than the spread + expected slippage. Scalping 2–3 point moves on gold with a 1.5 point spread is a losing game before you start. Your **reward must dwarf your frictions.**
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — Chapters 2–3 on spread mechanics and transaction costs.
 `),
 
   L("foundations", "lots-contract-size", "Lots & Contract Size", "How position size is measured, and what one lot of gold is really worth.", 8, ["lot", "contract-size", "position-size"], `
@@ -166,6 +172,8 @@ So if you buy **0.10 lots** at 3700.00 and gold rises to 3705.00 (a \$5 move), y
 
 ## The point that saves accounts
 Notice how *fast* this scales. On **1.00 lot**, a completely ordinary 20-dollar swing in gold — which can happen in an hour — is **\$2,000**. New traders pick a lot size because it "feels normal", not because they calculated the risk. That is backwards. In **Position Sizing** you'll learn to do it the professional way: decide the dollars you're willing to lose *first*, then let that math *tell you* the lot size.
+
+> **Sources:** CME Group, *Gold Futures Contract Specifications* — 100 oz per standard contract; lot and contract size conventions.
 `),
 
   L("foundations", "pips-points", "Pips & Points", "How distance on the gold chart is measured and counted.", 6, ["pip", "point"], `
@@ -184,6 +192,8 @@ When a signal service or mentor says "50 pip stop on gold", *always* ask: 50 × 
 
 ## Rule of thumb
 Convert everything to **price** and to **dollars of P&L** using the lot table from the previous lesson. If you can answer *"how many actual dollars do I make/lose per \$1 move?"* you never need to argue about pips again.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press; CME Group, *Gold Futures Contract Specifications* — price conventions vary across instrument types.
 `),
 
   L("foundations", "leverage", "Leverage", "How a small deposit controls a large position — and why that cuts both ways.", 8, ["leverage", "margin", "position-size"], `
@@ -204,6 +214,8 @@ Professionals often use only a tiny fraction of available leverage. Your real co
 
 ## Beginner mistake
 "I have \$500 and 1:500 leverage, so I can trade 2 lots!" — Yes, and a \$5 move against you (routine for gold) is \$1,000 → your \$500 account is gone, plus you owe. High leverage + emotional sizing is the single most common way new accounts die.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — leverage, margin, and position sizing mechanics; Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — risk-first position sizing.
 `),
 
   L("foundations", "margin", "Margin", "The deposit your broker locks up, and the dreaded margin call.", 7, ["margin", "free-margin", "margin-call", "leverage"], `
@@ -222,6 +234,8 @@ If open trades move against you, your **equity** falls. When your **margin level
 
 ## Why beginners hit this
 They size positions off *free margin* ("I can afford 3 lots") instead of off *risk*. A normal adverse swing eats their buffer and forces liquidation. If you size trades correctly (risking a small % per trade), you will essentially **never** see a margin call — you'll have closed at your planned stop long before margin becomes an issue.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — margin mechanics and margin calls.
 `),
 
   L("foundations", "long-vs-short", "Long vs Short", "Profiting from both rising and falling gold.", 6, ["long", "short", "direction"], `
@@ -241,6 +255,8 @@ Gold spends plenty of time falling. If you only ever look for longs:
 
 ## Mental symmetry
 For a **short**, everything flips: your stop goes *above* your entry, resistance is where you want price to reject, and "higher lows" become "lower highs". Train yourself to read the chart both ways. A useful drill: cover the direction and ask, *"if this exact structure were upside-down, would I take the buy?"* If yes, take the short.
+
+> **Sources:** Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — Chapter on trend direction and directional bias.
 `),
 
   L("foundations", "order-types", "Order Types", "Market, limit and stop orders — the tools that put you in a trade.", 9, ["market-order", "limit-order", "stop-order", "stop-loss", "take-profit"], `
@@ -266,6 +282,8 @@ These are exits attached to an open position:
 Most of this academy's setups use a **clear invalidation (SL)** and a **defined target (TP)** set *before* entry, so the outcome is decided by your plan, not your nerves. Whether you *enter* with a market, limit, or stop order depends on the setup — you'll choose deliberately in **Entry Models**.
 
 > A trade without a stop-loss is not a trade. It's an open-ended bet on your account's survival.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — comprehensive treatment of order types and their mechanics.
 `),
 
   // -------------------------------------------------------------- CHART READING
@@ -296,6 +314,8 @@ A candle with a **long lower wick** at an important support level tells you *sel
 
 ## The one habit that separates pros
 Never trade a candle *pattern* in isolation. A "bullish engulfing" into major resistance in a downtrend is a **trap**, not a buy. The candle is evidence; *context* is the verdict.
+
+> **Sources:** Nison, S. (1991), *Japanese Candlestick Charting Techniques*, New York Institute of Finance — the definitive Western reference on candlestick anatomy.
 `, "/labs/candlestick"),
 
   L("chart-reading", "ohlc", "OHLC & how candles form", "Watch a candle build tick by tick to truly understand it.", 6, ["ohlc", "open", "high", "low", "close"], `
@@ -314,6 +334,8 @@ A candle can look like a strong bullish breakout at minute 3, then get rejected 
 
 ## Beginner mistake
 Entering the instant price *touches* a level because the live candle "looks bullish". The unclosed candle is a rumour; the closed candle is the news. Decide whether your setup needs a **confirmed close** or an **anticipatory limit** — and write it into the plan.
+
+> **Sources:** Nison, S. (1991), *Japanese Candlestick Charting Techniques*, New York Institute of Finance; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — OHLC construction and the importance of candle closes.
 `),
 
   L("chart-reading", "timeframes", "Timeframes", "The same market tells different stories at different zoom levels.", 8, ["timeframe", "higher-timeframe", "lower-timeframe", "top-down"], `
@@ -335,6 +357,8 @@ Both are true. Neither is "right". They answer different questions. This is why 
 Trade *with* the higher-timeframe bias and use the lower timeframe only to get a better price and a tighter stop. Fighting the higher timeframe with a lower-timeframe signal is how you get repeatedly stopped out.
 
 > You'll practise combining timeframes in the **Top-Down Analysis** workspace.
+
+> **Sources:** Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — Chapter on multi-timeframe analysis; Investopedia, "Multiple Time Frames Can Multiply Returns" (Investopedia.com).
 `, "/top-down"),
 
   L("chart-reading", "swing-points", "Swing Highs & Lows", "The pivots that define structure and where stops hide.", 8, ["swing-high", "swing-low", "pivot", "liquidity"], `
@@ -353,6 +377,8 @@ Don't over-count every tiny wiggle. Use **meaningful** swings — pivots that a 
 A break of a swing high/low is **information**: it tells you the prior control has shifted. A *failure* to break one is also information: it tells you the level held. Learn to treat swing points as **decision boundaries**, not decoration.
 
 > Train your eye in the **Market Structure Lab**, where you'll classify swing points as HH/HL/LH/LL.
+
+> **Sources:** Edwards, R. & Magee, J. (2007), *Technical Analysis of Stock Trends*, 9th ed., AMACOM — the foundational text on swing highs/lows and trend structure; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF.
 `, "/labs/market-structure"),
 
   L("chart-reading", "market-structure", "Market Structure", "HH, HL, LH, LL — the grammar of trend and reversal.", 11, ["market-structure", "higher-high", "higher-low", "lower-high", "lower-low", "break-of-structure"], `
@@ -385,6 +411,8 @@ The trend is "intact" until structure breaks:
 
 ## Beginner mistake
 Calling a reversal after a single counter-move. One lower high in a strong uptrend is *noise* until structure actually breaks and *confirms*. Wait for the **break**, then the **retest**, before betting on a new direction.
+
+> **Sources:** Edwards, R. & Magee, J. (2007), *Technical Analysis of Stock Trends*, 9th ed., AMACOM — Dow Theory-based structure analysis; Dow, C. / Rhea, R. (1932), *The Dow Theory*, Barron's.
 `, "/labs/market-structure"),
 
   L("chart-reading", "trend-range-momentum", "Trend, Range, Momentum & Consolidation", "Classify the environment before choosing any tactic.", 9, ["trend", "range", "momentum", "consolidation"], `
@@ -406,6 +434,8 @@ A tight, low-volatility pause — often before an explosive move (a "coil"). Gre
 
 ## The professional filter
 > First classify the environment. Then pick a tactic that *matches* it. Most beginner losses come from running a trend tactic in a range, or fading strong momentum. Environment first, setup second.
+
+> **Sources:** Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — Chapters on trend classification and momentum; Elder, A. (1993), *Trading for a Living*, Wiley.
 `),
 
   // ----------------------------------------------------------------- KEY LEVELS
@@ -432,6 +462,8 @@ The level tells you **where** to pay attention. **Price action at the level** te
 Broken **support becomes resistance**, and broken **resistance becomes support**. When price breaks below a floor and later returns to it from underneath, that old floor often acts as a new ceiling — one of the most reliable and tradeable behaviours in all of price action (the **retest**).
 
 > Practise marking zones in the **Support / Resistance Lab.**
+
+> **Sources:** Osler, C. (2000), "Support for Resistance," *Federal Reserve Bank of New York Economic Policy Review* 6(2) — empirical evidence that published S/R levels coincide with trend interruptions; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF.
 `, "/labs/support-resistance"),
 
   L("key-levels", "zones-vs-lines", "Zones vs Exact Lines", "Why a thin line will fake you out — and a zone won't.", 7, ["zone", "level", "support", "resistance"], `
@@ -457,6 +489,8 @@ Zones let you:
 - **Wait patiently** — you don't chase; you let price come into the box.
 - **Place stops sensibly** — beyond the *far side* of the zone, not one cent past a line where noise stops you out.
 - **Stay calm** — a poke into the zone isn't a failure; it's expected.
+
+> **Sources:** Elder, A. (1993), *Trading for a Living*, Wiley — the zone/buffer concept; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — support/resistance as areas, not exact prices.
 `, "/labs/support-resistance"),
 
   L("key-levels", "reference-levels", "Reference Levels: PDH/PDL, Session H/L, Round Numbers", "The objective levels every gold trader watches.", 9, ["pdh", "pdl", "session-high", "session-low", "round-number", "liquidity"], `
@@ -480,6 +514,8 @@ Big psychological figures — **3700, 3750, 3800** — attract orders because hu
 1. **Mark them before the session** as part of your routine.
 2. Treat them as **decision zones**: expect a *reaction* (reject or break-and-go), and let price action tell you which.
 3. Know that **stops sit just beyond them** — so a quick spike *through* a level that immediately reverses is often a **liquidity sweep**, not a real breakout.
+
+> **Sources:** Osler, C. (2003), "Currency Orders and Exchange Rate Dynamics," *Journal of Finance* 58(5) — stop-loss orders cluster at round numbers and just beyond technical levels.
 `),
 
   // -------------------------------------------------------------------- SESSIONS
@@ -501,6 +537,8 @@ The gold market trades ~24 hours on weekdays, but it is **not the same market** 
 - The **overlap** is where the biggest, cleanest moves *and* the nastiest news whips happen.
 
 The rest of this module breaks down each session's typical behaviour so you can match tactic to time.
+
+> **Sources:** BIS (2022), *Triennial Central Bank Survey of Foreign Exchange and OTC Derivatives Markets* — session volumes; BabyPips.com, "Forex Trading Sessions" — London/NY overlap as peak liquidity window.
 `),
 
   L("sessions", "asia-session", "Asian Session", "The quiet range-builder that sets up the London move.", 6, ["asia-session", "asian-range", "range"], `
@@ -518,6 +556,8 @@ Price tends to coil into a **range** with a defined **Asian high** and **Asian l
 
 ## Beginner mistake
 Treating a quiet Asian breakout as a real trend move. Low-liquidity breakouts frequently fail the moment London arrives with real volume. Patience beats participation here.
+
+> **Sources:** BIS (2022), *Triennial Central Bank Survey of Foreign Exchange and OTC Derivatives Markets* — Asian session volume share; OANDA, "When is the best time for forex trading?" (oanda.com).
 `),
 
   L("sessions", "london-session", "London Session", "The day's engine — expansion, direction and stop hunts.", 7, ["london-session", "liquidity-sweep", "breakout"], `
@@ -533,6 +573,8 @@ Treating a quiet Asian breakout as a real trend move. Low-liquidity breakouts fr
 - Have **both** a sweep scenario and a breakout scenario ready — let price pick.
 - Respect that the **first move can be a fake**. Waiting for the sweep to *reclaim* the level (close back inside) is a higher-probability entry than chasing the initial spike.
 - Volatility is your friend for reward but your enemy for stop placement — size down if stops must be wide.
+
+> **Sources:** BIS (2022), *Triennial Central Bank Survey of Foreign Exchange and OTC Derivatives Markets*; RoboForex, "Gold Trading Explained (XAUUSD)" (roboforex.com) — London session characteristics for gold.
 `),
 
   L("sessions", "ny-session-overlap", "New York Session & the Overlap", "US data, the dollar, and the most active window of the day.", 7, ["ny-session", "overlap", "news", "usd"], `
@@ -552,6 +594,8 @@ For a few hours (~13:00–16:00 London time) **both** major centres are open. Th
 - After the initial news chaos settles (15–30 min), a *clearer* directional move often develops — many pros wait for that instead of trading the spike.
 
 > Cross-reference the **Economic Calendar** module: knowing *when* the overlap coincides with a red-folder release is half the battle.
+
+> **Sources:** BIS (2022), *Triennial Central Bank Survey of Foreign Exchange and OTC Derivatives Markets*; CME Group — NY session overlap as highest-volume window; BabyPips.com, "Forex Trading Sessions."
 `),
 
   // ------------------------------------------------------------- FUNDAMENTALS
@@ -573,6 +617,8 @@ When markets are **fearful** (war, banking stress, crashes), money flees to gold
 They often align (weak dollar + falling yields + fear = strong gold), but sometimes fight (fear pushing gold up while a spiking dollar pushes it down). When drivers **conflict**, expect choppier, less predictable price — a reason to trade smaller or stand aside.
 
 The following lessons unpack the specific events that move these levers.
+
+> **Sources:** Baur, D. & Lucey, B. (2010), "Is Gold a Hedge or a Safe Haven?", *The Financial Review* 45(2); O'Connor, Lucey, Batten & Baur (2015), *The Financial Economics of Gold: A Survey*, International Review of Financial Analysis 41 — the three macro levers.
 `),
 
   L("fundamentals", "usd-yields-fed", "USD, Yields & the Fed", "The rate-expectation machine that dominates gold.", 9, ["usd", "treasury-yield", "real-yield", "fed", "fomc"], `
@@ -595,6 +641,8 @@ Most of gold's *big* moves trace back to one question: **what will the US Federa
 
 ## Practical takeaway
 You are not forecasting the Fed. You are respecting that **around Fed events, gold's usual technical behaviour is overridden by macro.** Know when they occur (Economic Calendar) and manage risk accordingly.
+
+> **Sources:** Barsky, R. & Summers, L. (1988), "Gibson's Paradox and the Gold Standard," *Journal of Political Economy* 96(3) — gold and real interest rates; Erb, C. & Harvey, C. (2013), "The Golden Dilemma," *Financial Analysts Journal* 69(4).
 `),
 
   L("fundamentals", "inflation-data", "Inflation: CPI & PCE", "The reports that reset rate expectations — and gold.", 7, ["cpi", "pce", "inflation", "real-yield"], `
@@ -614,6 +662,8 @@ The Fed's **preferred** inflation gauge. Less market drama than CPI but taken se
 
 ## The nuance that catches beginners
 The **first spike can reverse.** Gold might drop on a hot CPI, then rip higher minutes later as traders reassess. Trading the *instant* of release is closer to gambling (huge spreads, slippage, whipsaw). Professionals typically either sit flat and let the dust settle, then trade the *clearer* post-news move — or have a very specific, pre-defined news plan with sizing to match.
+
+> **Sources:** Federal Reserve, *FOMC Calendar* (federalreserve.gov); Bureau of Labor Statistics, *CPI Data* (bls.gov) — CPI release schedule and methodology.
 `),
 
   L("fundamentals", "jobs-data", "Jobs Data: NFP", "The first-Friday shockwave.", 6, ["nfp", "employment", "usd"], `
@@ -632,6 +682,8 @@ But it's multi-dimensional: the **unemployment rate** and **average hourly earni
 - It routinely moves gold **\$20–\$40 in seconds**, spreads blow out, slippage is severe.
 - Safest for developing traders: **be flat into the release.** Mark the levels, watch the reaction, and trade the *structure* that forms afterwards, not the spike.
 - If you must be in around it, your position size must assume a worst-case slippage far beyond your normal stop.
+
+> **Sources:** Bureau of Labor Statistics, *Employment Situation Summary* (bls.gov) — NFP release; Federal Reserve Board — labour market data as a Fed input.
 `),
 
   L("fundamentals", "geopolitics-sentiment", "Geopolitics & Risk Sentiment", "The unscheduled driver that can spike gold anytime.", 6, ["geopolitics", "safe-haven", "risk-sentiment"], `
@@ -653,6 +705,8 @@ Unlike scheduled data, **geopolitical risk** strikes without a calendar entry. W
 3. When a geopolitical bid is *in play*, treat downside setups with extra caution and size — the "pain of surprise" is asymmetric against shorts.
 
 > Sentiment is context, not a trigger. It tells you which direction has *tailwind*; your technical process still decides *where and whether* to act.
+
+> **Sources:** Baur, D. & Lucey, B. (2010), "Is Gold a Hedge or a Safe Haven?", *The Financial Review* 45(2) — gold as a short-lived safe haven during equity market stress; Baur, D. & McDermott, T. (2010), "Is Gold a Safe Haven? International Evidence," *Journal of Banking & Finance* 34(8).
 `),
 
   // ------------------------------------------------------------- PRICE ACTION
@@ -675,6 +729,8 @@ When a "pullback" suddenly turns *impulsive against* the trend (big bodies, fast
 
 ## The trap to avoid
 Entering *during* the impulse (chasing) means a terrible price and a far-away stop. Entering *on the pullback* means patience is rewarded with a defined, low-cost risk. **The money is made by waiting for the pullback, not chasing the impulse.**
+
+> **Sources:** Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — impulse/correction structure as the basis of trend-following; Elder, A. (1993), *Trading for a Living*, Wiley — buying pullbacks in trends.
 `),
 
   L("price-action", "highs-lows-recap", "HH / HL / LH / LL in Action", "Apply structure labels to live-style price paths.", 7, ["higher-high", "higher-low", "lower-high", "lower-low", "market-structure"], `
@@ -700,6 +756,8 @@ This continuous labelling *is* discretionary trading. It keeps you aligned with 
 2. Refusing to update the label when structure breaks (ego). The chart doesn't care about your last idea — **re-label honestly.**
 
 > The **Market Structure Lab** will quiz you on exactly these, at rising difficulty.
+
+> **Sources:** Edwards, R. & Magee, J. (2007), *Technical Analysis of Stock Trends*, 9th ed., AMACOM — HH/HL/LH/LL as the empirical definition of trend; Dow Theory, Rhea, R. (1932), *The Dow Theory*, Barron's.
 `, "/labs/market-structure"),
 
   L("price-action", "breakout-retest", "Breakout & Retest", "The highest-quality continuation entry.", 8, ["breakout", "retest", "support", "resistance", "confirmation"], `
@@ -723,6 +781,8 @@ You give up some of the initial move, but you gain **confirmation** and a **tigh
 
 ## Beginner mistake
 Fear of "missing it" → chasing the initial breakout candle. You end up buying the high tick right before the retest dips into your stop. **Let it come back.** If it never retests, that's fine — one missed trade beats a chased loss.
+
+> **Sources:** Lo, A., Mamaysky, H. & Wang, J. (2000), "Foundations of Technical Analysis," *Journal of Finance* 55(4) — evidence that breakout patterns carry some information; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF.
 `),
 
   L("price-action", "false-breakout-sweep", "False Breakouts & Liquidity Sweeps", "How the market traps the impatient — and how to trade with it.", 9, ["false-breakout", "liquidity-sweep", "stop-hunt", "rejection", "trap"], `
@@ -747,6 +807,8 @@ Stops cluster in predictable places — just above swing highs, below swing lows
 
 ## The mindset shift
 > Stop seeing an obvious level break as "the move starting." Start asking: *"is this a real breakout, or is the market grabbing stops before going the other way?"* The reclaim answers it. Patience turns you from the *prey* into the *predator*.
+
+> **Sources:** Osler, C. (2003), "Currency Orders and Exchange Rate Dynamics," *Journal of Finance* 58(5) — stop clustering as the mechanism for false breakouts; Schwager, J. (1992), *The New Market Wizards*, HarperCollins — false breakout recognition.
 `),
 
   L("price-action", "rejection", "Rejection", "Reading who lost control at a level, from the wicks.", 6, ["rejection", "wick", "support", "resistance"], `
@@ -767,6 +829,8 @@ The *same* long-wicked candle means:
 Rejection is a **trigger**, not a reason on its own. The reason is the **level + bias**; the rejection is the market *confirming* your scenario is playing out, giving you a candle to act on and a wick extreme to place your stop beyond.
 
 > In the **Candlestick Lab** you'll practise spotting which side got rejected — the single most useful candle-reading skill.
+
+> **Sources:** Nison, S. (1991), *Japanese Candlestick Charting Techniques*, New York Institute of Finance — long-wick candles as rejection signals; Elder, A. (1993), *Trading for a Living*, Wiley — wick interpretation and context dependence.
 `, "/labs/candlestick"),
 
   // ------------------------------------------------------------------ SCENARIOS
@@ -798,6 +862,8 @@ Now you can't be "wrong" — one scenario simply activates. You react to *your o
 - Makes every outcome a **data point** you can journal and evaluate, not an emotional event.
 
 > This is the process the whole academy is built around: **context → location → scenario → trigger → invalidation → size → execute → manage → journal → review.**
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — probabilistic thinking and scenario-based trading; Douglas, M. (1990), *The Disciplined Trader*, NYIF.
 `),
 
   L("scenarios", "building-scenarios", "Building Scenarios on the Chart", "A repeatable routine to draft your daily if-then map.", 8, ["scenario", "top-down", "level", "bias"], `
@@ -818,6 +884,8 @@ A practical routine to turn your morning analysis into a concrete set of if-then
 Two or three well-formed scenarios beat ten vague ones. You want to walk into the session thinking: *"I'm mainly watching 3710 and 3740. Here's exactly what I'll do at each."*
 
 > Use the **Top-Down Analysis** workspace to record your reads, then draft these scenarios in your **Playbook** and **Journal**.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall; Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley — pre-session preparation routines.
 `, "/top-down"),
 
   // -------------------------------------------------------------------- ENTRIES
@@ -842,6 +910,8 @@ The best entries have **multiple reasons** to be there at once ("confluence"):
 - a key level **+** higher-timeframe bias **+** a clean rejection **+** a session timing edge.
 
 One reason = a coin flip. Three aligned reasons = an **A+ setup**. But beware *over*-confluence-hunting: waiting for 10 perfect stars means you never trade. Two or three solid, independent reasons is the sweet spot.
+
+> **Sources:** Elder, A. (1993), *Trading for a Living*, Wiley — entry model framework; Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — the importance of explicit, pre-defined entry rules.
 `),
 
   L("entries", "confirmation-vs-anticipation", "Confirmation vs Anticipation", "The trade-off between a better price and a safer entry.", 7, ["confirmation", "limit-order", "market-order", "risk-reward"], `
@@ -866,6 +936,8 @@ Wait for price to reach the level **and** print a trigger (rejection candle, str
 - **A+ confluence:** many pros *split* — a partial limit for price + add on confirmation.
 
 There's no universally "right" answer — only what fits the setup and what you can execute *consistently*. Pick one per scenario, write it down, and journal the results to learn your own edge.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — limit vs market order trade-offs; Elder, A. (1993), *Trading for a Living*, Wiley — confirmation vs anticipation as a fundamental entry decision.
 `),
 
   // ---------------------------------------------------------------------- STOPS
@@ -888,6 +960,8 @@ The market structure tells you where invalidation lives. Your job is to *find* i
 
 ## The professional sequence
 > Find invalidation → measure risk-per-unit → *then* decide size → *then* check if the target offers enough reward. If a logical stop makes the reward-to-risk poor, **the trade doesn't qualify.** No trade is better than a bad-structure trade with a hopeful stop.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — invalidation as the defining element of a trade; Schwager, J. (1993), *Market Wizards*, HarperCollins — every interviewed trader cites predefined stops.
 `),
 
   L("stops", "stop-placement", "Stop Placement", "Give the trade room to breathe without giving away the account.", 8, ["stop-loss", "atr", "volatility", "liquidity-sweep"], `
@@ -911,6 +985,8 @@ The resolution is **entry quality**: a better entry (via confirmation, retest, o
 - Don't trade **without** a stop.
 - Don't **widen** a stop as price approaches it ("it'll come back"). That is how small losses become catastrophic.
 - Don't set stops at the *exact* round number or exact swing — assume everyone else did too.
+
+> **Sources:** Elder, A. (1993), *Trading for a Living*, Wiley — stop placement beyond structure; Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — volatility-based stop placement.
 `),
 
   // --------------------------------------------------------------------- SIZING
@@ -939,6 +1015,8 @@ And recovering from a drawdown is brutally asymmetric: a **50% loss requires a 1
 
 ## The reframe
 > Your #1 job is not to make money — it's to **not blow up.** Amateurs ask "how much can I make on this trade?" Professionals ask "how much can I lose, and can my account easily survive a string of these?" Get sizing right and *time* lets your edge compound. Get it wrong and no edge can save you.
+
+> **Sources:** Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — the 1% rule and survival math; DayTrading.com, "The 1% Rule" (daytrading.com).
 `),
 
   L("sizing", "sizing-formula", "The Position Sizing Formula", "Turn risk dollars + stop distance into an exact lot size.", 8, ["position-size", "lot", "risk-per-trade", "stop-loss"], `
@@ -966,6 +1044,8 @@ So you buy **0.10 lots**. If stopped, you lose ~\$50 (1%). If the trade runs to 
 Notice: the **stop distance decides the size**, not your mood. A **wider** stop → **smaller** lots (to keep the loss at \$50). A **tighter** stop → **larger** lots for the *same* \$50 risk. Your dollar risk stays constant regardless of the setup — that's the whole point.
 
 > The **Position Sizing calculator** in Settings/Tools does this for you, but do it by hand a dozen times until it's instinct. A trader who can't size a trade in their head has no business clicking buy.
+
+> **Sources:** Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — position sizing formula; Elder, A. (1993), *Trading for a Living*, Wiley — the 2% rule variant.
 `),
 
   L("sizing", "leverage-margin-safety", "Leverage, Margin & Sizing Together", "How the pieces fit — and why leverage is almost irrelevant if you size right.", 6, ["leverage", "margin", "position-size", "risk-per-trade"], `
@@ -984,6 +1064,8 @@ If you always size by risk, you will typically use a **tiny fraction** of availa
 
 ## The failure mode to avoid forever
 Sizing off leverage/margin instead of risk: "I have \$5k and can afford 3 lots, so I'll trade 3 lots." A normal \$5 adverse move = \$1,500 = 30% of the account **on one trade**. A few of those in a row and you're done. **Never let available margin set your size. Let risk set your size, and let margin merely permit it.**
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — leverage mechanics; Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — position sizing as the key to survival.
 `),
 
   // ------------------------------------------------------------------------- RR
@@ -1013,6 +1095,8 @@ Trader **B** loses more often but makes far more, because **reward-to-risk** doe
 
 ## The professional standard
 Favour setups offering **≥ 2R** so you can be *wrong more than half the time and still profit.* This single discipline — refusing sub-2R trades unless there's a strong reason — quietly separates profitable traders from the rest.
+
+> **Sources:** Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — R-multiples framework; Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — expectancy and thinking in probabilities.
 `),
 
   L("rr", "expectancy-sample", "Expectancy & Sample Size", "Why you judge a strategy over dozens of trades, not one.", 7, ["expectancy", "sample-size", "variance", "edge"], `
@@ -1035,6 +1119,8 @@ Rules of thumb for a *first read* on a discretionary setup: **at least 20–30 t
 3. Separate "did I follow my process?" from "did the trade win?" A well-executed loss is a **good** trade. A rule-breaking win is a **bad** trade that got lucky.
 
 > The **Statistics** page computes your expectancy, win rate, average R and equity curve across your journaled sample — so you evaluate like a researcher, not a gambler.
+
+> **Sources:** Van Tharp, V. (2006), *Trade Your Way to Financial Freedom*, McGraw-Hill — expectancy formula and sample-size requirements; Aronson, D. (2006), *Evidence-Based Technical Analysis*, Wiley — statistical requirements for strategy evaluation.
 `, "/statistics"),
 
   // ------------------------------------------------------------------ MANAGEMENT
@@ -1055,6 +1141,8 @@ Your job isn't over when you enter. **Management** is executing the *rest* of th
 ## The two deadliest management mistakes
 1. **Moving your stop *further away*** as price approaches it. This converts a small planned loss into a catastrophe. Never do it. Ever.
 2. **Cutting winners early / letting losers run** — the exact opposite of what edge requires. Your losers should be capped at ~1R by your stop; your winners should be *allowed* to reach their multi-R targets.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — pre-committing management rules; Elder, A. (1993), *Trading for a Living*, Wiley — breakeven and trailing stop mechanics.
 `),
 
   L("management", "after-the-trade", "After the Trade", "Close it, then capture it — the loop that compounds skill.", 6, ["journal", "review", "process"], `
@@ -1071,6 +1159,8 @@ The trade is closed. For an amateur, it's over. For a professional, the *most va
 > Trading skill compounds only through honest **feedback**. Without a journal you repeat the same mistakes with new money and call it "experience." With a journal, patterns emerge — *"I lose most when I trade the New York open without waiting for the sweep"* — and *those* patterns are where your improvement (and money) actually come from.
 
 > Use the **Trading Journal** to capture each trade, the **Mistake Library** to log recurring errors and their fixes, and **Statistics** to review the sample. This close→capture→review loop is the engine of the entire academy.
+
+> **Sources:** Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley — the importance of journaling for skill development; Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — process vs outcome grading.
 `, "/journal"),
 
   // -------------------------------------------------------------------- ROUTINE
@@ -1096,6 +1186,8 @@ Consistency of *process* produces consistency of *results*. Professionals run es
 - Weekly: review the sample in **Statistics**, update the **Playbook** and **Mistake Library.**
 
 > Explore the **"A Day Trading XAU/USD"** timeline for a stage-by-stage walkthrough of exactly what to look at, what question to answer, and what *not* to do at each hour.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — the professional trading routine; Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley — daily preparation and review as skill-development tools.
 `, "/day-in-the-life"),
 
   L("routine", "risk-limits-rules", "Daily Risk Limits & Trading Rules", "The guardrails that protect you from yourself.", 7, ["risk-limits", "max-daily-loss", "rules", "discipline"], `
@@ -1114,6 +1206,8 @@ When you're up money you feel invincible; when you're down you feel desperate. B
 
 ## Build your own rule set
 The **Playbook** lets you write and edit your personal trading rules and setup checklists. Review and refine them weekly based on what your **Mistake Library** and **Statistics** reveal. Rules aren't a cage — they're the *structure* within which a discretionary edge can actually express itself.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — daily loss limits and trading rules; Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley.
 `, "/playbook"),
 
   // ----------------------------------------------------------------- PSYCHOLOGY
@@ -1137,6 +1231,8 @@ Your technical analysis can be flawless and you can still lose — because tradi
 - **Journal emotions**, not just prices — you'll spot your personal triggers.
 - **Smaller size** if a trade makes you anxious — anxiety usually means you're risking too much or the setup isn't clean.
 - **Step away** after a big win *or* loss; both distort the next decision.
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall — fear, greed, and the process-over-outcome mindset; Douglas, M. (1990), *The Disciplined Trader*, NYIF; Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley.
 `),
 
   L("psychology", "process-over-outcome", "Process Over Outcome", "The mindset that makes losses survivable and wins repeatable.", 6, ["process", "outcome", "variance", "discipline"], `
@@ -1159,6 +1255,8 @@ The only quadrants you can *control* are the ones about **process**. Aim to live
 
 ## Why it's the master skill
 Every professional's edge is small and only shows up over a **large sample**. Process-focus is what lets you *keep executing the edge* through the inevitable losing stretches that would make an outcome-focused trader quit or blow up right before the edge reasserts. **Protect the process, and the outcomes take care of themselves.**
+
+> **Sources:** Douglas, M. (2000), *Trading in the Zone*, Prentice Hall; Kahneman, D. (2011), *Thinking, Fast and Slow*, Farrar, Straus and Giroux — outcome bias and how humans misjudge probabilistic processes.
 `),
 
   // ------------------------------------------------------------------- CALENDAR
@@ -1188,6 +1286,8 @@ Each event shows:
 4. After the dust settles (often 15–30 min), a **cleaner directional move** frequently forms — many pros trade *that*, not the spike.
 
 > The **Economic Calendar** page in this app lets you record upcoming events, tag their impact, and note your pre-planned policy for each — turning the calendar from a source of ambushes into a source of *preparation.*
+
+> **Sources:** Federal Reserve, *FOMC Calendar* (federalreserve.gov); Bureau of Labor Statistics (bls.gov) for CPI/NFP schedules; FXStreet, *Economic Calendar* (fxstreet.com) — popular calendar tool.
 `, "/calendar"),
 
   // --------------------------------------------------------------- A GOLD TRADER'S DAY
