@@ -16,13 +16,13 @@ Core philosophy it teaches and must always reinforce:
 - **Live:** https://henokfasil.github.io/xauusd-trading-academy/
 - **Repo:** https://github.com/henokfasil/xauusd-trading-academy (branch `main`)
 - Every push to `main` auto-builds a **static export** and deploys to **GitHub Pages** via `.github/workflows/deploy.yml`.
-- ⚠️ **Auto-deploy is currently BROKEN (since ~2026-09-30):** the GitHub account is **locked due to a billing issue**, so the Actions `workflow` deploy fails in ~3s (*"the job was not started because your account is locked due to a billing issue"*). As a stopgap (2026-10-03) Pages was switched to **`build_type: legacy` serving the `gh-pages` branch**, which is NOT subject to the Actions lock. See **Deploy notes** for how to publish now and how to restore the normal flow.
+- ✅ **Auto-deploy is working** (billing lock resolved 2026-10-11). Push to `main` → GitHub Actions builds → Pages updates (~1–2 min). To watch: `gh run watch <id> --repo henokfasil/xauusd-trading-academy --exit-status`.
 
 ## Stack
 
 - **Next.js 15** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS** (custom theme via CSS variables in `app/globals.css`; dark/light through a `.dark` class)
-- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 8`)
+- **Zustand** + `persist` middleware → **localStorage** (key `xauusd-academy-v1`, currently `version: 9`)
 - **Recharts** (stats), **lucide-react** (icons, resolved by name via `<Icon name=.../>`), **react-markdown** + **remark-gfm** (lessons render Markdown), **nanoid** (ids)
 - Node 18+ (developed on Node 26).
 
@@ -46,7 +46,8 @@ PAGES=true BASE_PATH=/xauusd-trading-academy npm run build   # outputs ./out
 ```
 app/
   layout.tsx                 Root shell: Sidebar (in <Suspense>), main, <Assistant/>, ThemeProvider
-  page.tsx                   Dashboard
+  page.tsx                   Dashboard (incl. 4-chapter progress panel)
+  roadmap/                   16-Week Learning Roadmap — phase breakdown, per-week lessons + deliverables
   start-here/                Clickable professional mental-model flow
   day-in-the-life/           Expandable hour-by-hour timeline
   top-down/                  Top-Down Analysis workspace (auto-synthesises bias; NEVER signals)
@@ -59,17 +60,18 @@ app/
 components/
   ui.tsx                     Shared primitives: Icon, Card, Button, Badge, PageHeader,
                              EditableText, Field, Select, EmptyState, Stat, ClientOnly
-  sidebar.tsx                Left nav (curriculum from store + static tool/workspace/reference nav).
-                             `renderModule()` draws each collapsible module block; the "trading-day"
-                             module is pulled OUT of the Curriculum list (FEATURED_ID) and shown on
-                             its own just below Start Here. Curriculum order: Trading Strategies first.
+  sidebar.tsx                Left nav. "trading-day" is FEATURED above the curriculum. Curriculum
+                             modules are grouped into chapter sections (Ch.01 Price Action →
+                             Ch.02 Trading Strategies → Ch.03 Risk Management → Ch.04 Quant
+                             Validation) using the `chapter` field on Module. Chapter headers
+                             render as centered badge labels between module groups. Price Action first.
   theme.tsx                  Dark/light provider (localStorage 'academy-theme')
   price-widget.tsx           Live read-only XAU/USD spot (gold-api.com, client fetch, 30s)
   assistant.tsx              Floating AI tutor drawer + client-side tool executors
 lib/
-  types.ts                   All domain types
+  types.ts                   All domain types (Module now has optional `chapter?: string` field)
   store.ts                   Zustand store, all CRUD actions, computeStats(), persist config
-  nav.ts                     Static nav sections
+  nav.ts                     Static nav sections (topNav includes "16-Week Roadmap" → /roadmap)
   ai.ts                      Claude BYOK client, tutor persona, tools, streaming + agentic loop
 data/
   curriculum.ts              SEED modules, lessons, quizzes (Markdown bodies)
@@ -123,20 +125,46 @@ Lessons use a **query-param route** `/learn?m=<moduleId>&l=<lessonId>` (single s
 
 ## Adding curriculum content
 
-- Add a module: `data/curriculum.ts` `modules[]` (id, title, blurb, order, `icon` = lucide name).
-- Add a lesson: use the `L(moduleId, id, title, summary, estMinutes, concepts[], body, toolRoute?)` helper. `body` is Markdown; `concepts` are glossary term ids; `toolRoute` links to an interactive lab. Users can also add/edit lessons in-app (persisted to localStorage; seed changes only affect fresh/reset state).
+### Curriculum architecture (as of v9)
+
+The curriculum is organised into **4 chapters**, each containing one or more modules:
+
+| Chapter | `chapter` field value | Module IDs (in order) |
+|---------|----------------------|----------------------|
+| Ch.01 — Price Action | `"Price Action"` | `foundations` (10), `chart-reading` (20), `key-levels` (30), `price-action` (35), `sessions` (40), `fundamentals` (50), `pa-liquidity` (60), `pa-volume` (70), `pa-mtf` (80), `pa-integration` (90) |
+| Ch.02 — Trading Strategies | `"Trading Strategies"` | `strategies` (100), `scenarios` (110), `entries` (120) |
+| Ch.03 — Risk Management | `"Risk Management"` | `stops` (200), `sizing` (210), `rr` (220), `management` (230), `routine` (240), `psychology` (250), `calendar` (260) |
+| Ch.04 — Quant Validation | `"Quant Validation"` | `gold-research` (300) |
+| FEATURED (no chapter) | — | `trading-day` (0) — shown above the curriculum nav |
+
+The `price-action` module is titled **"Price Behavior at Levels"** (renamed from "Price Action" to avoid collision with the chapter title).
+
+### Adding / editing modules and lessons
+
+- Add a module: `data/curriculum.ts` `modules[]` (id, title, blurb, order, icon, **`chapter`** = chapter label string). The `chapter` field controls which sidebar group it appears under.
+- Add a lesson: use the `L(moduleId, id, title, summary, estMinutes, concepts[], body, toolRoute?)` helper. `body` is Markdown; end with a `> **Sources:** ...` line. `concepts` are glossary term ids; `toolRoute` links to an interactive lab.
+- **Template literal gotcha:** if a lesson body contains a markdown code fence (` ``` `), escape the backticks as `\`\`\`` to avoid terminating the template literal.
 - Quizzes: `seedQuizzes[]` keyed by `lessonId`.
-- ⚠️ **To ship new seed content to EXISTING users** (not just fresh/reset browsers), add an **idempotent block to the persist `migrate` fn in `lib/store.ts` and bump `version`** — inject seed items by id only if absent, never overwrite user edits. Precedents: `v3` injects the `trading-day` chapter; `v4` injects the `strategies` module + `fibonacci-retracement` lesson + its glossary terms *and* removes any empty "Trading Strategies" module the tutor left behind; `v5` re-orders modules (Trading Strategies first) via a `MODULE_ORDER` map; `v6` injects the `oc-zone-strategy` lesson *above* Fibonacci (order set to `fib.order - 1`) + its glossary terms. Current seed modules include **`strategies` (Trading Strategies, order 1 — first in the Curriculum)**; its lessons are **OC Zone Strategy**, **Fibonacci Retracement Strategy**, then the **23-lesson "Top 20 Chart-Based Trading Strategies for Gold"** set (`v8` injects the 21 from `data/extra-strategies.ts` by id; generated from the user's in-app export).
+- ⚠️ **To ship new seed content to EXISTING users** (not just fresh/reset browsers), add an **idempotent block to the persist `migrate` fn in `lib/store.ts` and bump `version`** — inject seed items by id only if absent, never overwrite user edits.
+
+### Persist version history
+
+| Version | What it does |
+|---------|-------------|
+| v2 | Ensures new Settings fields exist on older data |
+| v3 | Injects `trading-day` chapter |
+| v4 | Injects `strategies` module + `fibonacci-retracement` lesson; cleans up empty tutor-made strategy modules |
+| v5 | Re-orders modules (Trading Strategies first at the time) |
+| v6 | Injects `oc-zone-strategy` lesson above Fibonacci |
+| v7 | Injects `gold-research` chapter (3 lessons + glossary terms + reading list resources) |
+| v8 | Injects 21 `extra-strategies.ts` lessons into the `strategies` module |
+| **v9** | **Reorganises into 4 chapters** — applies new `order` values and `chapter` field to all modules; renames `price-action` title to "Price Behavior at Levels"; injects 4 new PA modules (`pa-liquidity`, `pa-volume`, `pa-mtf`, `pa-integration`) + 23 new lessons by id (idempotent) |
 
 ## Deploy notes
 
-- **Intended** Pages source = GitHub Actions. `configure-pages` + `upload-pages-artifact` + `deploy-pages`. To watch: `gh run watch <id> --repo henokfasil/xauusd-trading-academy --exit-status`. Node-20 deprecation + ubuntu-migration lines in CI are warnings only.
-- ⚠️ **CURRENT reality (account billing-locked → Actions blocked):** Pages serves the **`gh-pages` branch** (`build_type: legacy`). **`git push` to `main` does NOT update the live site.** To publish a change now:
-  1. Build: `PAGES=true BASE_PATH=/xauusd-trading-academy npm run build` (→ `out/`).
-  2. Publish `out/` to `gh-pages`: copy `out/` to a temp dir, `touch .nojekyll`, `git init`, `git checkout -b gh-pages`, commit, then `git push -f https://github.com/henokfasil/xauusd-trading-academy.git gh-pages`.
-  3. Trigger + poll the build: `gh api -X POST repos/henokfasil/xauusd-trading-academy/pages/builds` then poll `gh api repos/henokfasil/xauusd-trading-academy/pages/builds/latest` until `"status":"built"`.
-  4. Verify the live bundle actually changed (don't trust status alone): `curl` a referenced `_next/static/chunks/*.js` and grep for a known new string.
-- **To RESTORE normal auto-deploy once billing is fixed:** `gh api -X PUT repos/henokfasil/xauusd-trading-academy/pages -f build_type=workflow -F 'source[branch]=main' -F 'source[path]=/'`, then push to `main` and watch the Actions run. (Still commit source to `main` either way so the repo stays the source of truth.)
+- Pages source = **GitHub Actions** (`configure-pages` + `upload-pages-artifact` + `deploy-pages`). ✅ Working as of 2026-10-11 (billing lock resolved).
+- **Normal deploy:** `git push origin main` → Actions runs in ~1–2 min → Pages updates. Watch with `gh run watch <id> --repo henokfasil/xauusd-trading-academy --exit-status`.
+- Node-20 deprecation + ubuntu-migration warnings in CI output are harmless — ignore them.
 - Only commit/push when asked. Commit messages end with the required `Co-Authored-By` trailer.
 
 ## Guardrails to never break
