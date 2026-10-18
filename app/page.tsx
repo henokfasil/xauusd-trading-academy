@@ -111,6 +111,50 @@ function DashboardInner() {
         <Stat label="Rule violations" value={stats.violations} sub="honesty > ego" tone={stats.violations > 0 ? "warn" : undefined} />
       </div>
 
+      {/* Chapter progress */}
+      <Card className="p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Icon name="BookOpen" size={16} className="text-accent" />
+          <h2 className="font-semibold">Chapter Progress</h2>
+          <Link href="/roadmap" className="ml-auto text-xs text-accent hover:underline">16-Week Roadmap →</Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { ch: "Price Action",       num: "01", icon: "Activity"    },
+            { ch: "Trading Strategies", num: "02", icon: "Target"      },
+            { ch: "Risk Management",    num: "03", icon: "ShieldAlert" },
+            { ch: "Quant Validation",   num: "04", icon: "FlaskConical"},
+          ].map(({ ch, num, icon }) => {
+            const chMods = modules.filter((m) => (m as any).chapter === ch);
+            const chLessons = lessons.filter((l) => chMods.some((m) => m.id === l.moduleId));
+            const done = chLessons.filter((l) => l.completed).length;
+            const pct = chLessons.length ? Math.round((done / chLessons.length) * 100) : 0;
+            const firstUnfinished = [...chLessons].sort((a, b) => a.order - b.order).find((l) => !l.completed);
+            return (
+              <div key={ch} className="rounded-lg border border-border p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[9px] font-bold tabular-nums text-accent/70 bg-accent/10 rounded px-1 py-0.5">Ch.{num}</span>
+                  <Icon name={icon} size={13} className="text-subtle" />
+                  <span className="text-xs font-medium truncate">{ch}</span>
+                </div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="h-1.5 flex-1 rounded-full bg-border overflow-hidden">
+                    <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="text-xs tabular-nums text-subtle">{pct}%</span>
+                </div>
+                <div className="text-[11px] text-muted">{done}/{chLessons.length} lessons</div>
+                {firstUnfinished && (
+                  <Link href={`/learn?m=${firstUnfinished.moduleId}&l=${firstUnfinished.id}`} className="mt-1.5 block text-[11px] text-accent hover:underline truncate">
+                    Next: {firstUnfinished.title}
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
       {/* Two column: today's practice + review */}
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2 p-5">

@@ -15,6 +15,7 @@ export interface NavSection {
 export const topNav: NavItem[] = [
   { label: "Dashboard", href: "/", icon: "LayoutDashboard" },
   { label: "Start Here", href: "/start-here", icon: "Sparkles" },
+  { label: "16-Week Roadmap", href: "/roadmap", icon: "MapPin" },
 ];
 
 export const toolNav: NavSection = {

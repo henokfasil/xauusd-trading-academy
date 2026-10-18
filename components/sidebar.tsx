@@ -30,6 +30,27 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return <div className="px-2.5 pt-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-subtle">{children}</div>;
 }
 
+const CHAPTER_ORDER = ["Price Action", "Trading Strategies", "Risk Management", "Quant Validation"];
+const CHAPTER_NUMS: Record<string, string> = {
+  "Price Action": "01",
+  "Trading Strategies": "02",
+  "Risk Management": "03",
+  "Quant Validation": "04",
+};
+
+function ChapterLabel({ chapter }: { chapter: string }) {
+  const num = CHAPTER_NUMS[chapter];
+  return (
+    <div className="mt-3 mb-1 flex items-center gap-2 px-2.5">
+      <div className="h-px flex-1 bg-border" />
+      <span className="rounded bg-accent/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-accent/80">
+        {num ? `Ch.${num} · ` : ""}{chapter}
+      </span>
+      <div className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
 export function Sidebar() {
   const pathname = usePathname();
   const search = useSearchParams();
@@ -117,7 +138,33 @@ export function Sidebar() {
           {featuredModule && <div className="mt-1">{renderModule(featuredModule)}</div>}
 
           <SectionLabel>Curriculum</SectionLabel>
-          {curriculumModules.map(renderModule)}
+          {(() => {
+            // Group modules by chapter in defined order
+            const chapterMap = new Map<string, typeof curriculumModules>();
+            const unchaptered: typeof curriculumModules = [];
+            for (const m of curriculumModules) {
+              const ch = (m as any).chapter as string | undefined;
+              if (ch) {
+                if (!chapterMap.has(ch)) chapterMap.set(ch, []);
+                chapterMap.get(ch)!.push(m);
+              } else {
+                unchaptered.push(m);
+              }
+            }
+            const orderedChapters = CHAPTER_ORDER.filter((ch) => chapterMap.has(ch));
+            const extraChapters = [...chapterMap.keys()].filter((ch) => !CHAPTER_ORDER.includes(ch));
+            return (
+              <>
+                {[...orderedChapters, ...extraChapters].map((ch) => (
+                  <div key={ch}>
+                    <ChapterLabel chapter={ch} />
+                    {chapterMap.get(ch)!.map(renderModule)}
+                  </div>
+                ))}
+                {unchaptered.map(renderModule)}
+              </>
+            );
+          })()}
 
           <SectionLabel>{toolNav.label}</SectionLabel>
           {toolNav.items.map((n) => (

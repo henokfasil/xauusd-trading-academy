@@ -35,6 +35,8 @@ export interface Module {
   order: number;
   /** lucide icon name */
   icon: string;
+  /** chapter grouping label shown in the sidebar, e.g. "Price Action" */
+  chapter?: string;
 }
 
 export interface QuizQuestion {

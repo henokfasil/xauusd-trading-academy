@@ -9,24 +9,33 @@ import { extraStrategyLessons } from "@/data/extra-strategies";
 // ---------------------------------------------------------------------------
 
 export const modules: Module[] = [
-  { id: "trading-day", title: "A Gold Trader's Day", blurb: "Follow a professional XAU/USD day trader from pre-market prep to entry, exit and the closing journal.", order: 0, icon: "Sunrise" },
-  { id: "strategies", title: "Trading Strategies", blurb: "Complete chart-based setups that combine context, location and trigger into one repeatable play.", order: 1, icon: "Target" },
-  { id: "foundations", title: "Foundations", blurb: "The vocabulary and mechanics every trade rests on. Assume nothing.", order: 2, icon: "BookOpen" },
-  { id: "chart-reading", title: "Chart Reading", blurb: "Turn a wall of candles into structure you can reason about.", order: 3, icon: "CandlestickChart" },
-  { id: "key-levels", title: "Key Levels", blurb: "Where price is likely to react — and why zones beat exact lines.", order: 4, icon: "Ruler" },
-  { id: "sessions", title: "Trading Sessions", blurb: "Gold behaves differently across Asia, London and New York.", order: 5, icon: "Clock" },
-  { id: "fundamentals", title: "Gold Fundamentals", blurb: "The macro forces that move XAU/USD over days and hours.", order: 6, icon: "Landmark" },
-  { id: "price-action", title: "Price Action", blurb: "Read intent from price: rejection, breakout, retest, sweep.", order: 7, icon: "Activity" },
-  { id: "scenarios", title: "Trade Scenarios", blurb: "Convert analysis into conditional 'if-then' hypotheses.", order: 8, icon: "GitBranch" },
-  { id: "entries", title: "Entry Models", blurb: "Precise, repeatable triggers instead of gut clicks.", order: 9, icon: "Crosshair" },
-  { id: "stops", title: "Stops & Invalidation", blurb: "Define where you are wrong before you enter.", order: 10, icon: "ShieldAlert" },
-  { id: "sizing", title: "Position Sizing", blurb: "The single most important survival skill.", order: 11, icon: "Scale" },
-  { id: "rr", title: "Risk / Reward", blurb: "Why expectancy — not win rate — pays you.", order: 12, icon: "TrendingUp" },
-  { id: "management", title: "Trade Management", blurb: "What to do after you are in the trade.", order: 13, icon: "Settings2" },
-  { id: "routine", title: "Daily Routine", blurb: "The repeatable process professionals run every day.", order: 14, icon: "ListChecks" },
-  { id: "psychology", title: "Trading Psychology", blurb: "Manage the one variable you can't chart: you.", order: 15, icon: "Brain" },
-  { id: "calendar", title: "Economic Calendar", blurb: "Plan around CPI, FOMC and NFP instead of being ambushed.", order: 16, icon: "CalendarClock" },
-  { id: "gold-research", title: "Gold Research Lab", blurb: "What 23 years of data and the academic literature say about gold, key levels and testing honestly.", order: 17, icon: "FlaskConical" },
+  // Featured chapter — always shown separately above the curriculum nav
+  { id: "trading-day",    title: "A Gold Trader's Day",          blurb: "Follow a professional XAU/USD day trader from pre-market prep to entry, exit and the closing journal.",                              order: 0,   icon: "Sunrise" },
+  // ── Chapter 1: Price Action ──────────────────────────────────────────────
+  { id: "foundations",    title: "Foundations",                   blurb: "The vocabulary and mechanics every trade rests on: bid/ask, order types, lots, leverage, and how auctions produce price.",           order: 10,  icon: "BookOpen",          chapter: "Price Action" },
+  { id: "chart-reading",  title: "Chart Reading",                 blurb: "Turn a wall of candles into structure you can reason about — bodies, wicks, timeframes, swing points, and market structure.",        order: 20,  icon: "CandlestickChart",  chapter: "Price Action" },
+  { id: "key-levels",     title: "Key Levels",                    blurb: "Where price is likely to react — and why zones beat exact lines.",                                                                   order: 30,  icon: "Ruler",             chapter: "Price Action" },
+  { id: "price-action",   title: "Price Behavior at Levels",      blurb: "How price acts when it reaches a key level: rejection, breakout, retest, and liquidity sweep.",                                     order: 35,  icon: "Activity",          chapter: "Price Action" },
+  { id: "sessions",       title: "Trading Sessions",              blurb: "Gold behaves differently across Asia, London and New York — liquidity, volatility, and the opening range.",                         order: 40,  icon: "Clock",             chapter: "Price Action" },
+  { id: "fundamentals",   title: "Gold Fundamentals",             blurb: "The macro forces — USD, real yields, Fed, risk sentiment — that move XAU/USD over days and hours.",                                 order: 50,  icon: "Landmark",          chapter: "Price Action" },
+  { id: "pa-liquidity",   title: "Liquidity & Order Flow",        blurb: "Stop clusters, sweeps, absorption, and the honest limits of what a standard OHLC chart can show you.",                              order: 60,  icon: "Waves",             chapter: "Price Action" },
+  { id: "pa-volume",      title: "Volume & Auction Theory",       blurb: "Volume Profile, POC, value areas, Auction Market Theory — and why tick volume ≠ real volume on spot gold.",                         order: 70,  icon: "BarChart2",         chapter: "Price Action" },
+  { id: "pa-mtf",         title: "Multi-Timeframe Analysis",      blurb: "How the same price action tells different stories at different zoom levels, and how to read them together.",                         order: 80,  icon: "GalleryHorizontal", chapter: "Price Action" },
+  { id: "pa-integration", title: "Reading a Full Chart",          blurb: "Combine every preceding module into a complete, honest, structured chart analysis before any trade decision.",                      order: 90,  icon: "ScanSearch",        chapter: "Price Action" },
+  // ── Chapter 2: Trading Strategies ───────────────────────────────────────
+  { id: "strategies",     title: "Trading Strategies",            blurb: "Complete chart-based setups that combine context, location and trigger into one repeatable play.",                                   order: 100, icon: "Target",            chapter: "Trading Strategies" },
+  { id: "scenarios",      title: "Trade Scenarios",               blurb: "Convert analysis into conditional 'if-then' hypotheses — always with both a bullish and a bearish plan.",                           order: 110, icon: "GitBranch",         chapter: "Trading Strategies" },
+  { id: "entries",        title: "Entry Models",                  blurb: "Precise, repeatable triggers instead of gut clicks — confirmation vs anticipation.",                                                order: 120, icon: "Crosshair",         chapter: "Trading Strategies" },
+  // ── Chapter 3: Risk Management ──────────────────────────────────────────
+  { id: "stops",          title: "Stops & Invalidation",          blurb: "Define where you are wrong before you enter — structural invalidation, not arbitrary distances.",                                   order: 200, icon: "ShieldAlert",       chapter: "Risk Management" },
+  { id: "sizing",         title: "Position Sizing",               blurb: "The single most important survival skill: risk-first sizing, the formula, and why leverage is almost irrelevant.",                  order: 210, icon: "Scale",             chapter: "Risk Management" },
+  { id: "rr",             title: "Risk / Reward",                 blurb: "Why expectancy — not win rate — pays you, and how to think in R-multiples.",                                                        order: 220, icon: "TrendingUp",        chapter: "Risk Management" },
+  { id: "management",     title: "Trade Management",              blurb: "What to do after you are in — breakeven, partials, trailing, and the golden rule of pre-commitment.",                              order: 230, icon: "Settings2",         chapter: "Risk Management" },
+  { id: "routine",        title: "Daily Routine",                 blurb: "The repeatable pre-, during-, and post-session process that professionals run every day.",                                           order: 240, icon: "ListChecks",        chapter: "Risk Management" },
+  { id: "psychology",     title: "Trading Psychology",            blurb: "Manage the one variable you can't chart: fear, greed, FOMO, ego — and the process-over-outcome mindset.",                          order: 250, icon: "Brain",             chapter: "Risk Management" },
+  { id: "calendar",       title: "Economic Calendar",             blurb: "Plan around CPI, FOMC and NFP instead of being ambushed — and how to handle news technically.",                                    order: 260, icon: "CalendarClock",     chapter: "Risk Management" },
+  // ── Chapter 4: Quant Validation ─────────────────────────────────────────
+  { id: "gold-research",  title: "Gold Research Lab",             blurb: "What 23 years of data and the academic literature say about gold, key levels, and honest strategy testing.",                        order: 300, icon: "FlaskConical",      chapter: "Quant Validation" },
 ];
 
 // Helper to keep the seed compact & consistent.
@@ -1691,6 +1700,920 @@ Gold is useful for diversification and as a store of value, but a retail trader 
 > Educational only. Nothing here predicts gold or recommends a trade.
 `),
 
+  // ---------------------------------------------------------------- FOUNDATIONS (new lessons)
+  L("foundations", "passive-aggressive-liquidity", "Passive vs Aggressive Liquidity", "Two types of orders — one provides liquidity, the other takes it. This is what actually moves price.", 8, ["liquidity", "market-order", "limit-order", "order-flow"], `
+# Passive vs Aggressive Liquidity
+
+Every transaction involves two roles: one side **provides** liquidity, the other **takes** it. Understanding which does which is the foundation of order-flow thinking.
+
+## The two roles
+
+**Passive liquidity — limit orders.**
+A limit order rests in the order book at a specific price, waiting. "I'll buy at 3,710 and not a cent more." Passive orders don't move price; they create the supply or demand that other orders trade against.
+
+**Aggressive liquidity — market orders.**
+A market order says: "Fill me *now* at whatever price is available." It sweeps through the resting limits on the opposing side. This is what moves price tick by tick. Every upward tick happens because an aggressive buyer hit the lowest available sell limit.
+
+## The intuition: a market stall
+
+Imagine a stall with price tags. The stall-keeper is passive — she named her price and waits. A customer who walks up, accepts the tag, and buys is aggressive. The moment the customer transacts, the available inventory at that price is gone; the next customer pays whatever the next tag says. Price moves.
+
+## Why price moves directionally
+
+When aggressive buyers consistently outnumber the passive sell orders at the current level, the cheapest available ask gets swept, and price moves up to the next ask. This continues until either aggressive buying stops or enough passive supply materialises to absorb it.
+
+**Strong impulsive candles** (large bodies, small wicks, consistent direction) often reflect aggressive orders dominating. **Choppy, wicky candles** often reflect balanced passive orders on both sides absorbing every attempt.
+
+## What this means on the chart
+
+You cannot directly observe aggressor vs passive split from OHLC alone. The interpretation is a mental model, not a certifiable fact. True order-flow data requires footprint charts or Level 2 depth — not available on most retail spot-gold platforms.
+
+**Use conditional language:** "This impulsive candle *may* reflect aggressive buyers overwhelming passive supply" — not "buyers are definitely dominating."
+
+## Exercise
+
+On a 15m gold chart, find one impulsive move and one choppy range. For each, narrate which side (aggressive or passive) the balance appears to favour, using "may" language. Practise the habit of probabilistic description over assertive claims.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges: Market Microstructure for Practitioners*, Oxford University Press — the definitive reference on order types, passivity, and how prices form.
+`),
+
+  L("foundations", "price-discovery", "Price Discovery", "How markets find the price that clears both sides — the auction mechanism behind every chart.", 8, ["auction", "price-discovery"], `
+# Price Discovery
+
+"Price discovery" sounds academic but it answers a simple question: *how does a market figure out what something is worth right now?*
+
+## The mechanism
+
+No authority sets the gold price. Buyers and sellers interact continuously, each with their own view of value and urgency. The price at any moment is the most recent agreed transaction — the point where a willing seller and a willing buyer crossed.
+
+When new information arrives (a Fed statement, a geopolitical shock), participants update their estimate of value. Those who believe gold is now underpriced become aggressive buyers; those who think it's overpriced become aggressive sellers. The imbalance moves price until it finds a new level where two-sided trade can resume.
+
+**Every candlestick records the short auction that took place during its time period and where it settled.**
+
+## Acceptance vs rejection
+
+Markets don't just discover price — they test whether it's **accepted**:
+
+- **Acceptance:** price moves to a level and *stays*, trade occurs at that level, participants transact freely. Shows up as time and volume *at* the level.
+- **Rejection:** price moves to a level and snaps back — the auction found no willing counterparty there. Shows up as a **wick**: price explored that territory and closed away from it.
+
+This framework underlies Auction Market Theory (covered in the Volume module). The core idea: **a long wick is a rejected price.** The market attempted that level and couldn't sustain it.
+
+## Why key levels matter
+
+Support and resistance levels are past *acceptance zones* — prices where significant two-sided trade previously occurred. Participants remember and reference them. They're rational starting points for watching for a new auction to begin, not guaranteed turning points.
+
+## Exercise
+
+Find five significant wicks on a 1H gold chart. For each, narrate: "The market *attempted* to trade at [high/low of wick]. That level was *rejected* — the close tells me where the auction actually settled." Repeat on different timeframes. Notice how the same price path produces larger or smaller wicks depending on the timeframe.
+
+> **Sources:** Steidlmayer, J.P. & Koy, K. (1986), *Markets and Market Logic* — original Market Profile / Auction Market Theory framework. Pring, M. (2002), *Technical Analysis Explained*, McGraw-Hill.
+`),
+
+  // ---------------------------------------------------------------- CHART READING (new lessons)
+  L("chart-reading", "inside-outside-bars", "Inside Bars & Outside Bars", "One signals compression before an explosive move; the other signals a range expansion with no winner.", 7, ["candlestick", "volatility", "momentum"], `
+# Inside Bars & Outside Bars
+
+Two patterns built entirely on *range* — one contracts it, one expands it.
+
+## Inside Bar
+
+An inside bar is a candle whose entire range (high to low) fits *within* the range of the previous "mother" bar.
+
+\`\`\`
+Mother bar:  Low ──────────────────── High
+Inside bar:       Low ──────── High
+\`\`\`
+
+The inside bar is a **compressed auction**: the session traded entirely within the prior session's extremes. Neither buyers nor sellers pushed beyond the previous range. The market paused.
+
+**What it suggests:** energy is being compressed. Compression commonly precedes expansion. Inside bars at key levels or after strong impulses are "coil" setups — a break of the mother bar's range can signal the next directional leg.
+
+**Caution:** quiet periods (late Asian session, pre-news) produce many small inside bars that are pure noise. The pattern only has weight when the *context* is significant: at a meaningful level, or after a large directional candle.
+
+## Outside Bar
+
+An outside bar exceeds both the prior high *and* the prior low.
+
+\`\`\`
+Prior candle:     Low ──────── High
+Outside bar:  Low ──────────────────────── High
+\`\`\`
+
+Both sides were explored and neither won. Volatility expanded but produced no decisive resolution.
+
+**What it suggests:** active two-way trade with no dominant side. Context determines implication — at a turning point it may signal exhaustion; in a range it's often noise.
+
+**Key distinction:** an outside bar is about full-range expansion, not about the colour (close location). A bearish-closing outside bar at resistance in a downtrend means something different from the same shape in the middle of a range.
+
+## Exercise
+
+On a 1H gold chart, mark 3 inside bars and 2 outside bars. For each, note: (1) what was the context — trend, range, near a level? (2) what happened in the next 5 candles? Record outcomes *before* interpreting — let the data speak.
+`),
+
+  L("chart-reading", "engulfing-pin-bars", "Engulfing & Pin Bar Candles", "What these candles represent in auction terms — and why location determines whether they mean anything.", 8, ["candlestick", "rejection", "momentum"], `
+# Engulfing & Pin Bar Candles
+
+Two of the most discussed candle shapes. Understand what they *record*, not just what they look like.
+
+## Bullish Engulfing
+
+A bearish candle is followed by a bullish candle whose **body** completely covers the prior body.
+
+**What it records:** sellers controlled the prior session. The next session opened and buyers drove price above the prior open — completely reversing the prior session's work. The body-engulf means buyers absorbed and overcame the prior selling pressure within one period.
+
+**When it carries weight:** at a key support level after a pullback in a larger uptrend; at a significant higher-timeframe zone after a sustained move. At these locations, it can be a valid trigger.
+
+**When it doesn't:** in the middle of a trend (just a pullback candle); on a low timeframe in choppy conditions; at resistance in a downtrend — where a bullish engulfing is a *potential trap*, not a buy.
+
+The candle is neutral by itself. Context activates it.
+
+## Bearish Engulfing
+
+Mirror image: a bullish candle followed by a bearish candle whose body engulfs the prior. Sellers fully reversed the prior session's buying in one period.
+
+## Pin Bar (Rejection Candle)
+
+A pin bar has a long wick (typically 2–3× the body or more) on one side and a small body on the other.
+
+- **Bullish pin (hammer):** long lower wick. Price drove down hard but closed near the top — sellers tried, buyers overwhelmed them back.
+- **Bearish pin (shooting star):** long upper wick. Price drove up hard but closed near the bottom — buyers tried, sellers rejected them.
+
+**What a long upper wick proves:** price reached that high, could not sustain it, and the auction closed lower. That's all.
+
+**What it does not prove:** "smart money" specifically caused it; a reversal is guaranteed; there is intent behind the wick. It is evidence of price rejection at that level, nothing more.
+
+**The decisive test:** put the same pin bar in two places — at a major HTF resistance zone vs. floating in the middle of a trend. It is a strong signal in the first case and almost meaningless in the second.
+
+## Exercise
+
+Find 5 bullish pin bars on a 15m gold chart without cherry-picking — take the first 5 scanning left to right. For each, record: (1) was a key level nearby? (2) what was the 4H structure? (3) what happened in the next 10 candles? Tally successes and failures honestly.
+
+> **Sources:** Nison, S. (1991), *Japanese Candlestick Charting Techniques*, New York Institute of Finance — the reference on candle anatomy and names.
+`),
+
+  L("chart-reading", "doji-indecision", "Doji & Indecision Candles", "What a near-zero body actually records — and why the candle after the doji matters more than the doji itself.", 6, ["candlestick", "momentum", "auction"], `
+# Doji & Indecision Candles
+
+A doji forms when the open and close are at approximately the same price. The body is minimal or absent; wicks can vary.
+
+## What a doji records
+
+The session's auction **ended where it started.** Regardless of how far price travelled intra-period, buyers and sellers cancelled each other out by the close. No progress in either direction was sustained.
+
+## Types
+
+**Standard doji** (small body, moderate wicks both sides): balanced indecision. Neither side held ground.
+
+**Long-legged doji** (long wicks both sides): high volatility with no decision — large exploration, no resolution. Common around news events.
+
+**Dragonfly doji** (long lower wick, close near high): price drove down hard; buyers completely recovered it. Functionally similar to a bullish pin bar.
+
+**Gravestone doji** (long upper wick, close near low): price drove up hard; sellers pushed it fully back. Functionally similar to a bearish pin bar.
+
+## The honest interpretation
+
+A doji is a **question mark**, not an answer. It records unresolved tension. What it means depends entirely on context:
+
+- **At a key level after a strong trend:** possible exhaustion — worth watching for a reversal trigger.
+- **In the middle of a range:** noise — the range itself is already indecision.
+- **Before a major news event:** participants are flat, waiting — volatility expansion likely incoming.
+
+## The most important rule
+
+**The candle after the doji matters more than the doji.** A doji at support followed by a strong bullish close is a two-candle confirmation. A doji at support followed by another bearish close means the level is still being tested.
+
+Never act on a doji alone. Always wait for the next candle's resolution.
+
+## Exercise
+
+Find 5 doji candles on a 1H gold chart. For each, record what happened on the *next two candles*. Tally bullish vs bearish resolutions. The exercise will demonstrate that a doji alone resolves about 50/50 — confirming that context and follow-through create the edge, not the shape.
+`),
+
+  L("chart-reading", "candle-sequences", "Reading Candle Sequences", "Individual candles are words. Sequences are sentences. The meaning is in the narrative, not any single character.", 8, ["candlestick", "momentum", "market-structure"], `
+# Reading Candle Sequences
+
+Rather than naming individual patterns, ask: **what story is this sequence telling?**
+
+## The core skill
+
+Every 3–5 candle group can be narrated: "Sellers drove price down with a large bearish candle. The next two candles were small with wicks on both sides — neither side dominated. Then a large bullish candle reclaimed most of the prior move. Story: the initial sell-off was absorbed; buyers are attempting to take control."
+
+This narrative approach — reading intent rather than naming patterns — is what distinguishes discretionary skill from mechanical pattern-matching.
+
+## Momentum within sequences
+
+Sequences reveal momentum shifts before they appear on the chart:
+
+- **Increasing momentum:** successive candles in one direction grow larger — conviction building.
+- **Fading momentum:** candles in the trend direction are shrinking; wicks are growing. The dominant side is losing energy.
+- **Exhaustion:** a large candle followed by a much smaller candle of the same colour, or a doji — the push is stalling. This often precedes a reversal or consolidation.
+
+These momentum clues frequently appear *before* a structural break on the chart, giving alert readers an early warning.
+
+## The three-candle read drill
+
+For any three consecutive candles, ask:
+1. Who controlled candle 1?
+2. Did the same side maintain control in candle 2, or did control shift?
+3. What does candle 3 confirm or deny?
+
+Practise this continuously until it becomes automatic.
+
+## Why pattern names can mislead
+
+The same visual sequence ("three white soldiers," "morning star") means different things in different contexts. Three bullish candles in a downtrend = likely a pullback. Three bullish candles at a support hold in an uptrend = continuation. The shape is identical; the meaning is near-opposite. Context first, shape second.
+
+## Sequences and higher timeframes
+
+A 15m sequence *is* a single 1H candle viewed with more granularity. Understanding this builds multi-timeframe intuition: when you study a 1H candle with a rejection wick, you can imagine the 15m sequence of sell-off and recovery that produced it.
+
+## Exercise
+
+Pick any 40-candle segment of historical XAUUSD 15m data. Narrate it aloud, candle by candle, without using any pattern names — only words like "buyers," "sellers," "control shifted," "momentum fading," "absorption." Do this for 5 minutes without stopping. This is the root skill of discretionary reading.
+
+> **Sources:** Elder, A. (1993), *Trading for a Living*, Wiley — Chapter on candlesticks and pattern context. Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF.
+`),
+
+  // ---------------------------------------------------------------- LIQUIDITY & ORDER FLOW (new module)
+  L("pa-liquidity", "what-is-liquidity", "What is Liquidity?", "Market liquidity, resting orders, and why liquidity depth determines how far a single order can move price.", 7, ["liquidity", "order-flow", "spread"], `
+# What is Liquidity?
+
+Liquidity is how easy it is to buy or sell a given size without significantly moving the price.
+
+## Two forms of liquidity
+
+**Market liquidity** — the overall depth of the market. How much can trade near the current price without a large move? Gold during the London/NY overlap is highly liquid. Gold at 3 AM Sunday is thin.
+
+**Resting liquidity** — the limit orders sitting in the order book above and below current price, waiting to be filled. This is the pool that aggressive orders trade *into*.
+
+## Why depth matters
+
+In a deep market, large orders execute smoothly because many passive counterparties exist at nearby prices. In a thin market, even a modest market order can push price through several levels because fewer resting orders stand in the way. This explains why the same "setup" behaves very differently at different times of day.
+
+## Liquidity concentrations as price magnets
+
+Because most traders use the same chart landmarks, resting orders cluster at predictable locations: round numbers, prior swing highs and lows, previous day/week reference levels. These clusters are **price magnets** — price is often drawn toward them because that's where the supply of orders exists to fill incoming demand, and vice versa.
+
+## The two trading implications
+
+1. **You need liquidity to execute.** If you're trying to sell, you need a buyer. Thin liquidity = worse fills, wider spreads, more slippage.
+2. **Liquidity concentrations are trade locations.** Understanding where orders likely cluster helps anticipate where price may move toward (to find the fills) and where it may reverse (once the orders are absorbed).
+
+## What you can and cannot see
+
+On a standard OHLC chart, the order book is **invisible.** You can infer where orders are likely clustered by reading the chart, but you cannot observe it directly. True depth visibility requires Level 2 order book data, which most retail spot-gold platforms do not provide.
+
+Everything in this module is educated inference from price behaviour — not direct observation.
+
+> **Sources:** Harris, L. (2003), *Trading and Exchanges*, Oxford University Press — Chapters 3–5 on liquidity, order types, and market depth.
+`),
+
+  L("pa-liquidity", "stop-clusters", "Stop-Loss Clusters", "Where retail stops concentrate on a gold chart, and why those concentrations make certain price levels behave predictably.", 8, ["stop-loss", "liquidity", "swing-high", "swing-low"], `
+# Stop-Loss Clusters
+
+Most retail traders follow nearly identical logic when placing stops. This predictability creates predictable concentrations of resting orders.
+
+## Where stops cluster
+
+- **Just below recent swing lows** — stops for long positions.
+- **Just above recent swing highs** — stops for short positions.
+- **Below/above previous day high and low** — widely-watched reference points.
+- **Below/above round numbers** ($3,700, $3,750, $3,800) — psychological clustering.
+- **Beyond obvious double tops/bottoms** — pattern-based placements.
+
+Because thousands of traders use the same chart and the same logic, their stops pile up at the same locations. These clusters are **concentrations of waiting market orders.**
+
+## Why clusters matter to price
+
+When a stop-loss is triggered it becomes a market order — an instant aggressive order that pushes price further in the same direction. A cluster of stops is therefore a cluster of waiting momentum orders. When price reaches the zone:
+
+1. Stops trigger → burst of same-direction aggressive orders.
+2. Price moves through the level briefly.
+3. The liquidity from stopped-out traders fills the opposing side's resting limits.
+
+This is why price frequently "overshoots" obvious levels before reversing: the overshoot is the mechanism that exhausts the stop cluster and fills the opposing orders.
+
+## What this looks like on the chart
+
+A **wick** beyond a prior swing high or low, followed by a close back inside the prior range, is the visual signature of a stop-hunt completing. The wick = price found the stops, triggered them, and the reversal began once that liquidity was absorbed.
+
+## The critical caveat
+
+Not every overshoot is a deliberate stop-hunt. Other causes:
+- Thin liquidity periods cause natural overshoot on modest volume.
+- Algorithmic breakout systems buy new highs; their exits create apparent reversals later.
+- News events cause overshoots independent of stop positioning.
+
+The stop-cluster framework is a useful reading tool, not a verified explanation of who caused the move.
+
+> **Sources:** Osler, C. (2003), "Currency Orders and Exchange Rate Dynamics," *Journal of Finance* 58(5) — empirical evidence that stop-loss orders cluster at round numbers and just beyond technical levels.
+`),
+
+  L("pa-liquidity", "liquidity-sweeps-mechanics", "Liquidity Sweeps", "The mechanics of a price spike that grabs clustered stops and then reverses — one of gold's most repeatable patterns.", 9, ["liquidity-sweep", "false-breakout", "stop-loss", "rejection"], `
+# Liquidity Sweeps
+
+A liquidity sweep is when price moves aggressively beyond a well-known level, triggers the resting orders there, then reverses.
+
+## The mechanics
+
+When price pushes into a known stop cluster:
+1. Stops trigger → burst of market orders in the direction of the push.
+2. Those orders fill the opposing side (large resting limit orders absorb the flow).
+3. Once the available stops are exhausted, the pressure reverses.
+4. Price snaps back, often with momentum.
+
+You don't need to invoke "institutional targeting" as the cause. The mechanics are emergent: predictable stop placement + order-flow dynamics = predictable sweep behaviour.
+
+## Identifying a sweep on the chart
+
+- A **sharp, fast spike** beyond a swing high or low — often only one or two candles.
+- A **long wick** reaching into the stop zone.
+- A **close back inside** the prior range — the decisive element.
+- The spike is impulsive; the return is too.
+
+**The close is the key.** A close beyond the level = potential real breakout (or failed breakout — see below). A wick that spikes through then closes back = sweep signature.
+
+## The trade setup
+
+After a confirmed sweep (wick beyond level, candle closes back inside):
+1. The obvious stop orders have largely been triggered.
+2. Participants positioned in that direction have been shaken out.
+3. The path of least resistance often shifts.
+
+Entry: on the candle that closes back inside the level (the "reclaim"). Stop: just beyond the sweep wick extreme. Target: next key level in the reversal direction, minimum 2R.
+
+## The failure mode
+
+Sometimes what looks like a sweep is the start of a real breakout. Price sweeps, consolidates briefly above/below, then continues. The tell: if price cannot close back inside the level within 1–3 candles, treat it as a real breakout and step aside.
+
+## Epistemic note
+
+The candle pattern is observable. The cause (who swept whom and why) is not verifiable from OHLC. The pattern is tradeable regardless of its cause.
+
+> **Sources:** Osler (2000, 2003) as above. Schwager, J. (1992), *The New Market Wizards*, HarperCollins — multiple interviews touching on stop-placement behaviour.
+`),
+
+  L("pa-liquidity", "absorption-order-flow", "Absorption & Order Flow", "When significant aggressive flow meets larger passive resistance — and why price barely moves despite the volume.", 7, ["order-flow", "absorption", "liquidity"], `
+# Absorption & Order Flow
+
+Absorption occurs when significant aggressive order flow meets even larger passive resistance — and price fails to move as much as the volume would suggest.
+
+## The concept
+
+Imagine aggressive sellers flooding the market with market orders. Normally this pushes price down. But if equally large buyers are waiting with limit bids at that level, every sell order gets absorbed — the resting bids take the other side of every aggressive sell. Price barely moves despite the heavy activity.
+
+**Buy absorption** (at support): aggressive selling absorbed by large passive buying → potential strength, possible reversal.
+**Sell absorption** (at resistance): aggressive buying absorbed by large passive selling → potential weakness, possible reversal.
+
+Absorption signals hidden intent — the absorbing side is defending the level without revealing themselves through aggressive orders.
+
+## What you might see on the chart
+
+True absorption is difficult to identify from OHLC alone. Contextual clues include:
+
+- **Repeated rejection at the same exact level** — consistent refusal to sustain above or below.
+- **High-range candles that close near the middle** — aggressive attempts in both directions, neither holding.
+- **Price "stalling"** at a level despite what looks like pressure — multiple candles touching the level without decisively breaking it.
+
+## The important limitation for retail gold traders
+
+Full absorption analysis requires **footprint chart data** — volume traded at each price tick within a candle. This is not available on standard retail spot-gold CFD platforms. Tick volume (price changes per period) does not reveal absorption.
+
+What you observe from OHLC are *clues*, not proof. Use them to strengthen a hypothesis, not as standalone signals.
+
+## Practical application
+
+When price stalls at a level despite multiple candle attempts — consider absorption as a hypothesis. Look for a confirmation trigger (rejection candle, structural break in the reversal direction) before acting. The hypothesis + trigger together provide a more robust entry than either alone.
+
+> **Sources:** Steidlmayer & Koy (1986) as above. Dalton, J., Jones, E. & Dalton, R. (1990), *Mind Over Markets*, Probus — the classic Auction Market Theory / Market Profile reference.
+`),
+
+  L("pa-liquidity", "what-charts-dont-show", "What the Chart Cannot Show You", "The honest limits of OHLC analysis — and why conditional language is accuracy, not weakness.", 8, ["order-flow", "liquidity", "auction"], `
+# What the Chart Cannot Show You
+
+This may be the most important lesson in this module.
+
+## What OHLC actually records
+
+A candlestick chart records exactly four data points per period: Open, High, Low, Close. **That is all.** Everything else is inference.
+
+## What you cannot see on a standard chart
+
+| Claim | What it asserts | What the chart shows |
+|-------|----------------|---------------------|
+| "Institutions bought here" | Who traded and why | Only that price rose |
+| "Stop hunt by market makers" | Specific intent | Price spiked and reversed |
+| "Order block" | Where institutions rested orders | A candle that preceded a move |
+| "Smart money accumulation" | A specific actor accumulating | A period of sideways price action |
+| "Demand zone" | Where buy orders are waiting | A prior reaction area |
+
+None of the above can be verified from OHLC data. They are *interpretations* — sometimes useful heuristics, but interpretations nonetheless.
+
+## The volume problem on gold
+
+Retail spot gold uses **tick volume** (count of price changes per period), not real centralized exchange volume. COMEX gold futures have true reported volume. Spot CFD brokers do not. Tick volume correlates with activity but is not the same thing. Volume-based claims that presuppose real volume are built on shaky ground for retail spot gold.
+
+## The productive attitude
+
+Hold every OHLC-based observation as a **hypothesis**:
+- "Price *may* have swept stops here" — not "smart money definitely ran stops"
+- "This level *may* attract a reaction" — not "price will reverse here"
+- "Volume *appears* elevated, suggesting activity" — not "institutions are buying"
+
+Conditional language is **accuracy**, not timidity. It separates traders who improve by testing hypotheses against outcomes from those who defend narratives.
+
+## Why this matters for learning
+
+Many popular trading frameworks (SMC, ICT, order blocks) extrapolate strongly from OHLC to claims about market participant intent. Some describe patterns that genuinely repeat. But the mechanism they claim cannot be verified from a chart. Use them as pattern-recognition tools; test them statistically; don't mistake a useful heuristic for a proven market law.
+
+> **Sources:** Aronson, D. (2006), *Evidence-Based Technical Analysis*, Wiley — the definitive work on distinguishing testable claims from untestable narratives in technical analysis.
+`),
+
+  // ---------------------------------------------------------------- VOLUME & AUCTION THEORY (new module)
+  L("pa-volume", "volume-on-gold", "Volume on Gold: What You're Actually Seeing", "Tick volume vs real volume, why spot gold has no centralized exchange, and what you can and cannot infer.", 8, ["volume", "tick-volume", "comex"], `
+# Volume on Gold: What You're Actually Seeing
+
+Before using volume in any analysis, understand exactly what "volume" means on a retail gold chart.
+
+## The volume source problem
+
+**COMEX gold futures** (CME Group) trade on a centralized exchange with reported volume — every contract that changes hands is recorded. This is genuine traded volume.
+
+**Spot gold** and most retail gold CFDs trade **over-the-counter (OTC)** — between banks, brokers, and dealers globally, with no single exchange recording every transaction. There is no centralized spot gold volume figure.
+
+What your retail broker calls "volume" on a gold spot chart is almost always **tick volume**: a count of how many price changes occurred in the period. More activity = more ticks = larger tick-volume bar. This correlates reasonably with overall market activity but is not the same as actual ounces of gold traded.
+
+## Why this matters
+
+- Tick-volume figures are **broker-specific**: different client pools, different server activity.
+- You **cannot compare** volume across brokers.
+- Volume-analysis techniques designed for centralized equity markets (NYSE, CME) apply more cleanly to COMEX gold futures than to spot gold.
+
+## What you CAN reasonably use volume for
+
+Despite its limitations, tick volume provides useful context:
+
+**Expanding volume during a trend move:** consistent with genuine participation — more price changes per period as the move accelerates.
+
+**Contracting volume during a pullback:** consistent with a low-conviction counter-move — fewer participants fighting the trend.
+
+**Volume spike at a key level:** suggests heightened activity at that point, which is consistent with the level mattering.
+
+**Breakout on elevated volume vs. low volume:** a breakout with elevated tick volume is more credible than the same breakout in near-silence.
+
+## The honest framing
+
+Volume is one contextual signal among many. When it aligns with your price-action read, confidence increases. When it contradicts, pause. But never let a volume reading override a clear structural observation.
+
+> **Sources:** CME Group, *Gold Futures Contract Specifications* — COMEX as the centralized venue. Steenbarger, B. (2009), *The Daily Trading Coach*, Wiley — practical discussion of volume interpretation for active traders.
+`),
+
+  L("pa-volume", "volume-profile-basics", "Volume Profile Explained", "POC, Value Area High/Low, HVN, LVN — what each level represents and how to use them without making absolute claims.", 9, ["volume-profile", "poc", "hvn", "lvn", "value-area"], `
+# Volume Profile Explained
+
+Volume Profile shows how much volume (or tick activity) traded at each **price level** over a given period — horizontal bars on the price axis, with longer bars indicating more activity.
+
+## Key concepts
+
+**Point of Control (POC):** the price level with the highest volume in the period. The most two-sided trade occurred here — where buyers and sellers most agreed on value.
+
+**Value Area (VA):** the range containing approximately 70% of the period's volume. The **Value Area High (VAH)** and **Value Area Low (VAL)** are its edges.
+
+**High-Volume Nodes (HVN):** price levels with significant volume. The market spent considerable time here and accepted this as fair value. Price tends to *rotate* within HVNs rather than racing through them.
+
+**Low-Volume Nodes (LVN):** price levels with little volume. The market moved through quickly — no equilibrium found there. Price tends to pass through LVNs rapidly when it returns to them.
+
+## The intuition
+
+Imagine a party venue. The POC is the dance floor — where most activity happened, where the crowd gathered. The LVNs are the hallways that people briefly walked through but never stayed in. In market terms: HVNs = acceptance zones; LVNs = fast-transit zones.
+
+## What Volume Profile is NOT
+
+A POC or HVN does not guarantee that price will return there or react there. It means that level *was significant* during the measurement period. Whether it remains relevant depends on:
+- **Recency of the profile:** a 6-month-old POC may be less relevant than yesterday's POC.
+- **Regime changes:** a strong trend may blast through prior balance areas without pause.
+
+**Never say price "must" return to the POC.** Treat it as a hypothesis about where equilibrium may be re-sought, given that context still warrants it.
+
+## Practical use on gold
+
+For day trading, **session profiles** (today's or yesterday's activity) are more actionable than multi-month composites.
+
+Watch for:
+- Price above the VAH → market may be perceived as "premium"; rotations back toward the VA are possible.
+- Price below the VAL → market may be "discount"; recoveries toward VA are possible.
+- Price at an LVN → expect faster movement through it.
+- Price at an HVN → expect acceptance behaviour, possible rotation.
+
+Always combine Volume Profile context with structural analysis and a price-action trigger before acting.
+
+> **Sources:** Dalton, Jones & Dalton (1990), *Mind Over Markets* — original Market Profile / Volume Profile framework. Steidlmayer & Koy (1986) as above.
+`),
+
+  L("pa-volume", "auction-market-theory", "Auction Market Theory", "The conceptual framework that explains why markets trend, balance, and produce the structures you see on every chart.", 9, ["auction", "auction-market-theory", "balance", "imbalance"], `
+# Auction Market Theory
+
+Auction Market Theory (AMT) is the conceptual framework underlying Volume Profile — and much of how professional traders think about market dynamics.
+
+## The core idea
+
+A financial market is a **continuous two-way auction** with one purpose: to find the price that facilitates the most trade between buyers and sellers. This is the "fair value" zone.
+
+**Markets do two things:**
+
+1. **Trend (imbalance):** when the current price is broadly perceived as too cheap or too expensive, price moves away, searching for the level where two-sided trade can resume. This is directional movement.
+
+2. **Balance (consolidation):** when price is within the range that buyers and sellers accept as fair value, the market rotates — it oscillates within the range without breaking out.
+
+## Acceptance vs rejection (in AMT terms)
+
+A market "accepts" a price when it:
+- Spends significant time at that level (multiple candles trading there).
+- Produces high volume at that level.
+- Returns to it after moving away.
+
+A market "rejects" a price when it:
+- Moves away quickly.
+- Produces a sharp reversal (wick).
+- Fails to return.
+
+**The wick on a candlestick is the visual mark of rejected price.** The body marks accepted price.
+
+## Why trends start and stop
+
+A trend begins when the market perceives current price as significantly unfair (undervalued = buyers dominate; overvalued = sellers dominate). A trend ends when the market reaches a new price area where two-sided trade can resume — a new "value area" forms, and the market balances.
+
+## Using AMT as a framework
+
+AMT doesn't give entries. It gives better questions:
+- "Is this price being *accepted* (time + volume at level) or *probed* (quick in, quick out)?"
+- "Are we in balance (range) or imbalance (trend) right now?"
+- "Is this pullback a return-to-value move, or an early reversal?"
+
+Better questions = better context = better trade decisions.
+
+> **Sources:** Steidlmayer, J.P. & Koy, K. (1986), *Markets and Market Logic* — the original AMT text. Dalton, Jones & Dalton (1990), *Mind Over Markets*. Seidenberg, C. (2010), *The Handbook of Market Profile*, Marketplace Books.
+`),
+
+  L("pa-volume", "volume-as-context", "Volume as Context, Not Signal", "How volume confirms or weakens a price-action read — and the hierarchy: structure first, price action second, volume third.", 7, ["volume", "confirmation", "order-flow"], `
+# Volume as Context, Not Signal
+
+The most common volume mistake is treating it as a standalone signal. Volume is **context** — it weights a price-action observation; it does not replace it.
+
+## What volume can confirm
+
+**Breakout credibility:** a strong directional close through a key level on elevated volume is more credible than the same breakout in near-silence. Low-volume breakouts fail more frequently because fewer participants committed to the direction.
+
+**Trend conviction:** in a healthy trend, impulse legs (in the trend direction) should ideally show more activity than the pullbacks. This is consistent with the dominant side having more participation.
+
+**Exhaustion signal:** a large move accompanied by a climactic volume spike, immediately followed by a loss of momentum, may signal that all available buyers (or sellers) have entered. Nobody left to push further.
+
+## What volume cannot do
+
+- **Replace price-action confirmation.** A bullish volume spike at support means nothing if price immediately makes a lower low. Always wait for the price reaction.
+- **Override fundamental change.** Trends can persist on "weak" volume for extended periods, especially in gold's trending environments.
+- **Give a precise entry.** "Volume is elevated here" is an observation. The entry decision requires structure and trigger analysis.
+
+## The practical hierarchy
+
+When reading a chart, apply three layers:
+
+1. **Structure** — where is price relative to key levels and market structure? (Primary)
+2. **Price action** — what is price doing at those levels? (Primary)
+3. **Volume** — does the volume context support the price-action read? (Confirmation)
+
+If layers 1 and 2 give a clear picture and layer 3 aligns, confidence is higher. If layer 3 contradicts, pause. But layer 3 alone, without 1 and 2, is not a trade.
+
+> **Sources:** Elder, A. (1993), *Trading for a Living*, Wiley — Chapter on volume interpretation. Wyckoff, R. (1930s), collected works — the original articulation of price-volume relationships.
+`),
+
+  L("pa-volume", "volume-delta", "Volume Delta & the Absorption Hypothesis", "What delta reveals about aggressive buying vs selling within a candle — and why this requires data most retail gold traders don't have.", 8, ["volume", "order-flow", "absorption"], `
+# Volume Delta & the Absorption Hypothesis
+
+Volume delta attempts to read *directionality* within a candle's volume — which side was the aggressor.
+
+## What is Volume Delta?
+
+In true centralized volume data (footprint charts, COMEX futures), each transaction can be classified:
+- **Buyer-initiated (up-tick):** aggressive buyer hit the ask → bullish aggression.
+- **Seller-initiated (down-tick):** aggressive seller hit the bid → bearish aggression.
+
+**Volume Delta = Buy Volume − Sell Volume** for a given period.
+
+Positive delta = more aggressive buying. Negative delta = more aggressive selling.
+
+## The absorption case
+
+The most powerful signal: **negative delta on a bullish candle.** Price went up, but more aggressive selling than buying occurred. This means passive buyers absorbed every sell order with their resting limit bids, keeping price from falling. This is buy absorption — potential accumulation at a support level.
+
+Conversely, **positive delta on a bearish candle**: price fell despite aggressive buying. Passive sellers (limit orders above price) absorbed all buys, preventing a rise. Potential distribution.
+
+These divergences between delta direction and candle direction are among the highest-quality signals in professional order-flow analysis.
+
+## The critical limitation for retail gold traders
+
+Footprint chart data requires tick-by-tick transaction records. This is:
+- **Not available** on most retail spot-gold CFD platforms.
+- Available on some platforms using COMEX gold futures data (Bookmap, Sierra Chart, etc.).
+- **Not applicable** to broker tick volume, which doesn't distinguish buyer vs seller initiation.
+
+If you're trading retail spot gold CFDs, you **cannot calculate true volume delta.**
+
+## Why cover it here?
+
+Understanding delta makes you a more sophisticated market reader. When you progress to COMEX futures or access footprint data, this framework applies immediately. And even now, the concept — that aggressive directional flow can decouple from price direction — refines how you think about absorption, candle bodies, and what price action alone can and cannot tell you.
+
+File this under "I understand why this matters" and revisit when the tools are available.
+
+> **Sources:** Volman, B. (2011), *Forex Price Action Scalping*, Self-published — practical footprint/delta usage. Bookmap educational resources (bookmap.com) — modern tools for order-flow analysis.
+`),
+
+  // ---------------------------------------------------------------- MULTI-TIMEFRAME ANALYSIS (new module)
+  L("pa-mtf", "why-multiple-timeframes", "Why Multiple Timeframes?", "Different timeframes answer different questions — and using the wrong one for the wrong question is a silent source of most trading errors.", 7, ["timeframe", "higher-timeframe", "lower-timeframe", "top-down"], `
+# Why Multiple Timeframes?
+
+A chart is a question. Different timeframes answer different questions. The skill of multi-timeframe analysis is knowing which timeframe to ask which question.
+
+## The hierarchy of questions
+
+**Daily:** What is the macro swing structure? Where are the major levels that institutional participants reference? Is gold broadly bullish, bearish, or ranging over recent weeks?
+
+**4-Hour:** What is the current trend within the larger picture? Where are the significant levels for this week? What is today's probable bias before it starts?
+
+**1-Hour:** What is the intraday structure? Where are the key levels — today's session high/low, prior day reference, significant intraday swings?
+
+**15-Minute:** Where is the precise entry zone? What is price doing at the level I'm watching? Where does a logical, tight stop sit?
+
+**5-Minute:** What is the trigger candle? Where is the exact confirmation? (Used for precision, not narrative.)
+
+## The fundamental rule
+
+**Higher timeframes set context. Lower timeframes provide precision.**
+
+Never trade a lower-timeframe signal that contradicts a clear higher-timeframe structure. A bullish engulfing on the 5m in the middle of a 4H downtrend is a fade opportunity, not a buy.
+
+## What happens without multi-timeframe awareness
+
+- A clean 15m uptrend is a pullback in a 4H downtrend — you just bought the high.
+- A "strong" 5m breakout breaks a minor 5m level that the 1H shows is the middle of a range.
+- A "perfect" setup on the 15m runs straight into massive 4H resistance you never checked.
+
+Multi-timeframe awareness prevents these traps by ensuring your trade has the higher picture's support before it triggers on the lower.
+
+## The two-timeframe minimum rule
+
+For any entry, you should be able to answer:
+1. What does the **higher** timeframe say about direction and context?
+2. What does the **entry** timeframe say about timing and precision?
+
+If you can only answer one, you're missing critical information.
+
+> **Sources:** Murphy, J. (1999), *Technical Analysis of the Financial Markets*, NYIF — Chapter on multi-timeframe analysis. Investopedia — "Multiple Time Frames Can Multiply Returns" (Investopedia.com).
+`),
+
+  L("pa-mtf", "top-down-process-mtf", "The Top-Down Analysis Process", "A structured five-step routine for reading the market from the largest relevant timeframe down to your entry frame.", 8, ["timeframe", "top-down", "bias", "scenario"], `
+# The Top-Down Analysis Process
+
+Top-down analysis is a structured routine for reading the market from the highest relevant timeframe down to your entry frame — preventing tunnel vision and anchoring every trade in its proper context.
+
+## The five-step process
+
+### Step 1 — Daily: establish macro context
+- Is the Daily chart in an uptrend (HH/HL), downtrend (LH/LL), or range?
+- Where are the major Daily levels — prior week/month highs/lows, significant swing points?
+- **This step tells you the overall direction filter.** It eliminates whole categories of trades.
+
+### Step 2 — 4H: find current structure
+- Within the Daily structure, what is the 4H doing?
+- Where is price relative to its recent 4H swing points?
+- Where are the significant 4H support/resistance zones?
+- **This step tells you today's probable bias.**
+
+### Step 3 — 1H: locate decision points
+- What are the key intraday levels? Session highs/lows, prior day reference, significant 1H swings.
+- **This step tells you where something is likely to happen today.**
+
+### Step 4 — 15m/5m: build scenarios
+- At each key level, write both scenarios: reaction and breakout.
+- What trigger confirms each? What invalidates each?
+- **This step converts context into actionable if-then plans.**
+
+### Step 5 — Wait for the trigger
+- Execute only when a pre-planned scenario fires.
+- The setup comes to you. You do not chase.
+
+## Why this order matters
+
+Starting at the 5m is like reading a book by randomly opening pages. Starting at the Daily gives you the chapter; the 4H gives you the page; the 15m gives you the sentence. Without the chapter, the sentence makes no sense.
+
+## Time requirement
+
+Done properly: 15–30 minutes before London open, 5-minute update at NY open. Use the **Top-Down Analysis workspace** in this app to record your reads and build the discipline into a daily habit.
+
+> **Sources:** Murphy (1999) as above. Schwager, J. (1993), *Market Wizards*, HarperCollins — multiple interviewed traders describe top-down routines.
+`),
+
+  L("pa-mtf", "conflicting-signals", "When Timeframes Conflict", "Three types of timeframe conflict and the hierarchy rule for resolving each — plus the one 'conflict' that is actually your best entry.", 8, ["timeframe", "higher-timeframe", "lower-timeframe", "bias"], `
+# When Timeframes Conflict
+
+Timeframes rarely all align perfectly. Knowing what to do when they disagree separates analysts who get paralysed from traders who act decisively.
+
+## Type 1: HTF neutral, LTF has a clear setup
+
+The Daily and 4H are ranging, but the 15m shows a clean breakout.
+
+**Resolution:** treat it as lower-conviction, reduced-size. The lack of HTF confirmation means the setup has less tailwind. Target only a nearby LTF level, not a large HTF objective. If you miss it, you don't chase.
+
+## Type 2: HTF trend opposes the LTF signal
+
+4H is in a clear downtrend (LH/LL), but price is at a 15m support and "looks like a buy."
+
+**Resolution:** generally skip it. Counter-trend setups at LTF levels have lower probability. To justify trading it, you need extraordinary confluence (major HTF support + very strong rejection) and significantly reduced size. Most of the time, pass.
+
+## Type 3: HTF is bullish but price is at HTF resistance
+
+Daily is trending up; price has reached a major Daily resistance zone; 4H is showing weakness at that resistance.
+
+**Resolution:** this is not a true conflict — it's a normal tactical situation. The HTF trend tells you the overall direction; the resistance tells you to wait for either a breakout + retest (to rejoin the trend) or a deep pullback to HTF support. Short-term shorts at the resistance are tactical, counter-trend; approach them as small, time-limited plays only.
+
+## The hierarchy rule
+
+**Higher timeframe wins on direction; lower timeframe provides entry timing.**
+
+When in doubt: do not override a clear HTF trend based on a LTF signal. Use the LTF to find the precise entry *within* the HTF direction.
+
+## The productive "conflict"
+
+The most powerful setup is actually an alignment that looks like a conflict: a HTF level combined with a LTF structural break. A 4H resistance zone + a 15m bearish structure forming at that zone. Use the HTF to define the *area*, the LTF to define the *trigger*. This is top-down execution at its best — not a conflict, but a two-level confirmation.
+`),
+
+  L("pa-mtf", "one-candle-many-stories", "One 4H Candle, Many 15m Stories", "Understanding that every higher-timeframe candle contains a full narrative on the lower timeframe — and how to use this for precise entries.", 8, ["timeframe", "candlestick", "entry"], `
+# One 4H Candle, Many 15m Stories
+
+This is one of the most practically useful insights in multi-timeframe analysis.
+
+## The aggregation fact
+
+A 4-hour candlestick contains exactly **sixteen 15-minute candles.** Both representations show the same price action — but they tell very different stories.
+
+## A demonstration
+
+Consider a 4H candle that closes slightly bullish with a moderate body and wicks on both sides. You might read it as: "indecision, mild buying."
+
+Inside that same 4H candle, the 15m story might be:
+- A sharp bearish drop for the first 45 minutes.
+- Slow sideways consolidation for an hour.
+- A strong recovery and new high for two hours.
+- A small fade in the final 15 minutes.
+
+That "indecision" 4H candle hides two strong directional moves that cancelled each other. The 15m trader who caught the recovery saw a clean uptrend. The 4H trader saw indecision.
+
+## Why this matters for entries
+
+You cannot time a precise entry on a 4H candle — by the time it closes, 4 hours have passed. But you can use the 4H candle's *context* (near resistance, shows rejection) to watch the 15m for a trigger *while the 4H is still forming.*
+
+**The 4H gives you the destination. The 15m gives you the platform.**
+
+## The practical process
+
+1. On the 4H, identify you're near a key level and expect a potential reaction.
+2. Drop to the 15m.
+3. Watch for the 15m to form a structure break, rejection candle, or sweep that confirms the 4H expectation.
+4. Enter on the 15m trigger with a stop that fits inside the 4H level's buffer.
+
+Your entry is now precise, your stop tight relative to reward, and your trade aligned with both timeframes.
+
+## The two-timeframe formula
+
+- **4H/1H:** the *why* and the *where.*
+- **15m/5m:** the *when* and the *exactly.*
+
+Higher frame = conviction. Lower frame = precision.
+
+> **Sources:** Williams, L. (1999), *Long-Term Secrets to Short-Term Trading*, Wiley — multi-timeframe entry refinement. Elder (1993) as above — the "triple screen" multi-timeframe system.
+`),
+
+  // ---------------------------------------------------------------- READING A FULL CHART (new module)
+  L("pa-integration", "ten-questions", "The 10 Questions", "The ten specific questions a professional answers before any trading decision — making chart reading systematic, not impressionistic.", 10, ["scenario", "market-structure", "bias", "top-down"], `
+# The 10 Questions
+
+Before any trading decision, answer a specific set of questions. This lesson gives you those questions and what to look for in each answer. Applied consistently, they turn chart reading from an impressionistic exercise into a structured discipline.
+
+## The 10 questions
+
+**1. What is the current market structure?**
+Uptrend (HH/HL), downtrend (LH/LL), or range? Answer on both 4H and 1H.
+
+**2. Is the market trending or ranging?**
+A market can show structure but be in transition. Is the structure *active and clean*, or is it churning with overlapping candles?
+
+**3. Where are the important price levels?**
+List the 2–4 most significant levels: session high/low, previous day high/low, a major HTF swing, a round number. These are your potential trade locations today.
+
+**4. Where might liquidity be concentrated?**
+Where are stops likely sitting? Above obvious swing highs, below obvious swing lows, beyond round numbers. These are potential sweep targets before the real move.
+
+**5. What does recent candle behaviour reveal?**
+In the last 5–10 candles: fading momentum? Rejection at a level? Acceptance? Breakout? Indecision before news?
+
+**6. What does volume suggest, if reliable data is available?**
+Is there volume confirmation? Any notable divergence? Apply appropriate scepticism (recall the volume module).
+
+**7. What is the higher-timeframe context?**
+Is the current 1H structure a continuation or a counter-move within the 4H? What would the 4H structure logically lead to from here?
+
+**8. What are the plausible bullish and bearish scenarios?**
+Write one of each at your key levels — each with a specific trigger, a stop, and a target.
+
+**9. What would invalidate each scenario?**
+Bullish: "invalid if price closes below X." Bearish: "invalid if price closes above Y." Pre-commit the invalidation before the session starts.
+
+**10. Is the evidence sufficient to justify a trade, or should I wait?**
+Be honest. Is there a real A+ setup, or are you searching for a reason to click? "No trade today" is a valid and professional outcome.
+
+## Making this a habit
+
+These 10 questions become automatic over time. You won't consciously list them — your mind will cover them organically. But the path to that automaticity requires deliberate, explicit practice every session. Use the **Top-Down Analysis workspace** to record your answers and build the habit.
+`),
+
+  L("pa-integration", "both-scenarios-always", "Both Scenarios, Always", "Why preparing both a bullish and a bearish plan before every session eliminates prediction pressure and kills confirmation bias.", 8, ["scenario", "bias", "confirmation-bias", "if-then"], `
+# Both Scenarios, Always
+
+Professionals never walk into a session with only one idea. They always have both a bullish and a bearish scenario — because the market decides which fires, not them.
+
+## Why both scenarios?
+
+**Confirmation bias is your biggest enemy as a chart reader.** Once you've decided gold is going up today, you'll find bullish signals everywhere and dismiss bearish ones. Preparing both scenarios forces you to take the opposing view seriously and prevents you from marrying your first read.
+
+**Markets don't know your opinion.** Gold doesn't care that you believe it "should" reach 3,800. Your job is to react to what price actually does.
+
+**One scenario = prediction. Two scenarios = preparation.** The difference is the gap between retail and professional.
+
+## How to write both
+
+At each key level:
+
+**Bullish scenario:**
+"IF price pulls back to [level] AND shows [trigger: rejection candle / sweep-and-reclaim / structural break upward], THEN I go long targeting [next resistance]. Invalid if [price closes below X]."
+
+**Bearish scenario:**
+"IF price pushes up to [level] AND shows [trigger: rejection / sweep-and-reclaim / structural break downward], THEN I go short targeting [next support]. Invalid if [price closes above Y]."
+
+Both written. One fires (or neither does — you wait).
+
+## When only one makes strong sense
+
+When evidence strongly favours one direction (Daily + 4H both trending clearly, strong macro catalyst), keep the opposing scenario on paper but mark it "low confidence." You still want a plan if an unexpected development shifts the picture — even a low-confidence plan beats pure improvisation.
+
+## The emotional benefit
+
+When you have both scenarios, neither outcome feels like a failure. You had a plan for each. A loss was a scenario that fired — not an analytical failure. This is how composure is maintained through losing trades and the next setup is executed without emotional baggage.
+
+## Exercise
+
+Before your next market observation session, write a bullish and a bearish scenario for two key levels you identify. Include specific trigger, stop, and target for each. Notice how this exercise forces you to think clearly about what you actually believe vs. what the chart structure logically suggests.
+
+> **Sources:** Douglas, M. (1990), *The Disciplined Trader*, NYIF — the core text on probabilistic thinking in trading.
+`),
+
+  L("pa-integration", "when-not-to-trade", "When Not to Trade", "The six conditions that should stop you from clicking — and why the ability to identify no-trade conditions is as valuable as finding entries.", 8, ["discipline", "routine", "risk-management", "psychology"], `
+# When Not to Trade
+
+The ability to identify no-trade conditions is equal in value to the ability to find entries. This lesson defines the conditions that should stop you from acting.
+
+## Condition 1: No clear structure
+
+If you cannot answer "is this an uptrend, downtrend, or range?" without hesitation — you don't have enough structure to trade. Trend tactics in a range, or range tactics in a trend, produce consistently poor results. Wait for structure to clarify.
+
+## Condition 2: No confluence
+
+A single reason to trade is rarely sufficient. "Price is at a round number" is an observation, not a setup. "Price is at a round number that aligns with a previous swing high, showing a bearish pin bar at the London open, in a 4H downtrend" — that's a setup. If you cannot identify two or three independent reasons, the setup likely doesn't meet the bar.
+
+## Condition 3: High-impact news imminent
+
+Within 15–30 minutes of a major release (CPI, NFP, FOMC), normal technical patterns become unreliable. Spreads widen, algorithms reposition, and price can move $20–$50 in seconds regardless of what the chart shows. The correct action: be flat, mark your levels, wait for structure to reform after the initial chaos settles.
+
+## Condition 4: Daily loss limit hit
+
+If you've pre-set a maximum daily loss (e.g. −2R or a fixed dollar amount) and reached it — stop. Your worst trading is almost always done while trying to recover. The daily limit exists precisely for this moment. Respect it every time, without negotiation.
+
+## Condition 5: Choppy, overlapping price action
+
+If the last 10–15 candles show overlapping bodies with wicks on both sides and no directional progress — you're in chop. There is no clean structure to trade. Only clean setups deserve capital.
+
+## Condition 6: Your mind is off
+
+If you're distracted, emotionally compromised (fresh big win or loss), tired, or rushed — execution quality drops. You'll see setups that aren't there, size them wrong, and move stops under pressure. The most honest action is to identify these states and not trade. One focused session is worth three distracted ones.
+
+## The "no trade is a trade" reframe
+
+Every session you correctly identify as a no-trade day is a session where you did not lose money. Over a full year, the sessions where you stayed out of bad conditions often contribute more to total P&L than sessions where you forced trades. The goal is not to be in the market. The goal is to be in the market only when the odds are clearly in your favour.
+
+> **Sources:** Douglas (1990, 2000) — *The Disciplined Trader* and *Trading in the Zone*, both NYIF. Steenbarger (2009) as above — on psychological conditions affecting execution quality.
+`),
+
+  // ---------------------------------------------------------------- EXTRA STRATEGIES (existing)
   // The user's in-app "Top 20 Chart-Based Trading Strategies for Gold" set,
   // baked into the seed so it ships to every device/visitor (see extra-strategies.ts).
   ...extraStrategyLessons,

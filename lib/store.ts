@@ -397,7 +397,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 8,
+      version: 9,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -527,6 +527,68 @@ export const useAcademy = create<AcademyState>()(
         if (Array.isArray(persisted.lessons)) {
           const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
           const add = seedLessons.filter((l) => l.moduleId === "strategies" && !have.has(l.id));
+          if (add.length) persisted.lessons = [...persisted.lessons, ...add];
+        }
+        // v9: Reorganise into chapters — Price Action first, Strategies second,
+        // Risk Management third, Quant Validation fourth.
+        // Rename "Price Action" module to "Price Behavior at Levels".
+        // Add chapter grouping field to all modules.
+        // Inject 4 new PA modules and 23 new lessons. Non-destructive, idempotent.
+        const V9_MODULE_META: Record<string, { order: number; chapter?: string; title?: string }> = {
+          "trading-day":      { order: 0 },
+          "foundations":      { order: 10,  chapter: "Price Action" },
+          "chart-reading":    { order: 20,  chapter: "Price Action" },
+          "key-levels":       { order: 30,  chapter: "Price Action" },
+          "price-action":     { order: 35,  chapter: "Price Action", title: "Price Behavior at Levels" },
+          "sessions":         { order: 40,  chapter: "Price Action" },
+          "fundamentals":     { order: 50,  chapter: "Price Action" },
+          "pa-liquidity":     { order: 60,  chapter: "Price Action" },
+          "pa-volume":        { order: 70,  chapter: "Price Action" },
+          "pa-mtf":           { order: 80,  chapter: "Price Action" },
+          "pa-integration":   { order: 90,  chapter: "Price Action" },
+          "strategies":       { order: 100, chapter: "Trading Strategies" },
+          "scenarios":        { order: 110, chapter: "Trading Strategies" },
+          "entries":          { order: 120, chapter: "Trading Strategies" },
+          "stops":            { order: 200, chapter: "Risk Management" },
+          "sizing":           { order: 210, chapter: "Risk Management" },
+          "rr":               { order: 220, chapter: "Risk Management" },
+          "management":       { order: 230, chapter: "Risk Management" },
+          "routine":          { order: 240, chapter: "Risk Management" },
+          "psychology":       { order: 250, chapter: "Risk Management" },
+          "calendar":         { order: 260, chapter: "Risk Management" },
+          "gold-research":    { order: 300, chapter: "Quant Validation" },
+        };
+        if (Array.isArray(persisted.modules)) {
+          // Apply new orders, chapter fields, and optional renames
+          persisted.modules = persisted.modules.map((m: Module) => {
+            const meta = V9_MODULE_META[m.id];
+            if (!meta) return m;
+            return {
+              ...m,
+              order: meta.order,
+              chapter: meta.chapter,
+              ...(meta.title ? { title: meta.title } : {}),
+            };
+          });
+          // Inject new modules that don't exist yet (pa-* modules)
+          const existingIds = new Set(persisted.modules.map((m: Module) => m.id));
+          const newMods = seedModules.filter((m) => !existingIds.has(m.id));
+          if (newMods.length) persisted.modules = [...persisted.modules, ...newMods];
+        }
+        // Inject new lessons by id (idempotent — never overwrites user edits)
+        const V9_NEW_LESSON_IDS = new Set([
+          "passive-aggressive-liquidity", "price-discovery",
+          "inside-outside-bars", "engulfing-pin-bars", "doji-indecision", "candle-sequences",
+          "what-is-liquidity", "stop-clusters", "liquidity-sweeps-mechanics",
+          "absorption-order-flow", "what-charts-dont-show",
+          "volume-on-gold", "volume-profile-basics", "auction-market-theory",
+          "volume-as-context", "volume-delta",
+          "why-multiple-timeframes", "top-down-process-mtf", "conflicting-signals", "one-candle-many-stories",
+          "ten-questions", "both-scenarios-always", "when-not-to-trade",
+        ]);
+        if (Array.isArray(persisted.lessons)) {
+          const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
+          const add = seedLessons.filter((l) => V9_NEW_LESSON_IDS.has(l.id) && !have.has(l.id));
           if (add.length) persisted.lessons = [...persisted.lessons, ...add];
         }
         return persisted;
