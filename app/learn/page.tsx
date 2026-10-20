@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useAcademy } from "@/lib/store";
 import { Card, Button, Icon, Badge, ClientOnly, EditableText } from "@/components/ui";
+import { LESSON_DIAGRAMS } from "@/components/diagrams";
 
 const lessonHref = (moduleId: string, lessonId: string) => `/learn?m=${moduleId}&l=${lessonId}`;
 
@@ -108,6 +109,18 @@ function LessonInner({ moduleId, lessonId }: { moduleId: string; lessonId: strin
           <article className="prose-academy max-w-prose">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{lesson.body}</ReactMarkdown>
           </article>
+        )}
+
+        {/* Visual diagrams — auto-rendered for lessons that have them */}
+        {!editing && LESSON_DIAGRAMS[lesson.id] && (
+          <div className="mt-8">
+            <div className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-subtle">
+              <Icon name="BarChart2" size={13} /> Visual Reference
+            </div>
+            {LESSON_DIAGRAMS[lesson.id].map((DiagramComp, i) => (
+              <DiagramComp key={i} />
+            ))}
+          </div>
         )}
 
         {lessonQuiz.length > 0 && !editing && (
