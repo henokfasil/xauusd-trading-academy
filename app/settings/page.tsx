@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { User } from "@supabase/supabase-js";
 import { useAcademy } from "@/lib/store";
 import { getApiKey, setApiKey, AI_MODELS, streamChat } from "@/lib/ai";
 import { Card, Button, Icon, PageHeader, ClientOnly, Field, Select } from "@/components/ui";
+import { supabase, signInWithEmail, signOut, buildSyncPayload, pushToSupabase, pullFromSupabase } from "@/lib/supabase";
 
 const LOT_VALUE_PER_DOLLAR = 100;
 
@@ -146,6 +148,16 @@ function SettingsInner() {
           </div>
         </Card>
 
+        {/* ── Cloud Sync ────────────────────────────────────────────────── */}
+        <Card className="p-5 lg:col-span-2">
+          <div className="mb-4 flex items-center gap-2">
+            <Icon name="Cloud" size={16} className="text-accent" />
+            <h2 className="font-semibold">Cloud Sync</h2>
+            <span className="ml-auto rounded-full bg-bull/15 px-2 py-0.5 text-[10px] font-bold text-bull">NEW</span>
+          </div>
+          <CloudSyncPanel />
+        </Card>
+
         {/* Curriculum management */}
         <Card className="p-5">
           <div className="mb-4 flex items-center gap-2"><Icon name="BookOpen" size={16} className="text-accent" /><h2 className="font-semibold">Curriculum</h2></div>
@@ -180,6 +192,110 @@ function SettingsInner() {
           </div>
         </div>
       </Card>
+    </div>
+  );
+}
+
+function CloudSyncPanel() {
+  const { importData } = useAcademy();
+  const [user, setUser] = useState<User | null>(null);
+  const [email, setEmail] = useState("");
+  const [phase, setPhase] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [msg, setMsg] = useState("");
+  const [syncMsg, setSyncMsg] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user ?? null));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setUser(s?.user ?? null));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const sendLink = async () => {
+    if (!email.trim()) return;
+    setPhase("sending");
+    const { error } = await signInWithEmail(email.trim());
+    if (error) { setPhase("error"); setMsg(error); }
+    else { setPhase("sent"); setMsg(""); }
+  };
+
+  const doSignOut = async () => { await signOut(); setUser(null); setSyncMsg(""); };
+
+  const doSync = async () => {
+    setSyncMsg("Pushing to cloud…");
+    const s = useAcademy.getState() as unknown as Record<string, unknown>;
+    const ok = await pushToSupabase(buildSyncPayload(s));
+    setSyncMsg(ok ? "✓ Synced successfully" : "✕ Sync failed — check your connection");
+  };
+
+  const doLoad = async () => {
+    setSyncMsg("Loading from cloud…");
+    const remote = await pullFromSupabase();
+    if (!remote) { setSyncMsg("Nothing found in the cloud yet"); return; }
+    importData(JSON.stringify({ version: 1, ...remote }));
+    setSyncMsg("✓ Loaded from cloud");
+  };
+
+  if (user) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 rounded-lg border border-bull/30 bg-bull/8 px-4 py-3">
+          <Icon name="CheckCircle2" size={16} className="text-bull" />
+          <div>
+            <p className="text-sm font-medium">Signed in</p>
+            <p className="text-xs text-muted">{user.email}</p>
+          </div>
+          <Button size="sm" variant="ghost" className="ml-auto" onClick={doSignOut}>Sign out</Button>
+        </div>
+        <p className="text-sm text-muted">
+          Your trades, journal, playbook, notes and settings sync automatically to the cloud when you make changes.
+          Sign in with the same email on any device to access your data everywhere.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" onClick={doSync}><Icon name="Upload" size={15} /> Push to cloud now</Button>
+          <Button variant="outline" onClick={doLoad}><Icon name="Download" size={15} /> Load from cloud</Button>
+        </div>
+        {syncMsg && (
+          <p className={`text-sm ${syncMsg.startsWith("✓") ? "text-bull" : syncMsg.startsWith("✕") ? "text-bear" : "text-muted"}`}>
+            {syncMsg}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-muted">
+        Sign in with your email to sync your journal trades, playbook setups, lesson notes and settings across all your devices.
+        We send a magic link — no password needed. Your data is encrypted and only accessible by you.
+      </p>
+      {phase === "sent" ? (
+        <div className="rounded-lg border border-accent/40 bg-accent/8 px-4 py-4 text-sm">
+          <p className="font-medium">📧 Check your email</p>
+          <p className="mt-1 text-muted">We sent a sign-in link to <b>{email}</b>. Click it to sign in — then come back to this page.</p>
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendLink()}
+            placeholder="your@email.com"
+            className="flex-1 rounded-lg border border-border bg-elevated px-3 py-2 text-sm outline-none focus:border-accent/60"
+          />
+          <Button variant="primary" onClick={sendLink} disabled={phase === "sending" || !email.trim()}>
+            {phase === "sending" ? <><Icon name="Loader" size={14} className="animate-spin" /> Sending</> : "Send magic link"}
+          </Button>
+        </div>
+      )}
+      {phase === "error" && <p className="text-sm text-bear">{msg}</p>}
+      {phase !== "sent" && (
+        <p className="text-xs text-subtle">
+          Sync is powered by Supabase — your data lives in your account, not ours.
+          The app also keeps a local copy in your browser as a fallback.
+        </p>
+      )}
     </div>
   );
 }

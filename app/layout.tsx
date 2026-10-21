@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme";
 import { Sidebar } from "@/components/sidebar";
 import { Assistant } from "@/components/assistant";
+import { SyncProvider } from "@/components/sync-provider";
 
 export const metadata: Metadata = {
   title: "XAU/USD Trading Academy",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </main>
           </div>
           <Assistant />
+          <SyncProvider />
         </ThemeProvider>
       </body>
     </html>

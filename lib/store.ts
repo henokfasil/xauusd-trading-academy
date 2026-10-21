@@ -397,7 +397,7 @@ export const useAcademy = create<AcademyState>()(
     }),
     {
       name: "xauusd-academy-v1",
-      version: 9,
+      version: 10,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: any, version) => {
         if (!persisted) return persisted;
@@ -590,6 +590,18 @@ export const useAcademy = create<AcademyState>()(
           const have = new Set(persisted.lessons.map((l: Lesson) => l.id));
           const add = seedLessons.filter((l) => V9_NEW_LESSON_IDS.has(l.id) && !have.has(l.id));
           if (add.length) persisted.lessons = [...persisted.lessons, ...add];
+        }
+        // v10: Push the comprehensive OC Zone lesson (premium/discount/triggers)
+        // to all existing users. The seed now contains the full version.
+        if (Array.isArray(persisted.lessons)) {
+          const ocSeed = seedLessons.find((l) => l.id === "oc-zone-strategy");
+          if (ocSeed) {
+            persisted.lessons = persisted.lessons.map((l: Lesson) =>
+              l.id === "oc-zone-strategy"
+                ? { ...l, body: ocSeed.body, summary: ocSeed.summary }
+                : l
+            );
+          }
         }
         return persisted;
       },

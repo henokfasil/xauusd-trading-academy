@@ -1527,66 +1527,286 @@ The trade is closed — for a professional the most valuable part begins:
 `, "/journal"),
 
   // ----------------------------------------------------------- TRADING STRATEGIES
-  L("strategies", "oc-zone-strategy", "OC Zone Strategy (Institutional Anchor)", "Use the daily Open–Close zone of an anchor candle as a fixed daily reference: premium/discount, a 50% equilibrium, and zone edges you trade with a trigger.", 15, ["oc-zone", "institutional-anchor", "equilibrium", "premium-discount", "market-structure", "rejection", "liquidity-sweep", "confirmation", "invalidation"], `
+  L("strategies", "oc-zone-strategy", "OC Zone Strategy (Institutional Anchor)", "Use the daily Open–Close zone of an anchor candle as a fixed daily reference: premium/discount, a 50% equilibrium, and three entry triggers you stack for confluence.", 15, ["oc-zone", "institutional-anchor", "equilibrium", "premium-discount", "market-structure", "rejection", "liquidity-sweep", "confirmation", "invalidation"], `
 # OC Zone Strategy (Institutional Anchor)
 
-The **OC Zone** ("Open–Close Zone") is a daily reference box drawn from a single **anchor candle** — usually the candle at a key session open (Midnight open, London open, or your broker's daily open). Once that candle closes, the box is **locked for the rest of the day** and becomes a fixed map of *premium*, *discount* and *fair value* to trade around.
+The **OC Zone** ("Opening Candle Zone") is a daily reference box drawn from a single anchor candle — the one candle that starts the session (e.g. Midnight open, London open, or your broker's daily open). Once that candle closes, the box is **locked for the rest of the day** and becomes a fixed map of three key price zones you trade around all day.
 
-> **Reminder:** this is a *reference framework*, not a signal. It tells you **where** to look and how to frame bias — it never tells you to buy or sell a specific price. Numbers below are illustrative.
+> **Reminder:** this is a reference framework, not a signal. It tells you **where** to look and how to frame bias — it never tells you to buy or sell a specific price. Numbers below are illustrative.
+
+## 📦 What is Premium, Discount and Fair Value?
+
+Before anything else — define these three terms, because everything in this strategy depends on them.
+
+Think of it exactly like shopping. If a product normally costs $100:
+- Paying $130 = you're overpaying = it's at a **premium** (expensive)
+- Paying $70 = you're getting a bargain = it's at a **discount** (cheap)
+- Paying $100 = fair price = it's at **fair value**
+
+Gold (XAU/USD) trading works the exact same way — just replace "normal price" with the midpoint (50%) of the Opening Candle box.
+
+Here is how the three zones sit inside the Opening Candle box:
+
+\`\`\`
+┌─────────────────────────┐  ← TOP of Opening Candle box (e.g. $3,800)
+│                         │
+│   🔴 P R E M I U M     │  ← Price is HERE = EXPENSIVE
+│   (upper half of box)   │     → In a bearish market: look for SELLS
+│                         │
+├─────────────────────────┤  ← ⚖️ EQUILIBRIUM / 50% midpoint ($3,770)
+│      "Fair Value"       │     = the normal/average price of the day
+│      Decision Point     │     → Rejection here = strong signal
+│                         │
+│   🟢 D I S C O U N T   │  ← Price is HERE = CHEAP
+│   (lower half of box)   │     → In a bullish market: look for BUYS
+│                         │
+└─────────────────────────┘  ← BOTTOM of Opening Candle box (e.g. $3,740)
+\`\`\`
+
+## 🔴 PREMIUM — Price above the 50% midpoint
+
+**What it means:** Price is in the upper half of the box — relatively expensive compared to today's average.
+
+**What you do:** In a bearish market (4H chart showing Lower Highs & Lower Lows) → look for **SELL** opportunities.
+
+**Why:** Large institutions prefer to sell when price is expensive — not after it has already dropped.
+
+**Plain English:** Price is high up in the box. If the big picture is pointing down, this is a good area to look for sells — but only with a trigger (confirmation signal).
+
+## 🟢 DISCOUNT — Price below the 50% midpoint
+
+**What it means:** Price is in the lower half of the box — relatively cheap compared to today's average.
+
+**What you do:** In a bullish market (4H chart showing Higher Highs & Higher Lows) → look for **BUY** opportunities.
+
+**Why:** Large institutions prefer to buy when price is cheap — not after it has already risen.
+
+**Plain English:** Price is low in the box. If the big picture is pointing up, this is a good area to look for buys — but only with a trigger.
+
+## ⚖️ FAIR VALUE (Equilibrium) — Price at the 50% midpoint
+
+**What it means:** Price is at the dead centre of the box — neither expensive nor cheap.
+
+**What it does:** Acts as a decision point — price either bounces off it and continues in the HTF direction, or breaks through it and moves toward the opposite zone.
+
+**Why it matters:** Many institutional algorithms reference the 50% level as their "mean" — price is naturally attracted to it and often reacts strongly there.
+
+**Plain English:** The midpoint is like a magnet. Price often returns to it during the day. A clean rejection here — in the direction of your bias — is one of the best places to look for an entry.
 
 ## What the zone is
-Pick an **anchor candle** at a chosen open hour (set the UTC offset so the hour matches *your broker's* clock — this matters a lot). From that one candle you draw a rectangle:
 
-- **Body mode (O→C):** top & bottom = the candle's **Open and Close**. This is the "real move" — where the session actually settled, ignoring wick noise.
-- **Range mode (H→L):** top & bottom = the candle's **High and Low**. This captures the full liquidity/volatility envelope.
-- **Equilibrium (50% midline):** the exact centre of the box — the **"fair value" / mean threshold**. This line is the heart of the whole method.
+Pick an **anchor candle** at a chosen open hour (set the UTC offset so the hour matches your broker's clock — this matters a lot). From that one candle you draw a rectangle:
 
-The zone is **non-repainting**: after the anchor hour closes it never moves, so everyone referencing it sees the same box all day.
+- **Body mode (O→C):** top & bottom = the candle's Open and Close. This is the "real move" — where the session actually settled, ignoring wick noise.
+- **Range mode (H→L):** top & bottom = the candle's High and Low. This captures the full liquidity/volatility envelope.
+- **Equilibrium (50% midline):** the exact centre of the box — the "fair value" / mean threshold. This line is the heart of the whole method.
 
-## Why traders use it — premium / discount / fair value
-Think of the box as the day's **dealing range**:
+The zone is **non-repainting**: after the opening candle closes it never moves.
 
-- Price **above equilibrium** = **premium** (relatively expensive) → in a bearish day you look to **sell**.
-- Price **below equilibrium** = **discount** (relatively cheap) → in a bullish day you look to **buy**.
-- Price **at equilibrium** = fair value — often a decision point where the day's move resumes or reverses.
+## 🧠 Real Example on Gold (XAU/USD)
 
-This is the same logic as the golden zone in the [Fibonacci lesson](/learn?m=strategies&l=fibonacci-retracement) — a disciplined *location* to look for a trade — just anchored to the day's open instead of an impulse leg.
+| Level | Price |
+|---|---|
+| Top of Zone | $3,800 |
+| Equilibrium (50%) | $3,770 |
+| Bottom of Zone | $3,740 |
 
-## The two interactions to watch
-1. **Equilibrium touch** — price trades back to the 50% midline. Either it **rejects** (bias continues) or it **reclaims/holds** (bias may flip). A clean rejection at equilibrium in the direction of your bias is a classic place to look.
-2. **Boundary breach** — price taps or pushes through a zone **edge**. Two readings, and you must decide which with *confirmation*, not hope:
-   - **Rejection** off the edge back into the zone → fade it (mean-revert toward equilibrium / opposite edge).
-   - **Accept/breakout** (closes and holds beyond the edge) → the day is expanding; the breached edge can become support/resistance on a retest.
+**Scenario A — Bearish day:**
+- 4H chart shows Lower Highs & Lower Lows (bearish HTF structure)
+- Price retraces UP to $3,782 — above $3,770 = **PREMIUM** (expensive)
+- Look for a sell trigger at that level (rejection candle, liquidity sweep, LTF break of structure)
+- Do NOT sell blindly — wait for confirmation
 
-## The flow (same discipline as every setup here)
+**Scenario B — Bullish day:**
+- 4H chart shows Higher Highs & Higher Lows (bullish HTF structure)
+- Price pulls back DOWN to $3,755 — below $3,770 = **DISCOUNT** (cheap)
+- Look for a buy trigger at that level
+- Wait for confirmation, not just the price level
+
+## ⚡ The Golden Rule
+
+> **HTF bias → DIRECTION. Premium/Discount → LOCATION. Trigger → TIMING.**
+
+You need all three before considering a trade:
+
+1. **Direction** — Is 4H structure bullish (HH+HL) or bearish (LH+LL)?
+2. **Location** — Is price in Premium (above equilibrium) or Discount (below equilibrium)?
+3. **Timing** — Has ONE of these triggers confirmed at that location?
+   - 🕯️ Rejection candle — a pin bar, engulfing, or hammer that has **fully closed**
+   - 💧 Liquidity sweep — a wick spikes beyond a recent swing high/low then snaps back
+   - 📉 LTF Break of Structure (BoS) — 5m/15m chart confirms the reversal has begun
+
+All three must align. If even one is missing — you wait.
+
+## ⏱️ The Three Triggers in Full Detail
+
+### 🕯️ TRIGGER 1 — Rejection Candle
+
+A rejection candle shows price tried to move in one direction but got aggressively pushed back the other way. It leaves behind a **long wick** as evidence of the rejection.
+
+\`\`\`
+      |        ← UPPER WICK = price went up here but got rejected
+      |
+    ┌───┐
+    │   │     ← BODY = distance between Open and Close
+    │   │        Green = closed HIGHER than opened (bullish)
+    └───┘        Red   = closed LOWER than opened (bearish)
+      |
+      |        ← LOWER WICK = price went down here but got rejected
+\`\`\`
+
+**🔴 Bearish Rejection Candles (use at PREMIUM zone to SELL)**
+
+*Shooting Star / Bearish Pin Bar* — price shoots UP into premium, gets rejected, closes near the LOW.
+\`\`\`
+      |
+      |   ← long upper wick (price tried to go up, failed)
+      |
+    ┌─┐
+    └─┘   ← small body near the bottom (bears won)
+\`\`\`
+Rules: upper wick ≥ 2× body size; body near bottom; formed inside/at premium zone; wait for full close.
+
+*Bearish Engulfing* — a green candle followed by a larger red candle that completely covers it.
+\`\`\`
+       ┌───┐
+       │   │  ← Candle 1: Green (buyers pushed up)
+       └───┘
+  ┌─────────┐
+  │         │  ← Candle 2: Red (sellers overwhelm buyers completely)
+  └─────────┘
+\`\`\`
+
+**🟢 Bullish Rejection Candles (use at DISCOUNT zone to BUY)**
+
+*Hammer / Bullish Pin Bar* — price drops DOWN into discount, gets rejected, closes near the HIGH.
+\`\`\`
+    ┌─┐   ← small body near the top (bulls won)
+    └─┘
+      |
+      |   ← long lower wick (price tried to drop, failed)
+      |
+\`\`\`
+Rules: lower wick ≥ 2× body size; body near top; formed inside/at discount zone; wait for full close.
+
+*Bullish Engulfing* — a red candle followed by a larger green candle that completely covers it.
+
+**✅ Rejection Candle Checklist**
+
+| Question | Answer needed |
+|---|---|
+| Is the wick at least 2× the body? | ✅ Yes |
+| Did the candle fully close? | ✅ Yes — never enter mid-candle |
+| Is it at the premium/discount zone? | ✅ Yes |
+| Does it match HTF bias direction? | ✅ Yes |
+| Do I know where my stop goes? | ✅ Beyond the wick tip |
+
+### 💧 TRIGGER 2 — Liquidity Sweep
+
+A liquidity sweep is when price briefly spikes beyond a key level, grabs the stop-loss orders sitting there, and then aggressively reverses. Large institutions push price into stop clusters to create the liquidity they need to fill their own orders — then reverse hard. That reversal IS the trade.
+
+**🔴 Bearish Sweep (at PREMIUM — look to SELL):**
+\`\`\`
+                    |  ← SWEEP: wick spikes ABOVE old swing high
+  ══════════════════╪══  ← OLD SWING HIGH (stops above here)
+                    |
+                    ↓  ← Price REVERSES hard back down
+\`\`\`
+Enter sell after the sweep candle closes back below the level. Stop above the wick tip.
+
+**🟢 Bullish Sweep (at DISCOUNT — look to BUY):**
+\`\`\`
+                    ↑  ← Price REVERSES hard back up
+  ══════════════════╪══  ← OLD SWING LOW (stops below here)
+                    |
+                    |  ← SWEEP: wick spikes BELOW old swing low
+\`\`\`
+Enter buy after the sweep candle closes back above the level. Stop below the wick tip.
+
+**✅ Liquidity Sweep Checklist**
+
+| Question | Answer needed |
+|---|---|
+| Is there a clear swing high/low that was swept? | ✅ Yes |
+| Did the sweep candle close BACK beyond the swept level? | ✅ Yes — the close-back is critical |
+| Is the sweep happening at the premium/discount zone? | ✅ Yes |
+| Does HTF bias confirm the direction? | ✅ Yes |
+| Is my stop beyond the sweep wick? | ✅ Yes |
+
+### 📉 TRIGGER 3 — LTF Break of Structure (BoS)
+
+Drop to the 5m or 15m chart and wait for price to form a small structure that then breaks in your bias direction. This gives the tightest stop and best reward-to-risk, but requires patience.
+
+**🔴 Bearish BoS (at PREMIUM — to SELL):** Watch for a Lower High to form on 5m, then price breaks below the prior swing low.
+
+**🟢 Bullish BoS (at DISCOUNT — to BUY):** Watch for a Higher Low to form on 5m, then price breaks above the prior swing high.
+
+**✅ LTF BoS Checklist**
+
+| Question | Answer needed |
+|---|---|
+| Is HTF (4H) bias clear? | ✅ Yes |
+| Is price inside the premium or discount zone on 1H? | ✅ Yes |
+| Have I switched to the 5m or 15m chart? | ✅ Yes |
+| Has a clear swing high/low formed on the LTF? | ✅ Yes |
+| Has price broken that swing in my bias direction? | ✅ Yes — the BoS |
+| Is my stop beyond the last LTF swing extreme? | ✅ Yes |
+
+## 🏆 Comparing the Three Triggers
+
+| Trigger | Speed | Stop Size | Best R:R | Difficulty |
+|---|---|---|---|---|
+| 🕯️ Rejection Candle | Fast | Medium | Good | Easy |
+| 💧 Liquidity Sweep | Fast | Small–Medium | Very Good | Medium |
+| 📉 LTF BoS | Slower | Smallest | Best | Harder |
+
+**Beginner tip:** Start with rejection candles — easiest to spot. Add liquidity sweeps and LTF BoS as you gain experience.
+
+## ⚖️ Confluence — When Triggers Stack
+
+| What you see | Confidence |
+|---|---|
+| Price in premium/discount + rejection candle | 🟡 Moderate |
+| Price in premium/discount + liquidity sweep | 🟠 Good |
+| Price in premium/discount + liquidity sweep + LTF BoS | 🟢 Strong |
+| All of the above + HTF key level alignment | 🔵 Very Strong |
+
+More confluence = more evidence = more confidence. But even the strongest confluence does not guarantee a win. Markets are probabilistic. Manage risk regardless.
+
+## The flow
 
 | Step | What you do |
 |---|---|
-| 1. Anchor | Mark the OC zone from the chosen open candle; let it lock. Note equilibrium. |
-| 2. Bias | Which side of equilibrium is price on? Combine with higher-timeframe [structure](/learn?m=chart-reading&l=market-structure). Premium → hunt sells; discount → hunt buys. |
-| 3. Location | Wait for price to reach a *decision* spot: an edge, or the 50% equilibrium. |
-| 4. Trigger | Demand confirmation there — a rejection candle, a [liquidity sweep](/learn?m=price-action&l=false-breakout-sweep) of the edge, or a lower-timeframe break of structure. The level alone is **not** an entry. |
-| 5. Invalidation | Stop just beyond the zone edge / anchor-candle extreme you're trading from — if price trades there, your read is wrong. |
-| 6. Manage | Target the opposite boundary, equilibrium, or the next structural level. Only take it if reward-to-risk clears your minimum; size from the stop. |
+| 1. Anchor | Mark the OC zone from the chosen opening candle; let it lock. Note equilibrium. |
+| 2. Bias | Which side of equilibrium is price on? Combine with higher-timeframe structure. Premium → hunt sells; discount → hunt buys. |
+| 3. Location | Wait for price to reach a decision spot: an edge, or the 50% equilibrium. |
+| 4. Trigger | Demand confirmation — a rejection candle, a liquidity sweep of the edge, or a LTF break of structure. The level alone is **not** an entry. |
+| 5. Invalidation | Stop just beyond the zone edge / opening candle extreme — if price trades there, your read is wrong. |
+| 6. Manage | Target the opposite boundary, equilibrium, or the next structural level. Only take it if R:R clears your minimum; size from the stop. |
 
 ## Confluence & context
-- **Nested zones:** yesterday's (and the prior days') OC zones still matter. Where today's edge lines up with a previous day's zone or equilibrium, the level is stronger.
-- **Weekly cycle:** Monday's anchor often frames the week; note where the current day sits inside the larger weekly range.
-- **Sessions & news:** the zone is cleanest during liquid hours (London / NY overlap). Around high-impact news it can be swept violently — size down or stand aside (see [Economic Calendar](/learn?m=calendar&l=using-the-calendar)).
+- **Nested zones:** yesterday's OC zones still matter. Where today's edge lines up with a previous day's zone, the level is stronger.
+- **Weekly cycle:** Monday's anchor often frames the week.
+- **Sessions & news:** the zone is cleanest during London / NY overlap. Around high-impact news it can be swept violently — size down or stand aside.
 
 ## Common mistakes
-- **Wrong anchor hour.** If your UTC offset doesn't match your broker's daily open, the whole box is off. Verify it once.
+- **Wrong anchor hour.** If your UTC offset doesn't match your broker's daily open, the whole box is off. Verify once.
 - **Trading the touch, not the trigger.** Reaching an edge or equilibrium is a *location*, never a reason to click.
-- **Ignoring bias.** Buying premium in a bearish day (or selling discount in a bullish day) is fighting the range.
-- **No invalidation.** If you can't say where the idea is wrong (beyond which edge), you don't have a trade.
+- **Ignoring bias.** Buying premium in a bearish day is fighting the range.
+- **No invalidation.** If you can't say where the idea is wrong, you don't have a trade.
 
 ## Practice it, don't trust it
-The OC zone is popular partly because many traders watch the same session opens, which can make these levels mildly self-fulfilling — but it is **not magic and carries no guaranteed edge**. Treat it as one clean way to frame the day. Prove *your* version on chart history in **Backtesting**, save the rules as a **Playbook** setup, and let **Statistics** tell you whether it actually has positive expectancy over a real sample.
+The OC zone is popular partly because many traders watch the same session opens, creating mild self-fulfilling behaviour — but it is **not magic and carries no guaranteed edge**. Prove your version on chart history in **Backtesting**, save the rules as a **Playbook** setup, and let **Statistics** tell you whether it has positive expectancy over a real sample.
 
 ## Sources
-- Credit — concept based on *The Institutional Anchor (Daily OC Zone)* indicator by its TradingView author: https://www.tradingview.com/script/rg8g9p3i-The-Institutional-Anchor-Daily-OC-Zone/
-- Investopedia — *Opening Range* (using the session open as an intraday reference): https://www.investopedia.com/terms/o/opening-range.asp
-- Investopedia — *Mean Reversion* (why price often returns toward a central/fair value): https://www.investopedia.com/terms/m/meanreversion.asp
+- Credit — concept based on *The Institutional Anchor (Daily OC Zone)* by its TradingView author: https://www.tradingview.com/script/rg8g9p3i-The-Institutional-Anchor-Daily-OC-Zone/
+- Investopedia — *Shooting Star*: https://www.investopedia.com/terms/s/shootingstar.asp
+- Investopedia — *Hammer Candlestick*: https://www.investopedia.com/terms/h/hammer.asp
+- Investopedia — *Bearish Engulfing*: https://www.investopedia.com/terms/b/bearishengulfingp.asp
+- Investopedia — *Bullish Engulfing*: https://www.investopedia.com/terms/b/bullishengulfingcandle.asp
+- Investopedia — *Opening Range*: https://www.investopedia.com/terms/o/opening-range.asp
+- Investopedia — *Mean Reversion*: https://www.investopedia.com/terms/m/meanreversion.asp
+- BabyPips — *Market Structure*: https://www.babypips.com/learn/forex/market-structure
 `, "/top-down"),
 
   L("strategies", "fibonacci-retracement", "Fibonacci Retracement Strategy", "A top-down, trend-following setup: read bias on the higher timeframe, draw the Fib on the impulse, and wait for a trigger in the golden zone.", 14, ["fibonacci-retracement", "golden-zone", "impulse", "pullback", "market-structure", "trend", "rejection", "confirmation", "invalidation"], `
